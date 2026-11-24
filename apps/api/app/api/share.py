@@ -8,9 +8,10 @@ from sqlalchemy.orm import Session
 
 from app.db.session import get_session
 from app.domain.brief import Brief, render_text
-from app.schemas.review import DecisionIn, FindingOut
+from app.schemas.review import DecisionIn, FindingOut, RatingIn, StressQuestionOut
 from app.services import review as svc
 from app.services import share
+from app.services import stress as stress_svc
 
 router = APIRouter(prefix="/share", tags=["dosen"])
 SessionDep = Annotated[Session, Depends(get_session)]
@@ -33,3 +34,19 @@ def decide(token: str, finding_id: str, body: DecisionIn, session: SessionDep) -
     return FindingOut.model_validate(
         share.supervisor_decide(session, token, finding_id, body.confirm)
     )
+
+
+@router.get("/{token}/stress-test")
+def shared_stress(token: str, session: SessionDep) -> list[StressQuestionOut]:
+    link = share.resolve(session, token)
+    rows = stress_svc.latest_for_project(session, link.project_id)
+    return [StressQuestionOut.model_validate(q) for q in rows]
+
+
+@router.post("/{token}/stress-questions/{question_id}/rating")
+def rate(token: str, question_id: str, body: RatingIn, session: SessionDep) -> StressQuestionOut:
+    link = share.resolve(session, token)
+    row = stress_svc.rate(
+        session, question_id, body.score, link.project_id, f"dosen-link:{link.id}"
+    )
+    return StressQuestionOut.model_validate(row)

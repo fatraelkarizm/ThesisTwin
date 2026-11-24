@@ -15,12 +15,14 @@ import {
   type ElementType,
   type FindingApi,
   type GraphOut,
+  type StressQuestionOut,
   type VersionOut,
 } from "@/lib/api";
 import { copy } from "@/lib/copy";
 import { savedProjectId } from "@/lib/project";
 import { ElementsPanel } from "./ElementsPanel";
 import { GraphView } from "./GraphView";
+import { StressPanel } from "./StressPanel";
 import { BriefPanel, CommentsPanel } from "./SidePanels";
 
 const OPEN = new Set(["ai_suggested", "needs_user_confirmation"]);
@@ -34,6 +36,7 @@ export function Workspace() {
   const [elements, setElements] = useState<ElementOut[]>([]);
   const [findings, setFindings] = useState<FindingApi[]>([]);
   const [graph, setGraph] = useState<GraphOut | null>(null);
+  const [stress, setStress] = useState<StressQuestionOut[]>([]);
   const [comments, setComments] = useState<CommentStatusOut[]>([]);
   const [brief, setBrief] = useState("");
   const [checking, setChecking] = useState(false);
@@ -70,11 +73,17 @@ export function Workspace() {
 
   useEffect(() => {
     if (!versionId) return;
-    Promise.all([api.elements(versionId), api.findings(versionId), api.graph(versionId)])
-      .then(([e, f, g]) => {
+    Promise.all([
+      api.elements(versionId),
+      api.findings(versionId),
+      api.graph(versionId),
+      api.getStressTest(versionId),
+    ])
+      .then(([e, f, g, q]) => {
         setElements(e);
         setFindings(f);
         setGraph(g);
+        setStress(q);
       })
       .catch(fail);
   }, [versionId]);
@@ -133,6 +142,23 @@ export function Workspace() {
     try {
       await api.reviewComment(previous.id, commentId, addressed);
       refreshProject(projectId!);
+    } catch (e) {
+      fail(e);
+    }
+  }
+
+  async function generateStress(regenerate: boolean) {
+    try {
+      setStress(await api.stressTest(version!.id, regenerate));
+    } catch (e) {
+      fail(e);
+    }
+  }
+
+  async function answerStress(questionId: string, text: string) {
+    try {
+      const updated = await api.answer(questionId, text);
+      setStress((prev) => prev.map((q) => (q.id === questionId ? updated : q)));
     } catch (e) {
       fail(e);
     }
@@ -200,6 +226,8 @@ export function Workspace() {
             </ul>
           )}
         </Section>
+
+        <StressPanel questions={stress} onGenerate={generateStress} onAnswer={answerStress} />
       </div>
 
       <div className="space-y-8 border-t border-line bg-background p-4 md:p-6 lg:border-l lg:border-t-0">

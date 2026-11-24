@@ -9,6 +9,7 @@ from app.domain.brief import Brief, render_text
 from app.domain.comments import CommentStatus
 from app.domain.status import Role, Status
 from app.schemas.review import (
+    AnswerIn,
     CommentReviewIn,
     ElementIn,
     ElementOut,
@@ -18,9 +19,11 @@ from app.schemas.review import (
     GraphOut,
     ShareOut,
     StatusIn,
+    StressQuestionOut,
 )
 from app.services import review as svc
 from app.services import share
+from app.services import stress as stress_svc
 from app.services.findings import change_status
 
 router = APIRouter(tags=["review"])
@@ -95,3 +98,23 @@ def brief_text(project_id: str, session: SessionDep) -> str:
 def create_share(project_id: str, session: SessionDep) -> ShareOut:
     link, token = share.create_link(session, project_id)
     return ShareOut(token=token, path=f"/dosen/{token}", expires_at=link.expires_at)
+
+
+@router.post("/versions/{version_id}/stress-test")
+def stress_test(
+    version_id: str, session: SessionDep, regenerate: bool = False
+) -> list[StressQuestionOut]:
+    rows = stress_svc.generate(session, version_id, regenerate)
+    return [StressQuestionOut.model_validate(q) for q in rows]
+
+
+@router.get("/versions/{version_id}/stress-test")
+def get_stress_test(version_id: str, session: SessionDep) -> list[StressQuestionOut]:
+    return [
+        StressQuestionOut.model_validate(q) for q in stress_svc.list_questions(session, version_id)
+    ]
+
+
+@router.post("/stress-questions/{question_id}/answer")
+def answer(question_id: str, body: AnswerIn, session: SessionDep) -> StressQuestionOut:
+    return StressQuestionOut.model_validate(stress_svc.answer(session, question_id, body.answer))

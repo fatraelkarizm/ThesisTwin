@@ -98,3 +98,23 @@ class GraphOut(BaseModel):
     nodes: list[ElementOut]
     edges: list[GraphEdge]
     gaps: list[GraphGap]
+
+
+class StressQuestionOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str
+    position: int
+    kind: str
+    text: str
+    reason: str
+    answer: str | None
+    rating: int | None
+
+
+class AnswerIn(BaseModel):
+    answer: str = Field(min_length=1, max_length=4000)
+
+
+class RatingIn(BaseModel):
+    score: int = Field(ge=1, le=5)

@@ -172,11 +172,11 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 ### Langkah 22 — Defense Stress-Test
 - **Output:** pilih 3–5 tautan terlemah graph (deterministik) → pertanyaan penguji (LLM, berlabel AI) → kolom justifikasi mahasiswa.
 - **Selesai jika:** pemilihan tautan bisa dijelaskan; pertanyaan tidak berisi jawaban.
-- **Status:** ⬜
+- **Status:** ✅ (2026-11-24) — deterministik: skor = temuan terbuka (+prioritas) > celah graph > elemen tak terverifikasi > pertanyaan dasar; 3–5 pertanyaan dari templat, alasan pemilihan ditampilkan. Jawaban tidak hilang saat pertanyaan diperbarui. LLM boleh memperhalus bahasa nanti (butuh 0.3).
 
 ### Langkah 23 — Formulir rating dosen untuk stress-test
 - **Output:** skala 1–5 relevansi per pertanyaan (target abstrak 4/5).
-- **Status:** ⬜ (butuh 21, 22)
+- **Status:** ✅ (2026-11-24) — rating 1–5 per pertanyaan di /dosen/[token], terbatas pada proyek tautan, tercatat di audit log.
 
 ---
 

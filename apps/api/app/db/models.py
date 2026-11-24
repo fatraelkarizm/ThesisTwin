@@ -126,6 +126,27 @@ class CommentReview(Base):
     at: Mapped[datetime]
 
 
+class StressQuestionRow(Base):
+    """Pertanyaan Defense Stress-Test per versi + justifikasi mahasiswa + rating dosen."""
+
+    __tablename__ = "stress_questions"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    version_id: Mapped[str] = mapped_column(
+        ForeignKey("document_versions.id", ondelete="CASCADE"), index=True
+    )
+    position: Mapped[int]
+    key: Mapped[str] = mapped_column(String)
+    kind: Mapped[str] = mapped_column(String)
+    text: Mapped[str] = mapped_column(Text)
+    reason: Mapped[str] = mapped_column(Text)
+    element_ids_json: Mapped[str] = mapped_column(Text, default="[]")
+    answer: Mapped[str | None] = mapped_column(Text, default=None)
+    answered_at: Mapped[datetime | None] = mapped_column(default=None)
+    rating: Mapped[int | None] = mapped_column(default=None)  # 1–5 relevansi menurut dosen
+    rated_at: Mapped[datetime | None] = mapped_column(default=None)
+
+
 class ShareLink(Base):
     """Tautan untuk dosen tanpa akun (abstrak §2). Hanya hash token yang disimpan."""
 

@@ -7,7 +7,7 @@ import { StatusBadge } from "@/components/domain/StatusBadge";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
-import { api, ApiError, type BriefFindingOut, type BriefOut } from "@/lib/api";
+import { api, ApiError, type BriefFindingOut, type BriefOut, type StressQuestionOut } from "@/lib/api";
 import { copy } from "@/lib/copy";
 
 export function SupervisorBrief({ token }: { token: string }) {
@@ -15,12 +15,26 @@ export function SupervisorBrief({ token }: { token: string }) {
   const [brief, setBrief] = useState<BriefOut | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [decided, setDecided] = useState<Record<string, string>>({});
+  const [stress, setStress] = useState<StressQuestionOut[]>([]);
 
   useEffect(() => {
-    api.sharedBrief(token).then(setBrief, (e: unknown) =>
-      setError(e instanceof ApiError && e.status === 404 ? s.invalid : String(e)),
+    Promise.all([api.sharedBrief(token), api.sharedStress(token)]).then(
+      ([b, q]) => {
+        setBrief(b);
+        setStress(q);
+      },
+      (e: unknown) => setError(e instanceof ApiError && e.status === 404 ? s.invalid : String(e)),
     );
   }, [token, s.invalid]);
+
+  async function rate(questionId: string, score: number) {
+    try {
+      const updated = await api.rate(token, questionId, score);
+      setStress((prev) => prev.map((q) => (q.id === questionId ? updated : q)));
+    } catch (e) {
+      setError(e instanceof ApiError ? e.message : String(e));
+    }
+  }
 
   async function decide(f: BriefFindingOut, confirm: boolean) {
     try {
@@ -92,6 +106,42 @@ export function SupervisorBrief({ token }: { token: string }) {
               </ul>
             )}
           </Section>
+
+          {stress.length > 0 ? (
+            <Section title={copy.stress.title} description={copy.stress.rateLabel}>
+              <ol className="space-y-2.5">
+                {stress.map((q, i) => (
+                  <li key={q.id} className="rounded-card border border-line bg-surface p-4 shadow-card">
+                    <p className="text-sm font-semibold">
+                      {i + 1}. {q.text}
+                    </p>
+                    <p className="mt-1 text-xs text-muted">
+                      {copy.stress.why}: {q.reason}
+                    </p>
+                    <p className="mt-2 border-l-2 border-brand pl-3 text-sm">
+                      {q.answer ?? <span className="text-muted">{copy.stress.noAnswer}</span>}
+                    </p>
+                    <div className="mt-3 flex flex-wrap items-center gap-1.5" role="group" aria-label={copy.stress.rating}>
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <button
+                          key={n}
+                          type="button"
+                          aria-pressed={q.rating === n}
+                          aria-label={`${copy.stress.rating} ${n}`}
+                          onClick={() => rate(q.id, n)}
+                          className={`size-11 rounded-lg border text-sm font-semibold ${
+                            q.rating === n ? "border-brand bg-brand text-brand-fg" : "border-line bg-surface"
+                          }`}
+                        >
+                          {n}
+                        </button>
+                      ))}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </Section>
+          ) : null}
 
           <Section title={s.changes}>
             {brief.changes.length === 0 ? (

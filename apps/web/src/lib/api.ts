@@ -97,6 +97,16 @@ export interface GraphOut {
   gaps: { from_type: ElementType; to_type: ElementType; relation: string }[];
 }
 
+export interface StressQuestionOut {
+  id: string;
+  position: number;
+  kind: "finding" | "gap" | "unverified" | "baseline";
+  text: string;
+  reason: string;
+  answer: string | null;
+  rating: number | null;
+}
+
 export interface ShareOut {
   token: string;
   path: string;
@@ -167,6 +177,16 @@ export const api = {
   addElement: (versionId: string, body: { type: ElementType; content: string; quote: string; page: number }) =>
     request<ElementOut>(`/versions/${versionId}/elements`, json(body)),
   graph: (versionId: string) => request<GraphOut>(`/versions/${versionId}/graph`),
+  stressTest: (versionId: string, regenerate = false) =>
+    request<StressQuestionOut[]>(`/versions/${versionId}/stress-test${regenerate ? "?regenerate=true" : ""}`, {
+      method: "POST",
+    }),
+  getStressTest: (versionId: string) => request<StressQuestionOut[]>(`/versions/${versionId}/stress-test`),
+  answer: (questionId: string, answer: string) =>
+    request<StressQuestionOut>(`/stress-questions/${questionId}/answer`, json({ answer })),
+  sharedStress: (token: string) => request<StressQuestionOut[]>(`/share/${token}/stress-test`),
+  rate: (token: string, questionId: string, score: number) =>
+    request<StressQuestionOut>(`/share/${token}/stress-questions/${questionId}/rating`, json({ score })),
   check: (versionId: string) => request<FindingApi[]>(`/versions/${versionId}/check`, { method: "POST" }),
   findings: (versionId: string) => request<FindingApi[]>(`/versions/${versionId}/findings`),
   setStatus: (findingId: string, target: "student_confirmed" | "rejected") =>
