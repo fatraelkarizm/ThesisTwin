@@ -21,6 +21,7 @@ Dokumentasi untuk **ThesisTwin** — AI-powered navigation & consistency engine 
 | [pitch-and-demo-script.md](pitch-and-demo-script.md) | Narasi pitch, skrip demo 8 langkah, Q&A | Presenter |
 | [traceability-matrix.md](traceability-matrix.md) | BR ↔ FR ↔ UAT ↔ Task | PM, QA |
 | [glossary.md](glossary.md) | Istilah | Semua |
+| [feedback/](feedback/README.md) | Skor & komentar juri Preliminary, fokus fitur, gap vs repo | Semua |
 
 ## Urutan Baca yang Disarankan
 1. `source/01-proposal-full.md` → 2. `BRD` → 3. `PRD` → 4. `step-plan` → 5. `UAT`.
