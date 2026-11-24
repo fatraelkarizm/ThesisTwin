@@ -30,7 +30,8 @@ ThesisTwin/
 │       │   ├── domain/          # LOGIKA MURNI tanpa IO: status machine, constraint engine, redaction
 │       │   ├── schemas/         # Pydantic: request/response & kontrak ekstraksi LLM
 │       │   ├── services/        # orkestrasi use-case (ingestion, extraction, brief)
-│       │   ├── llm/             # adapter provider LLM (satu-satunya tempat memanggil LLM)
+│       │   ├── llm/             # antarmuka + adapter provider LLM (satu-satunya tempat memanggil LLM)
+│       │   ├── parsing/         # DOCX/PDF -> {halaman: teks}; nomor halaman dari parser, bukan LLM
 │       │   └── db/              # model SQLAlchemy, sesi, migrasi
 │       ├── rules/               # aturan alignment sebagai DATA (YAML/JSON), bukan kode
 │       └── tests/               # cermin struktur app/
@@ -49,6 +50,7 @@ ThesisTwin/
 | `api/app/api` | routing, auth dependency, status code | logika domain, query SQL langsung, panggilan LLM |
 | `api/app/domain` | fungsi/kelas murni, deterministik | IO (DB, HTTP, file, LLM), `datetime.now()` langsung (inject clock) |
 | `api/app/services` | orkestrasi: DB + LLM + domain | aturan bisnis inti (taruh di `domain/`) |
+| `api/app/parsing` | membaca file, memetakan halaman | memanggil LLM, aturan bisnis |
 | `api/app/llm` | prompt, panggilan provider, validasi skema, retry | keputusan alignment |
 | `api/rules` | aturan sebagai data + metadata (id, prioritas, pesan) | kode |
 
