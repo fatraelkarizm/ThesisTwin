@@ -62,3 +62,13 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
 }
+
+/* Cetak brief dosen ke PDF (abstrak: brief "sent as a PDF"): latar putih, tanpa bayangan. */
+@media print {
+  body {
+    background: var(--surface);
+  }
+  * {
+    box-shadow: none !important;
+  }
+}

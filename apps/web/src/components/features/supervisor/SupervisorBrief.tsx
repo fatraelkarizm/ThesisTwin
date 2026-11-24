@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpenCheck, Check, CircleAlert, X } from "lucide-react";
+import { BookOpenCheck, Check, CircleAlert, Printer, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PriorityTag } from "@/components/domain/PriorityTag";
 import { StatusBadge } from "@/components/domain/StatusBadge";
@@ -71,7 +71,13 @@ export function SupervisorBrief({ token }: { token: string }) {
 
       {brief ? (
         <>
-          <p className="rounded-card border border-line bg-surface p-3 text-xs text-muted">{s.note}</p>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <p className="max-w-xl rounded-card border border-line bg-surface p-3 text-xs text-muted">{s.note}</p>
+            <Button variant="secondary" className="print:hidden" onClick={() => window.print()}>
+              <Printer aria-hidden="true" className="size-4" />
+              {s.print}
+            </Button>
+          </div>
 
           <Section title={s.awaiting}>
             {brief.awaiting_supervisor.length === 0 ? (
@@ -90,7 +96,7 @@ export function SupervisorBrief({ token }: { token: string }) {
                         <StatusBadge status={decided[f.id] as BriefFindingOut["status"]} /> {s.decided}
                       </p>
                     ) : (
-                      <div className="mt-3 flex flex-wrap gap-2">
+                      <div className="mt-3 flex flex-wrap gap-2 print:hidden">
                         <Button onClick={() => decide(f, true)}>
                           <Check aria-hidden="true" className="size-4" />
                           {s.agree}
@@ -121,7 +127,7 @@ export function SupervisorBrief({ token }: { token: string }) {
                     <p className="mt-2 border-l-2 border-brand pl-3 text-sm">
                       {q.answer ?? <span className="text-muted">{copy.stress.noAnswer}</span>}
                     </p>
-                    <div className="mt-3 flex flex-wrap items-center gap-1.5" role="group" aria-label={copy.stress.rating}>
+                    <div className="mt-3 flex flex-wrap items-center gap-1.5 print:hidden" role="group" aria-label={copy.stress.rating}>
                       {[1, 2, 3, 4, 5].map((n) => (
                         <button
                           key={n}

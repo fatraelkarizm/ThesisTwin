@@ -49,7 +49,7 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 - **Output:** `components/features/shell/` (Sidebar, Topbar), `app/layout.tsx` memakai shell. Menu yang belum dibangun tampil non-aktif dengan label "Segera", bukan tautan mati.
 - **Selesai jika:** shell responsif (sidebar tersembunyi di layar kecil), fokus keyboard terlihat, tidak ada tautan 404.
 - **Verifikasi:** typecheck, lint, build; buka di browser desktop + lebar 375px.
-- **Status:** ✅ (2026-11-24) — dicek di browser: desktop terang/gelap, 375px, fokus Tab, konsol bersih. Catatan: di < 768px belum ada menu navigasi (baru satu rute).
+- **Status:** ✅ (2026-11-24) — dicek di browser: desktop terang/gelap, 375px, fokus Tab, konsol bersih. Menu mobile (< 768px) ditambahkan kemudian lewat tombol Menu di topbar.
 
 ### Langkah 3 — Dashboard: kartu proposal, panel Tools, statistik, temuan
 - **Tujuan:** layar utama berbasis konsep Notalx: kartu ringkasan proposal, **panel "Tools"** (ikon + judul + status + deskripsi + chevron), ubin statistik, daftar temuan dengan aksi konfirmasi, riwayat versi.
@@ -163,7 +163,7 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 ### Langkah 20 — Supervision Brief
 - **Output:** ringkasan 1 halaman: apa yang berubah, komentar yang ditangani, keputusan terbuka; ekspor **PDF** dan **teks chat**.
 - **Selesai jika:** brief hanya merangkum state, tidak menulis konten penelitian.
-- **Status:** ✅ (2026-11-24) — brief JSON + teks chat (/projects/{id}/brief.txt). Ekspor PDF belum ada; sementara cetak halaman dosen dari browser.
+- **Status:** ✅ (2026-11-24) — brief JSON + teks chat (/projects/{id}/brief.txt) + tombol "Cetak / simpan PDF" di halaman dosen (gaya cetak menyembunyikan tombol).
 
 ### Langkah 21 — Akses brief untuk dosen tanpa akun
 - **Output:** sesuai keputusan 0.1 (mis. tautan bertoken).

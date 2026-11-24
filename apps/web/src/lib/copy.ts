@@ -179,6 +179,7 @@ export const copy = {
     comments: "Komentar Anda sebelumnya",
     awaiting: "Menunggu keputusan Anda",
     noAwaiting: "Tidak ada temuan yang menunggu keputusan.",
+    print: "Cetak / simpan PDF",
     open: "Temuan terbuka (belum dikonfirmasi mahasiswa)",
     resolved: "Tidak muncul lagi di versi ini",
     agree: "Setuju, perlu ditindaklanjuti",
