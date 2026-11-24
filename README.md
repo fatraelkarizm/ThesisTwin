@@ -25,17 +25,18 @@ STACK 2026 · Case 1: Smarter Campus and Learning
 - **Primary:** undergraduate students preparing a thesis proposal or thesis; thesis supervisors handling several students at once.
 - **Supporting:** peer mentors, thesis coordinators, academic services.
 
-**Supporting evidence.** Indonesia's *Statistik Pendidikan Tinggi 2025* records 289,670 students who dropped out, up 2.62% from 2024. This shows that study continuity matters, but it does **not** show that the thesis causes dropout, and we make no causal claim. Thesis-specific evidence (revision rounds, feedback wait time, most common inconsistencies) is to be collected through our discovery research ([research plan](docs/research-validation-plan.md)). Any number we report will be labelled as measured or simulated.
+**Supporting evidence.** Indonesia's *Statistik Pendidikan Tinggi 2025* records 289,670 students who dropped out, up 2.62% from 2024. This shows that study continuity matters, but it does **not** show that the thesis causes dropout, and we make no causal claim. Thesis-specific evidence comes from our discovery research: 7 student interviews and 1 supervisor interview (small, exploratory; being expanded toward the 15-30 students / 3-5 supervisors in the [research plan](docs/research-validation-plan.md)). Interview guide, consent template, anonymised log, and literature notes live in [docs/feedback/evidence/](docs/feedback/evidence/README.md). Any number we report is labelled as measured or simulated and must trace to a row in that log.
 
-**Existing alternatives and their gap**
+**What students and supervisors use today** (hypotheses to be validated; full comparison and test design in [docs/feedback/comparison.md](docs/feedback/comparison.md))
 
-| Alternative | What it does well | What it misses |
+| Real practice | What it does well | Suspected gap |
 |---|---|---|
-| General AI chatbot | Flexible, fast | No structured, long-running state of the thesis |
-| Grammar checker | Improves language | No understanding of research dependencies |
-| Reference manager | Manages citations | Does not track feedback or decisions |
-| Project management tool | Tracks tasks | Does not understand methodological links |
-| LMS / SIAKAD | Stores official milestones | No cognitive navigation or alignment help |
+| Word track changes / Compare, Google Docs version history | Familiar; text-level diff; comments anchored to text | Diff is by text, not by research element; no record of *why* a decision was made |
+| WhatsApp / email feedback, supervision card | Fast; official record | Unstructured; not linked to the part of the proposal |
+| Chatbot with project memory | Keeps documents and chat in one place | LLM judgement without deterministic rules, quote/page verification, or student/supervisor confirmation |
+| Grammar checker, reference manager, task manager, LMS | Mature in their niche | Do not understand methodological links |
+
+The strongest competitor to beat is *Word/Docs Compare + a chatbot with project memory*, not a plain chatbot.
 
 ## 3. Proposed Solution
 
@@ -53,13 +54,16 @@ STACK 2026 · Case 1: Smarter Campus and Learning
 7. ThesisTwin shows what changed, what is resolved, and the new impact.
 8. It generates a one-page supervision brief.
 
-**Distinguishing features**
-- **Thesis Route Map:** milestones, bottleneck, blocked tasks, next best action.
-- **Alignment Checker:** deterministic rules that raise verifiable *questions*, not verdicts.
+**Core differentiators (demo focus).** Our edge is the **version record** and the **supervision brief**:
+- **Version record and diff at research-element level:** what changed, what is resolved, what a change affects.
+- **Supervision brief:** one-page pre-meeting summary built from structured state, not free text.
+
+**Supporting the core**
+- **Dependency graph and Alignment Checker:** deterministic rules that raise verifiable *questions*, not verdicts, each with page evidence.
 - **Feedback-to-Action:** vague feedback mapped to affected components and concrete actions, confirmed by the student.
-- **Change Impact Analysis:** what to re-check when one node changes.
-- **Decision Memory:** every decision with its reason, approver, and evidence.
-- **Supervision Brief:** one-page pre-meeting summary.
+
+**Later (not in the demo):** Thesis Route Map, Decision Memory, multi-supervisor conflict flag.
+**Open item:** *Defense Stress-Test* appears in the abstract; its specification is pending (see [docs/feedback/features.md](docs/feedback/features.md)).
 
 **Guardrails.** ThesisTwin never writes thesis content, never invents references, never decides that a methodology is correct, and never replaces supervisor approval. Every AI output is labelled AI-generated and goes through human confirmation.
 
@@ -83,6 +87,17 @@ Proposal / Guideline / Feedback / Versions
 - The **LLM does not decide alignment.** A deterministic, configurable constraint engine does; the LLM only extracts and explains.
 - Every node and finding carries **evidence** (document + page) or is marked *needs confirmation*.
 - Document versions are **append-only**; superseded nodes are marked, never deleted.
+
+**Extraction error mitigation** (implemented and tested in `apps/api`; details in [docs/feedback/gap.md](docs/feedback/gap.md) §5)
+
+| Risk | Mitigation |
+|---|---|
+| Wrong page | Page numbers come from the parser, never from the LLM; the cited page must exist |
+| Hallucinated quote | LLM must return a verbatim `quote`; it is fuzzy-matched (character level, tolerates OCR slips) against that page; failure downgrades the element to *needs confirmation* |
+| Invalid JSON | Schema validation, bounded retries, then manual confirmation instead of guessing |
+| PII sent to the LLM | Deterministic redaction (NIM, phone, email) before any LLM call |
+| Unknown accuracy | Precision/recall per element type and evidence correctness against a labelled gold set |
+| Equations / non-text | *Not yet handled*: to be flagged for manual confirmation |
 
 **Technologies** (provisional, to be finalised via ADRs)
 
@@ -114,19 +129,20 @@ Quality checks: `npm run lint && npm run typecheck && npm run build` (web); `ruf
 
 ## 5. Development Plan
 
-**Milestones** (full breakdown in [step-plan](docs/step-plan.md))
+**Milestones** (full breakdown in [step-plan](docs/step-plan.md)). Dates marked `TODO` must be filled from the official STACK 2026 calendar.
 
-| Phase | Focus | Deliverable |
-|---|---|---|
-| Preliminary | Problem validation | Abstract, early interviews, problem evidence |
-| Semifinal | Product definition | Proposal, user journey, prototype design |
-| Pre-final | Core build | Parser, graph, rules, feedback mapping |
-| Final Day | Working demo | End-to-end core interaction and test results |
-| Post-hackathon | Pilot | One study-program pilot |
+| Phase | Date | Focus | Deliverable | Status |
+|---|---|---|---|---|
+| Preliminary | `TODO` | Problem validation | Abstract, early interviews | Done. Score 86.0/100 ([feedback](docs/feedback/README.md)) |
+| Semifinal | `TODO` | Product definition | Proposal, user journey, prototype design | In progress |
+| Checkpoint | **30 Nov 2026** | Extraction on real proposals | Extract elements from 10 proposals (abstract commitment) | Not reached; extraction pipeline built, no real proposals processed yet |
+| Pre-final | `TODO` | Core build | Parser, graph, rules, feedback mapping | Not started beyond parser/verification |
+| Final Day | `TODO` | Working demo | End-to-end core interaction and test results | Not started |
+| Post-hackathon | `TODO` | Pilot | One study program (Mathematics, per abstract) | Planned |
 
 **Current progress** (honest status)
-- Done: full documentation set; project scaffold; domain UI components (status, priority, evidence, confidence, AI label, finding card) with **simulated, labelled** data; backend status state machine, evidence invariant, SQLite tables for findings, evidence, and audit log.
-- Not yet built: document ingestion, LLM extraction, knowledge graph, constraint engine, feedback mapping, version diff, authentication.
+- Done: full documentation set; project scaffold; domain UI components with **simulated, labelled** data; backend status state machine, evidence invariant, SQLite tables (findings, evidence, audit log); PDF page parser; PII redaction; extraction service with schema retry; quote/page verification; accuracy metrics. All unit-tested with a fake LLM.
+- Not yet built: a real LLM provider (ADR-003), DOCX parsing, knowledge graph, constraint engine, feedback mapping, version diff, authentication. No real proposal has been processed yet.
 
 **Member contributions.** `TODO`
 
@@ -143,6 +159,7 @@ Quality checks: `npm run lint && npm run typecheck && npm run build` (web); `ruf
 
 | Goal | Metric | Target |
 |---|---|---|
+| Save time (abstract target) | Supervisor/student review time | down 50% (hypothesis) |
 | Save time | Time to build an action plan | down 30% or more |
 | Follow-through | Feedback turned into action items | 80% or more |
 | Accuracy | Alignment finding precision after confirmation | 75% or more |
