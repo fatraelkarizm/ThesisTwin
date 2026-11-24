@@ -38,6 +38,8 @@ class UploadOut(BaseModel):
     version: VersionOut
     created: bool
     pages: int
+    auto_elements: int = 0  # elemen terdeteksi dari struktur bab
+    findings: int = 0
 
 
 class ShareLinkOut(BaseModel):

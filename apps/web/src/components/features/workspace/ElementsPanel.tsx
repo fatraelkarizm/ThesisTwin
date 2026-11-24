@@ -55,7 +55,7 @@ export function ElementsPanel({ elements, unit, onAdd }: ElementsPanelProps) {
                   {el.verified ? w.verified : w.notVerified}
                 </Badge>
                 <span className="ml-auto text-xs text-muted">
-                  {el.source === "ai" ? w.fromAi : w.fromStudent}
+                  {el.source === "ai" ? w.fromAi : el.source === "auto" ? w.fromAuto : w.fromStudent}
                 </span>
               </div>
               <p className="mt-1.5 text-sm">{el.content}</p>

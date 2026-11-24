@@ -86,3 +86,16 @@ def test_reasons_use_indonesian_labels_not_internal_ids():
     qs = stress_questions(build_graph([E("v", "variable", "Motivasi")]), [])
     gap = next(q for q in qs if q.kind == "gap")
     assert "variabel tanpa instrumen" in gap.reason and "variable" not in gap.reason
+
+
+def test_new_rules_have_examiner_questions():
+    qs = stress_questions(
+        build_graph(ELS),
+        [
+            FindingRef("R-PROPOSAL-RESULTS", "high", "ai_suggested", []),
+            FindingRef("R-RQ-OBJ-COUNT", "medium", "ai_suggested", ["rq", "o"]),
+        ],
+    )
+    keys = [q.key for q in qs]
+    assert keys[:2] == ["finding:R-PROPOSAL-RESULTS", "finding:R-RQ-OBJ-COUNT"]
+    assert "angka hasil" in qs[0].text

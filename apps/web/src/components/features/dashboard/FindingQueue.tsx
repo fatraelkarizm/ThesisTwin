@@ -85,7 +85,7 @@ export function FindingQueue({ initial, onDecide }: FindingQueueProps) {
                   </p>
                   <div className="flex flex-wrap items-center gap-2">
                     {f.evidence.length > 0 ? (
-                      f.evidence.map((e) => <EvidenceChip key={`${e.element}-${e.page}`} evidence={e} />)
+                      f.evidence.map((e, i) => <EvidenceChip key={`${e.element}-${e.page}-${i}`} evidence={e} />)
                     ) : (
                       <span className="text-xs text-muted">{copy.noEvidence}</span>
                     )}

@@ -25,8 +25,17 @@ from app.services import review as svc
 from app.services import share
 from app.services import stress as stress_svc
 from app.services.findings import change_status
+from app.services.rules import rule_basis
 
 router = APIRouter(tags=["review"])
+
+
+def _finding_out(row) -> FindingOut:
+    out = FindingOut.model_validate(row)
+    out.basis = rule_basis().get(out.rule_id)
+    return out
+
+
 SessionDep = Annotated[Session, Depends(get_session)]
 
 
@@ -56,19 +65,19 @@ def graph(version_id: str, session: SessionDep) -> GraphOut:
 
 @router.post("/versions/{version_id}/check")
 def run_check(version_id: str, session: SessionDep) -> list[FindingOut]:
-    return [FindingOut.model_validate(f) for f in svc.run_check(session, version_id)]
+    return [_finding_out(f) for f in svc.run_check(session, version_id)]
 
 
 @router.get("/versions/{version_id}/findings")
 def list_findings(version_id: str, session: SessionDep) -> list[FindingOut]:
     svc.get_version(session, version_id)
-    return [FindingOut.model_validate(f) for f in svc.list_findings(session, version_id)]
+    return [_finding_out(f) for f in svc.list_findings(session, version_id)]
 
 
 @router.post("/findings/{finding_id}/status")
 def student_status(finding_id: str, body: StatusIn, session: SessionDep) -> FindingOut:
     row = change_status(session, finding_id, Status(body.target), "mahasiswa", Role.STUDENT)
-    return FindingOut.model_validate(row)
+    return _finding_out(row)
 
 
 @router.post("/versions/{version_id}/comments/{comment_id}")

@@ -7,6 +7,8 @@ why_flagged: Bagian yang umumnya diwajibkan dalam proposal Bab 1–3 tidak ditem
 suggested_clarification: >-
   Apakah bagian ini memang belum ditulis, ditulis dengan judul lain, atau tidak diwajibkan oleh
   panduan prodi?
+basis: >-
+  Struktur umum proposal Bab 1–3 (pendahuluan, kajian pustaka, metode). Daftar ini contoh umum dan harus diganti panduan resmi prodi. Perlu ditinjau dosen metodologi.
 check:
   kind: required_sections
   sections:

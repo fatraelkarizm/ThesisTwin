@@ -12,6 +12,7 @@ from app.domain.rules import Element
 
 MIN_Q, MAX_Q = 3, 5
 PRIORITY = {"high": 2, "medium": 1, "low": 0}
+PRIORITY_LABEL = {"high": "tinggi", "medium": "sedang", "low": "rendah"}
 FINDING_TYPES = ("research_question", "objective", "variable", "method", "analysis", "instrument")
 CLOSED = {"rejected", "resolved"}
 
@@ -58,6 +59,15 @@ FINDING_Q = {
     ),
     "R-VAR-INSTR": (
         "Bagaimana “{variable}” diukur, dan apa bukti validitas serta reliabilitas instrumennya?"
+    ),
+    "R-PROPOSAL-RESULTS": (
+        "Proposal Anda sudah memuat hasil dan kesimpulan. Dari mana angka hasil itu diperoleh, "
+        "dan bagaimana Anda menjamin rencana penelitian tidak disesuaikan dengan hasil yang sudah "
+        "ditulis?"
+    ),
+    "R-RQ-OBJ-COUNT": (
+        "Jumlah rumusan masalah dan tujuan Anda berbeda. Tujuan mana menjawab rumusan masalah yang "
+        "mana, dan apakah ada tujuan yang sebenarnya manfaat atau keluaran penelitian?"
     ),
     "R-CONCL-SCOPE": (
         "Sampel Anda terbatas. Sampai sejauh mana hasil boleh digeneralisasi, dan bagaimana Anda "
@@ -109,7 +119,10 @@ def stress_questions(graph: Graph, findings: list[FindingRef]) -> list[Question]
                 key=f"finding:{f.rule_id}",
                 kind="finding",
                 text=_fill(FINDING_Q[f.rule_id], involved),
-                reason=f"Temuan {f.rule_id} masih terbuka (prioritas {f.priority}).",
+                reason=(
+                    f"Temuan {f.rule_id} masih terbuka "
+                    f"(prioritas {PRIORITY_LABEL.get(f.priority, f.priority)})."
+                ),
                 element_ids=tuple(f.element_ids),
                 score=3 + PRIORITY.get(f.priority, 0),
             )

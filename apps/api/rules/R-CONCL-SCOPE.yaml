@@ -7,6 +7,8 @@ why_flagged: >-
 suggested_clarification: >-
   Apakah kesimpulan akan dibatasi pada sampel yang diteliti, atau teknik sampling perlu diubah
   agar generalisasi lebih luas dapat didukung?
+basis: >-
+  Generalisasi hasil dibatasi oleh populasi dan teknik sampling (validitas eksternal); sampel non-probabilitas atau satu kelas tidak mendukung generalisasi luas. Perlu ditinjau dosen metodologi.
 check:
   kind: conflict
   a:

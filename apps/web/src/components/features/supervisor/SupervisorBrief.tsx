@@ -69,6 +69,8 @@ export function SupervisorBrief({ token }: { token: string }) {
         </p>
       ) : null}
 
+      {!brief && !error ? <p className="text-sm text-muted">{copy.workspace.loading}</p> : null}
+
       {brief ? (
         <>
           <div className="flex flex-wrap items-start justify-between gap-3">

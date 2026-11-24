@@ -36,7 +36,7 @@ describe("UploadForm", () => {
     const fetchMock = vi.fn((url: string) => {
       if (url.endsWith("/projects")) return respond({ id: "p1", title: "t", program: "matematika", consent_at: null });
       if (url.endsWith("/consent")) return respond({ id: "p1", title: "t", program: "matematika", consent_at: "x" });
-      if (url.endsWith("/documents")) return respond({ version, created: true, pages: 3 }, 201);
+      if (url.endsWith("/documents")) return respond({ version, created: true, pages: 3, auto_elements: 5, findings: 2 }, 201);
       return respond([version]);
     });
     vi.stubGlobal("fetch", fetchMock);
@@ -46,6 +46,8 @@ describe("UploadForm", () => {
     await userEvent.click(screen.getByRole("button", { name: u.submit }));
     expect(await screen.findByText(new RegExp(u.created))).toBeInTheDocument();
     expect(screen.getByText(new RegExp(`3 ${u.pagesPdf}`))).toBeInTheDocument();
+    expect(screen.getByText(u.autoResult(5, 2))).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: u.openWorkspace })).toHaveAttribute("href", "/proyek");
     expect(window.localStorage.getItem("thesistwin.projectId")).toBe("p1");
   });
 

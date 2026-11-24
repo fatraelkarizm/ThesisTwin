@@ -1,5 +1,6 @@
 """Memuat aturan dari rules/*.yaml (IO di sini; engine murni di domain/rules.py)."""
 
+from functools import cache
 from pathlib import Path
 
 import yaml
@@ -26,3 +27,9 @@ def load_rules(directory: Path = RULES_DIR) -> list[Rule]:
         seen.add(rule.id)
         rules.append(rule)
     return rules
+
+
+@cache
+def rule_basis() -> dict[str, str]:
+    """id aturan -> dasar metodologisnya (dimuat sekali per proses)."""
+    return {r.id: r.basis for r in load_rules() if r.basis}

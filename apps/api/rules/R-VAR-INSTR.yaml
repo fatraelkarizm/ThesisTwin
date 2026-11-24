@@ -5,6 +5,8 @@ why_flagged: >-
   Ditemukan variabel penelitian, tetapi tidak ditemukan instrumen untuk mengukurnya
   (tes, angket, lembar observasi, pedoman wawancara).
 suggested_clarification: Instrumen apa yang dipakai untuk mengukur variabel ini?
+basis: >-
+  Variabel harus didefinisikan secara operasional dan diukur dengan instrumen tertentu (tes, angket, observasi, atau alat ukur), beserta uji validitas/reliabilitasnya. Perlu ditinjau dosen metodologi.
 check:
   kind: requires
   source: {types: [variable]}

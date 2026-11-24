@@ -1,0 +1,27 @@
+id: R-RQ-OBJ-COUNT
+priority: medium
+title: Jumlah tujuan tidak sama dengan jumlah rumusan masalah
+why_flagged: >-
+  Jumlah tujuan penelitian berbeda dengan jumlah rumusan masalah. Pada proposal, tiap tujuan
+  lazimnya menjawab satu rumusan masalah; selisih menandakan ada tujuan tanpa pertanyaan atau
+  pertanyaan tanpa tujuan
+suggested_clarification: >-
+  Rumusan masalah mana yang dijawab oleh tiap tujuan, dan apakah ada tujuan yang sebenarnya
+  manfaat atau keluaran penelitian?
+basis: >-
+  Prinsip keselarasan rumusan masalah–tujuan (alignment) pada penulisan proposal; tujuan adalah
+  jawaban yang ingin dicapai atas rumusan masalah. Perlu ditinjau dosen metodologi.
+check:
+  kind: count_match
+  a: {types: [research_question], label: rumusan masalah}
+  b: {types: [objective], label: tujuan}
+examples:
+  fires:
+    elements:
+      - {type: research_question, content: "Bagaimana besaran emisi karbon model BERT?"}
+      - {type: objective, content: "Mengukur emisi karbon model BERT."}
+      - {type: objective, content: "Memberikan rekomendasi praktik Green AI."}
+  quiet:
+    elements:
+      - {type: research_question, content: "Bagaimana besaran emisi karbon model BERT?"}
+      - {type: objective, content: "Mengukur emisi karbon model BERT."}

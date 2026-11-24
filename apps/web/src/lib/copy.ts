@@ -1,7 +1,7 @@
 // Semua teks UI Indonesia di sini. Bahasa temuan = pertanyaan/peringatan, bukan vonis.
 export const copy = {
   status: {
-    ai_suggested: "Saran AI",
+    ai_suggested: "Saran otomatis",
     needs_user_confirmation: "Perlu konfirmasi",
     student_confirmed: "Dikonfirmasi mahasiswa",
     supervisor_confirmed: "Dikonfirmasi dosen",
@@ -13,6 +13,7 @@ export const copy = {
   confidence: "Perkiraan AI",
   evidenceVerified: "Evidence terverifikasi",
   ruleBased: "Dari aturan",
+  basis: "Dasar metodologi",
   whyFlagged: "Mengapa muncul",
   suggestion: "Pertanyaan untuk dijernihkan",
   noEvidence: "Belum ada sumber — perlu konfirmasi",
@@ -61,6 +62,11 @@ export const copy = {
     resultTitle: "Hasil unggahan",
     created: "Tersimpan sebagai versi baru",
     duplicate: "Isi sama dengan versi terakhir — tidak membuat versi baru",
+    autoResult: (elements: number, findings: number) =>
+      elements > 0
+        ? `${elements} elemen penelitian terdeteksi dari struktur bab, ${findings} temuan dari cek aturan.`
+        : "Belum ada elemen yang terdeteksi otomatis. Tambahkan elemen di Ruang Kerja.",
+    openWorkspace: "Buka Ruang Kerja",
     pagesPdf: "halaman terbaca",
     sectionsDocx: "bagian terbaca (DOCX tidak punya nomor halaman tetap)",
     versionsTitle: "Versi di proyek ini",
@@ -92,6 +98,7 @@ export const copy = {
     notVerified: "Kutipan tidak ditemukan di lokasi ini",
     fromStudent: "Dari mahasiswa",
     fromAi: "Dari ekstraksi AI",
+    fromAuto: "Terdeteksi dari struktur bab",
     form: {
       type: "Jenis elemen",
       content: "Isi (ringkas, kata-katamu sendiri)",
@@ -209,7 +216,7 @@ export const copy = {
     },
     queue: {
       title: "Temuan untuk ditinjau",
-      description: "Saran AI menunggu konfirmasi kamu sebelum dianggap benar.",
+      description: "Saran otomatis menunggu konfirmasi kamu sebelum dianggap benar.",
       empty: "Tidak ada temuan yang menunggu tinjauan.",
     },
     history: {

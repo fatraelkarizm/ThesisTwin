@@ -93,3 +93,22 @@ def test_docx_upload_keeps_comments(client):
 def test_unknown_project_is_404(client):
     assert client.post("/projects/nope/consent").status_code == 404
     assert client.get("/projects/nope/versions").status_code == 404
+
+
+def test_upload_runs_structural_extraction_and_check(client):
+    from tests.test_docx import _p, make_docx
+
+    pid = _project(client)
+    client.post(f"/projects/{pid}/consent")
+    doc = make_docx(
+        _p("Rumusan Masalah", "Heading1")
+        + _p("1. Bagaimana pengaruh model PBL terhadap hasil belajar siswa?")
+        + _p("Desain Penelitian", "Heading1")
+        + _p("Penelitian ini memakai desain one-group pre-test/post-test pada satu kelas.")
+    )
+    r = _upload(client, pid, doc, name="p.docx").json()
+    assert r["auto_elements"] >= 2 and r["findings"] >= 1
+    els = client.get(f"/versions/{r['version']['id']}/elements").json()
+    assert all(e["source"] == "auto" and e["verified"] for e in els)
+    rules = {f["rule_id"] for f in client.get(f"/versions/{r['version']['id']}/findings").json()}
+    assert "R-CAUSAL-01" in rules

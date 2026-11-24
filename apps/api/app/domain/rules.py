@@ -6,7 +6,7 @@ LLM tidak memutuskan apa pun di sini.
 """
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Annotated, Literal
 
 from pydantic import BaseModel, Field
@@ -61,6 +61,7 @@ class RuleFinding:
 class Match(BaseModel):
     types: list[str] = Field(min_length=1)
     any_terms: list[str] = Field(default_factory=list)  # kosong = semua elemen bertipe itu
+    label: str | None = None  # nama yang ditampilkan di temuan, mis. "rumusan masalah"
 
     def select(self, elements: list[Element]) -> list[Element]:
         return [
@@ -98,8 +99,28 @@ class RequiredSectionsCheck(BaseModel):
     sections: list[Section] = Field(min_length=1)
 
 
+class CountMatchCheck(BaseModel):
+    """Terpicu bila jumlah elemen `a` dan `b` sama-sama > 0 tetapi berbeda."""
+
+    kind: Literal["count_match"]
+    a: Match
+    b: Match
+
+
+class ForbiddenSectionsCheck(BaseModel):
+    """Terpicu per bagian yang **tidak seharusnya** ada di dokumen (mis. Bab Hasil di proposal)."""
+
+    kind: Literal["forbidden_sections"]
+    sections: list[Section] = Field(min_length=1)
+
+
 Check = Annotated[
-    ConflictCheck | RequiresCheck | RequiredSectionsCheck, Field(discriminator="kind")
+    ConflictCheck
+    | RequiresCheck
+    | RequiredSectionsCheck
+    | CountMatchCheck
+    | ForbiddenSectionsCheck,
+    Field(discriminator="kind"),
 ]
 
 
@@ -120,6 +141,8 @@ class Rule(BaseModel):
     # Wajib: contoh yang harus memicu dan yang tidak boleh memicu (docs/alignment-rules.md).
     examples: dict[Literal["fires", "quiet"], Example]
     reviewed_by_supervisor: bool = False
+    # Dasar metodologis aturan (prinsip/rujukan), agar temuan bisa diperiksa dosen.
+    basis: str | None = None
 
     def applies_to(self, program: str) -> bool:
         return self.enabled and ("*" in self.programs or program in self.programs)
@@ -150,7 +173,23 @@ def _finding(
     )
 
 
-def evaluate(rule: Rule, elements: list[Element], document_text: str = "") -> list[RuleFinding]:
+TOC_PAGE = re.compile(r"\bDAFTAR (ISI|TABEL|GAMBAR|LAMPIRAN)\b")
+
+
+def locate(pages: dict[int, str], terms: list[str]) -> int | None:
+    """Halaman pertama (di luar daftar isi) yang memuat salah satu istilah."""
+    for n in sorted(pages):
+        if not TOC_PAGE.search(pages[n]) and has_term(pages[n], terms):
+            return n
+    return None
+
+
+def evaluate(
+    rule: Rule,
+    elements: list[Element],
+    document_text: str = "",
+    pages: dict[int, str] | None = None,
+) -> list[RuleFinding]:
     check = rule.check
     if isinstance(check, ConflictCheck):
         a, b = check.a.select(elements), check.b.select(elements)
@@ -158,14 +197,45 @@ def evaluate(rule: Rule, elements: list[Element], document_text: str = "") -> li
     if isinstance(check, RequiresCheck):
         source = check.source.select(elements)
         return [_finding(rule, source)] if source and not check.target.select(elements) else []
+    if isinstance(check, CountMatchCheck):
+        a, b = check.a.select(elements), check.b.select(elements)
+        if a and b and len(a) != len(b):
+            counts = (
+                f"{len(a)} {check.a.label or check.a.types[0]}, "
+                f"{len(b)} {check.b.label or check.b.types[0]}"
+            )
+            return [_finding(rule, a + b, f"{rule.why_flagged} ({counts})", counts)]
+        return []
+    if isinstance(check, ForbiddenSectionsCheck):
+        out = []
+        for s in check.sections:
+            if not has_term(document_text, s.any_terms):
+                continue
+            page = locate(pages or {}, s.any_terms)
+            f = _finding(rule, [], f"{rule.why_flagged} ({s.name})", s.name)
+            if page is not None:  # teks bagian itu sendiri adalah bukti, dan halamannya diketahui
+                f = replace(
+                    f, evidence=[Evidence(f"section:{s.name}", page)], status=Status.AI_SUGGESTED
+                )
+            out.append(f)
+        return out
     missing = [s for s in check.sections if not has_term(document_text, s.any_terms)]
     return [_finding(rule, [], f"{rule.why_flagged} ({s.name})", s.name) for s in missing]
 
 
 def run(
-    rules: list[Rule], elements: list[Element], program: str, document_text: str = ""
+    rules: list[Rule],
+    elements: list[Element],
+    program: str,
+    document_text: str = "",
+    pages: dict[int, str] | None = None,
 ) -> list[RuleFinding]:
-    return [f for r in rules if r.applies_to(program) for f in evaluate(r, elements, document_text)]
+    return [
+        f
+        for r in rules
+        if r.applies_to(program)
+        for f in evaluate(r, elements, document_text, pages)
+    ]
 
 
 def example_elements(example: Example) -> list[Element]:

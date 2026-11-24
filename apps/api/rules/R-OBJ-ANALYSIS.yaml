@@ -5,6 +5,8 @@ why_flagged: >-
   Ditemukan tujuan penelitian, tetapi tidak ditemukan teknik analisis data. Tanpa rencana
   analisis, belum jelas bagaimana tujuan akan dicapai.
 suggested_clarification: Teknik analisis apa yang akan dipakai untuk mencapai tujuan ini?
+basis: >-
+  Setiap tujuan perlu rencana analisis data yang menunjukkan bagaimana tujuan itu dicapai dari data yang dikumpulkan. Perlu ditinjau dosen metodologi.
 check:
   kind: requires
   source: {types: [objective]}

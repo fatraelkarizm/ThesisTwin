@@ -123,6 +123,12 @@ def run_check(
     rows = list_elements(session, version_id)
     by_id = {r.id: r for r in rows}
 
+    # Hapus evidence dulu secara eksplisit: bulk delete tidak memicu cascade ORM, dan cascade FK
+    # SQLite hanya aktif bila PRAGMA foreign_keys menyala. Tanpa ini evidence tertinggal yatim.
+    stale = select(FindingRow.id).where(
+        FindingRow.version_id == version_id, FindingRow.status.in_(UNREVIEWED)
+    )
+    session.execute(delete(EvidenceRow).where(EvidenceRow.finding_id.in_(stale)))
     session.execute(
         delete(FindingRow).where(
             FindingRow.version_id == version_id, FindingRow.status.in_(UNREVIEWED)
@@ -134,12 +140,17 @@ def run_check(
         (f.rule_id, f.why_flagged)
         for f in session.scalars(select(FindingRow).where(FindingRow.version_id == version_id))
     }
-    text = "\n".join(pages(version).values())
-    for rf in run(rules or load_rules(), _domain_elements(rows), project.program, text):
+    page_texts = pages(version)
+    text = "\n".join(page_texts.values())
+    elements = _domain_elements(rows)
+    for rf in run(rules or load_rules(), elements, project.program, text, page_texts):
         if (rf.rule_id, rf.why_flagged) in reviewed:
             continue
-        evidence = [by_id[e.element] for e in rf.evidence]
-        verified = sum(e.verified for e in evidence)
+        evidence = [by_id[e.element] for e in rf.evidence if e.element in by_id]
+        # Evidence bagian dokumen (mis. "section:Hasil dan Pembahasan"): teks bagian itu sendiri.
+        sections = [e for e in rf.evidence if e.element.startswith("section:")]
+        verified = sum(e.verified for e in evidence) + len(sections)
+        total = len(evidence) + len(sections)
         session.add(
             FindingRow(
                 id=f"F-{uuid.uuid4().hex[:8]}",
@@ -151,7 +162,7 @@ def run_check(
                 why_flagged=rf.why_flagged,
                 suggested_clarification=rf.suggested_clarification,
                 # Bukan "keyakinan AI": proporsi evidence yang kutipannya terverifikasi.
-                confidence=verified / len(evidence) if evidence else 0.0,
+                confidence=verified / total if total else 0.0,
                 status=rf.status.value,
                 ai_generated=any(e.source == "ai" for e in evidence),
                 evidence=[
@@ -162,6 +173,14 @@ def run_check(
                         page=e.page,
                     )
                     for e in evidence
+                ]
+                + [
+                    EvidenceRow(
+                        element=e.element.removeprefix("section:"),
+                        document=f"v{version.version_no}",
+                        page=e.page,
+                    )
+                    for e in sections
                 ],
             )
         )

@@ -5,6 +5,8 @@ why_flagged: >-
   Ditemukan rumusan masalah, tetapi tidak ditemukan tujuan penelitian. Setiap rumusan masalah
   biasanya dijawab oleh minimal satu tujuan.
 suggested_clarification: Tujuan penelitian mana yang menjawab rumusan masalah ini?
+basis: >-
+  Rumusan masalah dan tujuan penelitian harus selaras: tiap pertanyaan dijawab oleh tujuan yang sesuai. Perlu ditinjau dosen metodologi.
 check:
   kind: requires
   source: {types: [research_question]}

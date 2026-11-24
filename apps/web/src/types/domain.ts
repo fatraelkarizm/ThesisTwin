@@ -29,4 +29,5 @@ export interface Finding {
   // true = isi temuan/evidence berasal dari AI (ekstraksi). Temuan aturan atas elemen
   // yang dimasukkan mahasiswa = false; label AI tidak boleh dipasang palsu.
   aiGenerated: boolean;
+  basis?: string; // dasar metodologis aturan
 }

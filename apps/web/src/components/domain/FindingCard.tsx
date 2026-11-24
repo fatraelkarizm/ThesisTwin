@@ -33,9 +33,15 @@ export function FindingCard({ finding, onConfirm, onReject }: FindingCardProps) 
         <span className="font-medium">{copy.suggestion}: </span>
         {finding.suggestedClarification}
       </p>
+      {finding.basis ? (
+        <p className="border-l-2 border-line pl-2 text-xs text-muted">
+          <span className="font-medium">{copy.basis}: </span>
+          {finding.basis}
+        </p>
+      ) : null}
       <div className="flex flex-wrap gap-2">
         {hasEvidence ? (
-          finding.evidence.map((e) => <EvidenceChip key={`${e.element}-${e.page}`} evidence={e} />)
+          finding.evidence.map((e, i) => <EvidenceChip key={`${e.element}-${e.page}-${i}`} evidence={e} />)
         ) : (
           <span className="text-xs text-muted">{copy.noEvidence}</span>
         )}

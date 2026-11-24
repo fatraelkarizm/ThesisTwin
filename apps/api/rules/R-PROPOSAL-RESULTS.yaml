@@ -1,0 +1,23 @@
+id: R-PROPOSAL-RESULTS
+priority: high
+title: Proposal memuat bab hasil atau kesimpulan
+why_flagged: >-
+  Dokumen proposal (Bab 1–3) memuat bagian hasil/kesimpulan. Proposal disusun sebelum data
+  dikumpulkan, sehingga angka hasil di dalamnya perlu dipastikan asal-usulnya
+suggested_clarification: >-
+  Apakah hasil ini sudah benar-benar diperoleh dari eksperimen, atau masih contoh/perkiraan yang
+  perlu diberi label jelas atau dihapus dari proposal?
+basis: >-
+  Proposal penelitian memuat rencana (latar belakang, kajian pustaka, metode); hasil dan
+  kesimpulan ditulis setelah data dikumpulkan. Hasil yang belum diperoleh tidak boleh disajikan
+  sebagai temuan (integritas data).
+check:
+  kind: forbidden_sections
+  sections:
+    - {name: Hasil dan Pembahasan, any_terms: [hasil dan pembahasan, results and discussion]}
+    - {name: Kesimpulan dan Saran, any_terms: [kesimpulan dan saran, conclusion and recommendation]}
+examples:
+  fires:
+    document_text: "BAB III METODOLOGI PENELITIAN ... BAB IV HASIL DAN PEMBAHASAN Akurasi 93,5%"
+  quiet:
+    document_text: "BAB I PENDAHULUAN ... BAB II KAJIAN PUSTAKA ... BAB III METODE PENELITIAN"

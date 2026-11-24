@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpenCheck, Share2 } from "lucide-react";
+import { BookOpenCheck } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { copy } from "@/lib/copy";
@@ -61,19 +61,6 @@ export function Sidebar() {
         </ul>
       </nav>
 
-      <div className="m-3 rounded-2xl bg-gradient-to-br from-brand to-brand-hover p-4 text-brand-fg shadow-card">
-        <span className="flex size-8 items-center justify-center rounded-lg bg-white/20">
-          <Share2 aria-hidden="true" className="size-4" />
-        </span>
-        <p className="mt-3 text-sm font-semibold">{s.shareTitle}</p>
-        <p className="mt-1 text-xs opacity-90">{s.shareBody}</p>
-        <Link
-          href="/proyek#brief"
-          className="mt-3 flex min-h-11 w-full items-center justify-center rounded-lg border border-white/40 bg-white/15 text-sm font-medium hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-white"
-        >
-          {s.shareAction}
-        </Link>
-      </div>
     </aside>
   );
 }

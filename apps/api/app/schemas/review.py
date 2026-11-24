@@ -57,6 +57,7 @@ class FindingOut(BaseModel):
     status: str
     ai_generated: bool
     evidence: list[EvidenceOut]
+    basis: str | None = None  # dasar metodologis aturan (dari rules/*.yaml)
 
 
 class StatusIn(BaseModel):

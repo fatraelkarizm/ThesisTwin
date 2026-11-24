@@ -24,6 +24,8 @@ export interface UploadOut {
   version: VersionOut;
   created: boolean;
   pages: number;
+  auto_elements: number;
+  findings: number;
 }
 
 export type ElementType =
@@ -44,7 +46,7 @@ export interface ElementOut {
   quote: string;
   page: number;
   verified: boolean;
-  source: "student" | "ai";
+  source: "student" | "ai" | "auto";
   status: Status;
 }
 
@@ -59,6 +61,7 @@ export interface FindingApi {
   status: Status;
   ai_generated: boolean;
   evidence: { element: string; document: string; page: number }[];
+  basis: string | null;
 }
 
 export interface CommentStatusOut {
@@ -134,6 +137,7 @@ export function toFinding(f: FindingApi, unit: "page" | "section"): Finding {
     confidence: f.confidence,
     status: f.status,
     aiGenerated: f.ai_generated,
+    basis: f.basis ?? undefined,
   };
 }
 

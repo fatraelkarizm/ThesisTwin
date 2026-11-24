@@ -12,3 +12,6 @@ node_modules/
 *.db
 *.sqlite3
 uploads/
+
+# Dokumen mahasiswa asli (berisi nama/NIM): jangan pernah di-commit (AGENTS.md §1)
+docs/source/Metodologi Penelitian_*.pdf

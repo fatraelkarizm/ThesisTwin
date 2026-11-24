@@ -9,7 +9,7 @@ from app.core.config import settings
 from app.db.session import get_session
 from app.schemas.project import ProjectIn, ProjectOut, ShareLinkOut, UploadOut, VersionOut
 from app.services import documents as svc
-from app.services import privacy
+from app.services import pipeline, privacy
 from app.storage import LocalStorage
 
 router = APIRouter(prefix="/projects", tags=["projects"])
@@ -38,10 +38,14 @@ async def upload(
         raise HTTPException(
             status.HTTP_413_CONTENT_TOO_LARGE, f"Maksimal {settings.max_upload_mb} MB."
         )
-    added = svc.ingest_upload(session, storage, project_id, file.filename or "dokumen", data)
-    pages = len(json.loads(added.version.parsed_json).get("pages", {}))
+    result = pipeline.process_upload(session, storage, project_id, file.filename or "dokumen", data)
+    pages = len(json.loads(result.added.version.parsed_json).get("pages", {}))
     return UploadOut(
-        version=VersionOut.model_validate(added.version), created=added.created, pages=pages
+        version=VersionOut.model_validate(result.added.version),
+        created=result.added.created,
+        pages=pages,
+        auto_elements=result.auto_elements,
+        findings=result.findings,
     )
 
 

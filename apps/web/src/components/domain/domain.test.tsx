@@ -49,10 +49,36 @@ describe("FindingCard", () => {
     expect(screen.getByText(new RegExp(copy.evidenceVerified))).toBeInTheDocument();
   });
 
+  it("menampilkan dasar metodologi aturan bila ada", () => {
+    render(<FindingCard finding={{ ...finding, basis: "Klaim kausal butuh kelompok pembanding." }} />);
+    expect(screen.getByText(/Klaim kausal butuh kelompok pembanding/)).toBeInTheDocument();
+  });
+
   it("tanpa evidence: status dipaksa 'perlu konfirmasi' dan sumber dinyatakan kosong", () => {
     render(<FindingCard finding={{ ...finding, evidence: [] }} />);
     expect(screen.getByText(copy.status.needs_user_confirmation)).toBeInTheDocument();
     expect(screen.queryByText(copy.status.ai_suggested)).not.toBeInTheDocument();
     expect(screen.getByText(copy.noEvidence)).toBeInTheDocument();
+  });
+});
+
+describe("FindingCard evidence", () => {
+  it("elemen setipe di halaman yang sama tidak memicu key ganda", () => {
+    const errors: unknown[] = [];
+    const orig = console.error;
+    console.error = (...args: unknown[]) => errors.push(args);
+    render(
+      <FindingCard
+        finding={{
+          ...finding,
+          evidence: [
+            { element: "Rumusan masalah", document: "v1", page: 6 },
+            { element: "Rumusan masalah", document: "v1", page: 6 },
+          ],
+        }}
+      />,
+    );
+    console.error = orig;
+    expect(errors.filter((e) => String(e).includes("same key"))).toHaveLength(0);
   });
 });

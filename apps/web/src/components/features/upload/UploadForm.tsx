@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircle2, CircleAlert, FileText, Info } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useId, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -194,7 +195,11 @@ function UploadResult({ result }: { result: UploadOut }) {
       <p>
         {result.pages} {isDocx ? u.sectionsDocx : u.pagesPdf}
       </p>
+      <p>{u.autoResult(result.auto_elements, result.findings)}</p>
       <p className="font-mono text-xs">SHA-256 {result.version.sha256.slice(0, 12)}…</p>
+      <Link href="/proyek" className="inline-block font-medium underline">
+        {u.openWorkspace}
+      </Link>
     </div>
   );
 }
