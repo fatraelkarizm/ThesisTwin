@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 
 from app.domain.status import InvalidTransition
 from app.services import documents as docs
-from app.services import review, share
+from app.services import privacy, review, share
 from app.services import stress as stress_svc
 from app.services.findings import FindingNotFound
 
@@ -14,6 +14,7 @@ _MAP: dict[type[Exception], tuple[int, str]] = {
     FindingNotFound: (status.HTTP_404_NOT_FOUND, "Temuan tidak ditemukan."),
     stress_svc.QuestionNotFound: (status.HTTP_404_NOT_FOUND, "Pertanyaan tidak ditemukan."),
     stress_svc.InvalidRating: (status.HTTP_422_UNPROCESSABLE_CONTENT, "Nilai harus 1–5."),
+    privacy.LinkNotFound: (status.HTTP_404_NOT_FOUND, "Tautan tidak ditemukan."),
     review.VersionNotFound: (status.HTTP_404_NOT_FOUND, "Versi tidak ditemukan."),
     share.LinkInvalid: (
         status.HTTP_404_NOT_FOUND,

@@ -7,8 +7,9 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_storage
 from app.core.config import settings
 from app.db.session import get_session
-from app.schemas.project import ProjectIn, ProjectOut, UploadOut, VersionOut
+from app.schemas.project import ProjectIn, ProjectOut, ShareLinkOut, UploadOut, VersionOut
 from app.services import documents as svc
+from app.services import privacy
 from app.storage import LocalStorage
 
 router = APIRouter(prefix="/projects", tags=["projects"])
@@ -42,6 +43,26 @@ async def upload(
     return UploadOut(
         version=VersionOut.model_validate(added.version), created=added.created, pages=pages
     )
+
+
+@router.get("/{project_id}")
+def get_project(project_id: str, session: SessionDep) -> ProjectOut:
+    return ProjectOut.model_validate(svc.get_project(session, project_id))
+
+
+@router.delete("/{project_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_project(project_id: str, session: SessionDep, storage: StorageDep) -> None:
+    privacy.delete_project(session, storage, project_id)
+
+
+@router.get("/{project_id}/share-links")
+def list_links(project_id: str, session: SessionDep) -> list[ShareLinkOut]:
+    return [ShareLinkOut.model_validate(x) for x in privacy.list_links(session, project_id)]
+
+
+@router.post("/{project_id}/share-links/{link_id}/revoke")
+def revoke_link(project_id: str, link_id: str, session: SessionDep) -> ShareLinkOut:
+    return ShareLinkOut.model_validate(privacy.revoke_link(session, project_id, link_id))
 
 
 @router.get("/{project_id}/versions")

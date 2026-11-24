@@ -98,6 +98,13 @@ export interface GraphOut {
   gaps: { from_type: ElementType; to_type: ElementType; relation: string }[];
 }
 
+export interface ShareLinkOut {
+  id: string;
+  created_at: string;
+  expires_at: string;
+  revoked: boolean;
+}
+
 export interface StressQuestionOut {
   id: string;
   position: number;
@@ -173,6 +180,14 @@ export const api = {
     form.append("file", file);
     return request<UploadOut>(`/projects/${projectId}/documents`, { method: "POST", body: form });
   },
+  project: (projectId: string) => request<ProjectOut>(`/projects/${projectId}`),
+  deleteProject: async (projectId: string) => {
+    const res = await fetch(`${API_URL}/projects/${projectId}`, { method: "DELETE" });
+    if (!res.ok) throw new ApiError(`Gagal menghapus (${res.status}).`, res.status);
+  },
+  shareLinks: (projectId: string) => request<ShareLinkOut[]>(`/projects/${projectId}/share-links`),
+  revokeLink: (projectId: string, linkId: string) =>
+    request<ShareLinkOut>(`/projects/${projectId}/share-links/${linkId}/revoke`, { method: "POST" }),
   versions: (projectId: string) => request<VersionOut[]>(`/projects/${projectId}/versions`),
   elements: (versionId: string) => request<ElementOut[]>(`/versions/${versionId}/elements`),
   addElement: (versionId: string, body: { type: ElementType; content: string; quote: string; page: number }) =>

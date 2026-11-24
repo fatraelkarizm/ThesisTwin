@@ -15,6 +15,7 @@ from app.parsing.detect import DOCX_MEDIA, PDF_MEDIA, TEX_MEDIA, detect
 from app.parsing.docx import DocxError, parse_docx
 from app.parsing.pdf import read_pages
 from app.parsing.tex import parse_tex
+from app.services import audit
 from app.storage import LocalStorage
 
 
@@ -97,6 +98,14 @@ def add_version(
         uploaded_at=now(),
     )
     session.add(version)
+    audit.record(
+        session,
+        "mahasiswa",
+        "version_uploaded",
+        "document_version",
+        version_id,
+        {"version_no": version_no, "sha256": digest},
+    )
     session.commit()
     return AddedVersion(version, created=True)
 
@@ -144,6 +153,10 @@ def list_versions(session: Session, project_id: str) -> list[DocumentVersion]:
             .order_by(DocumentVersion.version_no)
         )
     )
+
+
+def get_project(session: Session, project_id: str) -> Project:
+    return _get_project(session, project_id)
 
 
 def _get_project(session: Session, project_id: str) -> Project:

@@ -26,6 +26,7 @@ from app.domain.impact import change_impact
 from app.domain.rules import Element, Rule, run
 from app.domain.status import Status
 from app.domain.verification import verify_quote
+from app.services import audit
 from app.services.documents import ProjectNotFound
 from app.services.rules import load_rules
 
@@ -86,6 +87,7 @@ def add_element(
         status=status.value,
     )
     session.add(row)
+    audit.record(session, source, "element_added", "element", row.id, {"verified": check.ok})
     session.commit()
     return row
 

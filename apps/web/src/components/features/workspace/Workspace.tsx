@@ -65,7 +65,7 @@ export function Workspace() {
         setProjectId(pid);
         setVersions(list);
         setVersionId(list.at(-1)?.id ?? null);
-        refreshProject(pid);
+        if (list.length > 0) refreshProject(pid); // brief & komentar butuh minimal satu versi
       })
       .catch(fail)
       .finally(() => setLoaded(true));

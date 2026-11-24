@@ -26,5 +26,5 @@ export const navItems: NavItem[] = [
   { label: n.versions, icon: GitCompare, href: "/proyek" },
   { label: n.brief, icon: FileOutput, href: "/proyek#brief" },
   { label: n.stressTest, icon: ShieldQuestion, href: "/proyek#stress-test" },
-  { label: n.settings, icon: Settings },
+  { label: n.settings, icon: Settings, href: "/pengaturan" },
 ];

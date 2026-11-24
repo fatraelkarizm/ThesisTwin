@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 
 from app.db.models import FindingRow, Project, ShareLink
 from app.domain.status import Role, Status
+from app.services import audit
 from app.services.documents import ProjectNotFound
 from app.services.findings import FindingNotFound, change_status
 
@@ -55,6 +56,7 @@ def create_link(
         expires_at=created + timedelta(days=days),
     )
     session.add(link)
+    audit.record(session, "mahasiswa", "share_created", "share_link", link.id, at=created)
     session.commit()
     return link, token
 

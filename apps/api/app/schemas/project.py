@@ -38,3 +38,19 @@ class UploadOut(BaseModel):
     version: VersionOut
     created: bool
     pages: int
+
+
+class ShareLinkOut(BaseModel):
+    """Tanpa token: token hanya ditampilkan sekali saat dibuat."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: str
+    created_at: datetime
+    expires_at: datetime
+    revoked: bool
+
+    @field_validator("created_at", "expires_at")
+    @classmethod
+    def _as_utc(cls, v: datetime) -> datetime:
+        return v if v.tzinfo else v.replace(tzinfo=UTC)

@@ -184,7 +184,7 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 
 ### Langkah 24 — Privasi & audit
 - **Output:** cakupan redaction diuji, audit log semua aksi, hapus permanen (FR-122).
-- **Status:** ⬜
+- **Status:** ✅ (2026-11-24) — hapus permanen proyek (DB + file, eksplisit tanpa bergantung PRAGMA), cabut tautan dosen, audit log untuk unggah/elemen/tautan/status/rating/hapus tanpa isi penelitian; halaman /pengaturan. Redaction masih regex (NIM/telepon/email); nama orang belum.
 
 ### Langkah 25 — Protokol pilot 10 mahasiswa + 3 dosen
 - **Output:** cara mencatat waktu review per revisi (target −50%), formulir, consent.

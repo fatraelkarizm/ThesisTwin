@@ -150,4 +150,4 @@ def test_expired_link_is_rejected():
             raise AssertionError("tautan kedaluwarsa masih diterima")
         except share.LinkInvalid:
             pass
-        assert s.query(AuditLog).count() == 0
+        assert [a.action for a in s.query(AuditLog)] == ["share_created"]  # hanya pembuatan tautan
