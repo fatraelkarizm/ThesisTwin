@@ -1,23 +1,40 @@
-import { FindingCard } from "@/components/domain/FindingCard";
-import { sampleFindings } from "@/components/features/findings/sample";
+import { SimulatedBadge } from "@/components/domain/SimulatedBadge";
+import { FindingQueue } from "@/components/features/dashboard/FindingQueue";
+import { StatTiles } from "@/components/features/dashboard/StatTiles";
+import { ToolsPanel } from "@/components/features/dashboard/ToolsPanel";
+import { VersionCards } from "@/components/features/dashboard/VersionCards";
+import { VersionHistory } from "@/components/features/dashboard/VersionHistory";
+import { findings, stats, versions } from "@/components/features/dashboard/sample";
+import { copy } from "@/lib/copy";
 
-export default function Home() {
+export default function DashboardPage() {
+  const d = copy.dashboard;
   return (
-    <main className="mx-auto w-full max-w-3xl space-y-6 p-6">
-      <header>
-        <h1 className="text-2xl font-semibold">ThesisTwin</h1>
-        <p className="text-sm text-muted">
-          Navigasi dan konsistensi skripsi. Data di bawah ini simulasi (bukan hasil analisis nyata).
-        </p>
+    <main className="mx-auto w-full max-w-7xl space-y-5 p-4 md:p-6">
+      <header className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold">{d.title}</h1>
+          <p className="text-sm text-muted">{d.subtitle}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <SimulatedBadge />
+          <p className="max-w-xs text-xs text-muted">{d.simulatedNote}</p>
+        </div>
       </header>
-      <section aria-labelledby="temuan" className="space-y-4">
-        <h2 id="temuan" className="text-lg font-semibold">
-          Temuan
-        </h2>
-        {sampleFindings.map((f) => (
-          <FindingCard key={f.id} finding={f} />
-        ))}
-      </section>
+
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="space-y-5">
+          <VersionCards versions={versions} />
+          <div id="temuan" className="scroll-mt-4">
+            <FindingQueue initial={findings} />
+          </div>
+          <VersionHistory versions={versions} />
+        </div>
+        <div className="space-y-5">
+          <ToolsPanel />
+          <StatTiles stats={stats} />
+        </div>
+      </div>
     </main>
   );
 }

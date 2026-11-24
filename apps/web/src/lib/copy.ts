@@ -41,4 +41,59 @@ export const copy = {
     newProject: "Proyek Baru",
     soonHint: "Fitur ini sedang dibangun",
   },
+  dashboard: {
+    title: "Proposal Skripsi",
+    proposal: "Proposal",
+    of: "dari",
+    subtitle: "Prodi Matematika · Bab 1–3",
+    simulatedNote: "Semua angka di halaman ini adalah data simulasi, bukan hasil analisis proposal nyata.",
+    check: {
+      title: "Cek Konsistensi",
+      description: "Keselarasan pertanyaan penelitian, tujuan, metode, dan analisis per versi.",
+      openFindings: "Temuan terbuka",
+      uploaded: "Diunggah",
+    },
+    queue: {
+      title: "Temuan untuk ditinjau",
+      description: "Saran AI menunggu konfirmasi kamu sebelum dianggap benar.",
+      empty: "Tidak ada temuan yang menunggu tinjauan.",
+    },
+    history: {
+      title: "Riwayat Versi",
+      description: "Setiap unggahan disimpan sebagai versi baru; versi lama tidak ditimpa.",
+      sectionsChecked: "bagian dicek",
+    },
+    tools: {
+      title: "Tools",
+      description: "Apa yang bisa dilakukan ThesisTwin untuk proposal ini.",
+      items: {
+        consistency: {
+          title: "Cek Konsistensi",
+          body: "Temukan ketidaksesuaian RQ, tujuan, metode, dan analisis, lengkap dengan halaman sumber.",
+        },
+        compare: {
+          title: "Bandingkan Versi",
+          body: "Lihat apa yang berubah sejak revisi lalu dan komentar mana yang sudah ditangani.",
+        },
+        brief: {
+          title: "Supervision Brief",
+          body: "Ringkasan satu halaman untuk dosen: perubahan, komentar, dan keputusan terbuka.",
+        },
+        stressTest: {
+          title: "Defense Stress-Test",
+          body: "3–5 pertanyaan penguji dari bagian proposal yang paling lemah.",
+        },
+      },
+    },
+    stats: {
+      title: "Statistik",
+      description: "Kondisi versi terbaru.",
+      verified: "Elemen terverifikasi",
+      verifiedUnit: "kutipan cocok dengan halaman",
+      comments: "Komentar ditangani",
+      commentsUnit: "dari komentar dosen",
+      waiting: "Menunggu feedback",
+      waitingUnit: "hari sejak unggahan",
+    },
+  },
 } as const;

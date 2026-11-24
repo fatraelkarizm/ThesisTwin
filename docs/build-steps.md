@@ -56,7 +56,7 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 - **Output:** `components/features/dashboard/*`, `components/ui/Card.tsx`, data simulasi berlabel.
 - **Selesai jika:** semua angka berlabel **data simulasi**; tidak ada skor/persentase karangan yang tampak seperti hasil nyata; Tools yang belum ada berstatus "Segera".
 - **Verifikasi:** typecheck, lint, build; cek kontras teks (WCAG AA).
-- **Status:** ⬜
+- **Status:** ✅ (2026-11-24) — dicek di browser: desktop terang, 375px gelap, klik Konfirmasi/Tolak mengubah status, konsol bersih. Keterbatasan: angka "Temuan terbuka" di kartu versi statis (tidak ikut berubah saat temuan ditolak); diperbaiki saat data API tersambung (Langkah 10+).
 
 ### Langkah 4 — Tes komponen web (vitest + Testing Library)
 - **Tujuan:** memenuhi aturan [worktree.md](worktree.md) §3.11.
