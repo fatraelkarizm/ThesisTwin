@@ -21,7 +21,7 @@ const n = copy.shell.nav;
 
 export const navItems: NavItem[] = [
   { label: n.dashboard, icon: LayoutDashboard, href: "/" },
-  { label: n.proposals, icon: FileText },
+  { label: n.proposals, icon: FileText, href: "/proyek" },
   { label: n.findings, icon: ListChecks },
   { label: n.versions, icon: GitCompare },
   { label: n.brief, icon: FileOutput },

@@ -100,6 +100,23 @@ def test_full_flow_without_llm(client):  # noqa: F811
     assert client.get("/share/token-salah").status_code == 404
 
 
+def test_recheck_keeps_sibling_findings_of_the_same_rule(client):  # noqa: F811
+    pid = client.post("/projects", json={"title": "S", "program": "matematika"}).json()["id"]
+    client.post(f"/projects/{pid}/consent")
+    vid = _upload(client, pid, V1)
+    _element(client, vid, "research_question", RQ_OLD, 1)
+    sections = [
+        f for f in client.post(f"/versions/{vid}/check").json() if f["rule_id"] == "R-SECTIONS-UMUM"
+    ]
+    assert len(sections) > 1  # satu temuan per bagian wajib yang hilang
+    assert len({f["title"] for f in sections}) == len(sections)  # judulnya bisa dibedakan
+    client.post(f"/findings/{sections[0]['id']}/status", json={"target": "student_confirmed"})
+    again = [
+        f for f in client.post(f"/versions/{vid}/check").json() if f["rule_id"] == "R-SECTIONS-UMUM"
+    ]
+    assert len(again) == len(sections)  # yang lain tidak hilang setelah satu dikonfirmasi
+
+
 def test_link_cannot_touch_other_project_and_expires(client):  # noqa: F811
     a = client.post("/projects", json={"title": "A", "program": "matematika"}).json()["id"]
     b = client.post("/projects", json={"title": "B", "program": "matematika"}).json()["id"]

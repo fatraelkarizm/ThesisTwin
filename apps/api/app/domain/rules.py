@@ -135,11 +135,14 @@ def _status(evidence: list[Element]) -> Status:
     return Status.NEEDS_USER_CONFIRMATION
 
 
-def _finding(rule: Rule, evidence: list[Element], why: str | None = None) -> RuleFinding:
+def _finding(
+    rule: Rule, evidence: list[Element], why: str | None = None, detail: str | None = None
+) -> RuleFinding:
     return RuleFinding(
         rule_id=rule.id,
         priority=rule.priority,
-        title=rule.title,
+        # Satu aturan bisa menghasilkan beberapa temuan: detail membuat judulnya bisa dibedakan.
+        title=f"{rule.title}: {detail}" if detail else rule.title,
         why_flagged=why or rule.why_flagged,
         suggested_clarification=rule.suggested_clarification,
         evidence=[Evidence(e.id, e.page) for e in evidence],
@@ -156,7 +159,7 @@ def evaluate(rule: Rule, elements: list[Element], document_text: str = "") -> li
         source = check.source.select(elements)
         return [_finding(rule, source)] if source and not check.target.select(elements) else []
     missing = [s for s in check.sections if not has_term(document_text, s.any_terms)]
-    return [_finding(rule, [], f"{rule.why_flagged} ({s.name})") for s in missing]
+    return [_finding(rule, [], f"{rule.why_flagged} ({s.name})", s.name) for s in missing]
 
 
 def run(

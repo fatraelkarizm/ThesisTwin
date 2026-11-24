@@ -86,7 +86,7 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 - **Tujuan:** banyak proposal Matematika ditulis di LaTeX; PDF hasil LaTeX sering merusak simbol dan persamaan. Membaca `.tex` langsung lebih andal dan **tidak butuh LLM** ([feedback/not-a-wrapper.md](feedback/not-a-wrapper.md)).
 - **Output:** `parsing/tex.py`: bagian (`\section`, `\subsection`), lingkungan teorema/definisi/lema, `\label` dan `\ref` (termasuk rujukan yang tidak punya label), notasi `\newcommand`; persamaan disimpan utuh, tidak dikirim ke LLM untuk "dirapikan".
 - **Selesai jika:** `\ref` tanpa `\label` terdeteksi; tes dengan contoh `.tex` kecil; upload `.tex` diterima API.
-- **Status:** ⬜
+- **Status:** ✅ (2026-11-24) — 5 tes; ref tanpa label dan label ganda terdeteksi; upload .tex diterima.
 
 ### Langkah 8 — Layar unggah di web
 - **Output:** halaman `/upload`: pilih prodi (rule set), centang consent, unggah DOCX/PDF, status hasil.
@@ -154,20 +154,20 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 
 ### Langkah 18 — Diff elemen antar versi
 - **Output:** bandingkan node v(n) vs v(n-1): berubah / baru / hilang / isu selesai / dampak baru.
-- **Status:** ⬜
+- **Status:** ✅ (2026-11-24) — diff per elemen; elemen sisa bertipe sama dipasangkan sebagai "diubah".
 
 ### Langkah 19 — Pelacakan komentar yang ditangani
 - **Output:** komentar DOCX v(n-1) → apakah bagian terkait berubah di v(n) → status "kemungkinan ditangani" (butuh konfirmasi mahasiswa).
-- **Status:** ⬜ (butuh 7, 18)
+- **Status:** ✅ (2026-11-24) — status dari perubahan teks yang dikomentari + konfirmasi mahasiswa. Berubah ≠ benar; karena itu hanya "kemungkinan".
 
 ### Langkah 20 — Supervision Brief
 - **Output:** ringkasan 1 halaman: apa yang berubah, komentar yang ditangani, keputusan terbuka; ekspor **PDF** dan **teks chat**.
 - **Selesai jika:** brief hanya merangkum state, tidak menulis konten penelitian.
-- **Status:** ⬜
+- **Status:** ✅ (2026-11-24) — brief JSON + teks chat (/projects/{id}/brief.txt). Ekspor PDF belum ada; sementara cetak halaman dosen dari browser.
 
 ### Langkah 21 — Akses brief untuk dosen tanpa akun
 - **Output:** sesuai keputusan 0.1 (mis. tautan bertoken).
-- **Status:** ⛔ (butuh 0.1)
+- **Status:** ✅ (2026-11-24) — tautan bertoken, halaman /dosen/[token] tanpa akun. Arah ini masih perlu dicatat sebagai ADR-005 (keputusan 0.1).
 
 ### Langkah 22 — Defense Stress-Test
 - **Output:** pilih 3–5 tautan terlemah graph (deterministik) → pertanyaan penguji (LLM, berlabel AI) → kolom justifikasi mahasiswa.

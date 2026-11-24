@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { api, ApiError, type UploadOut, type VersionOut } from "@/lib/api";
 import { copy } from "@/lib/copy";
+import { PROJECT_KEY } from "@/lib/project";
 
-const STORAGE_KEY = "thesistwin.projectId";
 const DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
 type State =
@@ -28,7 +28,7 @@ export function UploadForm() {
   const [state, setState] = useState<State>({ kind: "idle" });
 
   useEffect(() => {
-    const saved = window.localStorage.getItem(STORAGE_KEY);
+    const saved = window.localStorage.getItem(PROJECT_KEY);
     if (!saved) return;
     api.versions(saved).then(
       (list) => {
@@ -36,7 +36,7 @@ export function UploadForm() {
         setVersions(list);
       },
       // Proyek lama tidak ada lagi (mis. database direset): mulai dari awal.
-      () => window.localStorage.removeItem(STORAGE_KEY),
+      () => window.localStorage.removeItem(PROJECT_KEY),
     );
   }, []);
 
@@ -48,7 +48,7 @@ export function UploadForm() {
       let pid = projectId;
       if (!pid) {
         pid = (await api.createProject(title.trim() || u.projectTitlePlaceholder, program)).id;
-        window.localStorage.setItem(STORAGE_KEY, pid);
+        window.localStorage.setItem(PROJECT_KEY, pid);
         setProjectId(pid);
       }
       await api.giveConsent(pid);
@@ -61,7 +61,7 @@ export function UploadForm() {
   }
 
   function reset() {
-    window.localStorage.removeItem(STORAGE_KEY);
+    window.localStorage.removeItem(PROJECT_KEY);
     setProjectId(null);
     setVersions([]);
     setState({ kind: "idle" });

@@ -7,16 +7,18 @@ Jawaban tim (diskusi grup, 2026-11-24): **bukan, tetapi hanya untuk bagian yang 
 | Komponen | Pelaku | Bisa ditiru dengan satu prompt? | Status di repo (2026-11-24) |
 |---|---|---|---|
 | Penyimpanan versi | Kode kita | Tidak, chat tidak persisten antarsesi | ✅ versi append-only + SHA-256 ([documents.py](../../apps/api/app/services/documents.py)) |
-| Diff antarversi | Kode kita | Tidak persisten | ❌ Langkah 18 |
-| Pelacakan "komentar dosen sudah ditindaklanjuti atau belum" | Kode kita (status) | Tidak, perlu keadaan jangka panjang | 🟡 komentar DOCX sudah terbaca ([docx.py](../../apps/api/app/parsing/docx.py)); status tindak lanjut belum (Langkah 19) |
+| Diff antarversi | Kode kita | Tidak persisten | ✅ diff per elemen ([diff.py](../../apps/api/app/domain/diff.py)); RQ yang ditulis ulang tercatat "diubah" |
+| Pelacakan "komentar dosen sudah ditindaklanjuti atau belum" | Kode kita (status) | Tidak, perlu keadaan jangka panjang | ✅ komentar DOCX → "kemungkinan ditangani" bila teks yang dikomentari berubah, lalu dikonfirmasi mahasiswa ([comments.py](../../apps/api/app/domain/comments.py)) |
 | Aturan sebagai data, dengan tes positif dan negatif | Kode kita | Tidak, hasil LLM tidak terulang persis | ✅ 6 aturan YAML, contoh `fires`/`quiet` dites otomatis ([rules/](../../apps/api/rules/README.md)); belum ditinjau dosen |
 | Verifikasi kutipan dan halaman sumber | Kode kita | Tidak, LLM sering mengarang rujukan | ✅ ([verification.py](../../apps/api/app/domain/verification.py)); baru diuji dengan LLM palsu, belum pada proposal nyata |
 | Status konfirmasi mahasiswa → dosen, audit log | Kode kita | Tidak, itu catatan bersama | ✅ state machine + audit log ([status.py](../../apps/api/app/domain/status.py), [findings.py](../../apps/api/app/services/findings.py)) |
-| Konfirmasi dosen **lewat tautan** (tanpa akun) | Kode kita | Tidak | ❌ Langkah 21; arah ini perlu dicatat sebagai keputusan 0.1 (ADR-005) |
-| Parser `.tex` (teorema, `\label`, `\ref`, notasi) | Kode kita, tanpa LLM | Tidak perlu LLM | ❌ **baru**, Langkah 7b |
-| Ekstraksi dari PDF/Word, penjelasan temuan, pertanyaan stress-test | **LLM** | Ya, di sinilah LLM berguna | ❌ menunggu provider (keputusan 0.3); pipeline dan validasinya sudah ada ([extraction.py](../../apps/api/app/services/extraction.py)) |
+| Konfirmasi dosen **lewat tautan** (tanpa akun) | Kode kita | Tidak | ✅ tautan bertoken (hanya hash disimpan, kedaluwarsa 14 hari, terbatas satu proyek, keputusan masuk audit log) ([share.py](../../apps/api/app/services/share.py)); halaman `/dosen/[token]`. Keputusan 0.1 tetap perlu ADR-005 |
+| Parser `.tex` (teorema, `\label`, `\ref`, notasi) | Kode kita, tanpa LLM | Tidak perlu LLM | ✅ bagian, lingkungan teorema, `\label`/`\ref` (termasuk rujukan rusak), makro ([tex.py](../../apps/api/app/parsing/tex.py)) |
+| Ekstraksi dari PDF/Word, penjelasan temuan, pertanyaan stress-test | **LLM** | Ya, di sinilah LLM berguna | ❌ menunggu provider (keputusan 0.3); pipeline dan validasinya sudah ada ([extraction.py](../../apps/api/app/services/extraction.py)). Sementara itu mahasiswa memasukkan elemen sendiri dan **tetap diverifikasi** terhadap dokumen |
 
-Ringkas: dari 9 baris, **4 sudah ada**, 1 sebagian, 4 belum. Dua baris yang paling sering dipakai untuk membantah tuduhan "wrapper", yaitu diff antarversi dan pelacakan komentar, **belum dibangun**.
+Ringkas (diperbarui 2026-11-24): dari 9 baris, **8 sudah ada di kode dan dites** (86 tes API, termasuk satu tes alur penuh), 1 menunggu provider LLM. Alur end-to-end berjalan **tanpa LLM**: unggah → elemen (dimasukkan mahasiswa, diverifikasi) → cek aturan → konfirmasi → versi baru → diff + komentar → brief → tautan dosen → keputusan dosen.
+
+**Yang belum diuji:** semua ini baru dicoba dengan data sintetis berlabel, bukan proposal mahasiswa nyata.
 
 ## Hal yang harus diakui jujur
 

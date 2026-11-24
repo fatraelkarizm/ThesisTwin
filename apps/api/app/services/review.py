@@ -124,13 +124,15 @@ def run_check(
             FindingRow.version_id == version_id, FindingRow.status.in_(UNREVIEWED)
         )
     )
+    # Satu aturan bisa menghasilkan beberapa temuan (mis. tiap bagian wajib yang hilang),
+    # jadi kunci "sudah ditinjau" = aturan + alasan, bukan aturan saja.
     reviewed = {
-        f.rule_id
+        (f.rule_id, f.why_flagged)
         for f in session.scalars(select(FindingRow).where(FindingRow.version_id == version_id))
     }
     text = "\n".join(pages(version).values())
     for rf in run(rules or load_rules(), _domain_elements(rows), project.program, text):
-        if rf.rule_id in reviewed:
+        if (rf.rule_id, rf.why_flagged) in reviewed:
             continue
         evidence = [by_id[e.element] for e in rf.evidence]
         verified = sum(e.verified for e in evidence)

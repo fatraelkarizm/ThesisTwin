@@ -12,6 +12,8 @@ export interface Evidence {
   element: string;
   document: string;
   page: number;
+  // DOCX/.tex tidak punya halaman tetap: lokasinya nomor bagian.
+  unit?: "page" | "section";
 }
 
 export interface Finding {
