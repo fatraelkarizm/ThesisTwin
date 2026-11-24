@@ -70,7 +70,7 @@ export function BriefPanel({ text, onShare }: { text: string; onShare: () => Pro
   }
 
   return (
-    <Section title={w.briefTitle} description={w.briefDescription}>
+    <Section id="brief" title={w.briefTitle} description={w.briefDescription}>
       <pre className="max-h-80 overflow-auto whitespace-pre-wrap rounded-card border border-line bg-surface p-3 font-sans text-xs leading-relaxed shadow-card">
         {text}
       </pre>

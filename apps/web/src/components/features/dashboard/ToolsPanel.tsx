@@ -11,17 +11,26 @@ interface Tool {
   href?: string;
 }
 
-const tools: Tool[] = [
+const demoTools: Tool[] = [
   { key: "consistency", icon: ScanSearch, href: "#temuan" },
   { key: "compare", icon: GitCompare },
   { key: "brief", icon: FileOutput },
   { key: "stressTest", icon: ShieldQuestion },
 ];
 
+// Dengan proyek nyata semua tool sudah tersedia di Ruang Kerja.
+const liveTools: Tool[] = [
+  { key: "consistency", icon: ScanSearch, href: "/proyek#temuan" },
+  { key: "compare", icon: GitCompare, href: "/proyek#brief" },
+  { key: "brief", icon: FileOutput, href: "/proyek#brief" },
+  { key: "stressTest", icon: ShieldQuestion, href: "/proyek#stress-test" },
+];
+
 const row = "flex items-center gap-3 rounded-card border border-line bg-surface p-3 shadow-card";
 
-export function ToolsPanel() {
+export function ToolsPanel({ live = false }: { live?: boolean }) {
   const t = copy.dashboard.tools;
+  const tools = live ? liveTools : demoTools;
   return (
     <Section title={t.title} description={t.description}>
       <ul className="space-y-2.5">
@@ -39,7 +48,7 @@ export function ToolsPanel() {
               <span className="min-w-0 flex-1">
                 <span className="block text-sm font-semibold">{item.title}</span>
                 <span className="mt-1 flex flex-wrap items-center gap-1.5">
-                  {href ? <SimulatedBadge /> : <Badge>{copy.soon}</Badge>}
+                  {!href ? <Badge>{copy.soon}</Badge> : live ? <Badge tone="success">{t.available}</Badge> : <SimulatedBadge />}
                 </span>
                 <span className="mt-1 block text-xs text-muted">{item.body}</span>
               </span>

@@ -174,6 +174,10 @@ export const copy = {
     of: "dari",
     subtitle: "Prodi Matematika · Bab 1–3",
     simulatedNote: "Semua angka di halaman ini adalah data simulasi, bukan hasil analisis proposal nyata.",
+    demoCta: "Belum ada proyek. Ini contoh tampilan dengan data simulasi.",
+    liveNote: "Data dari proyek aktif.",
+    coreElements: "elemen inti tercatat",
+    summary: (elements: number, verified: number) => `${elements} elemen, ${verified} kutipan terverifikasi.`,
     check: {
       title: "Cek Konsistensi",
       description: "Keselarasan pertanyaan penelitian, tujuan, metode, dan analisis per versi.",
@@ -195,6 +199,7 @@ export const copy = {
     tools: {
       title: "Tools",
       description: "Apa yang bisa dilakukan ThesisTwin untuk proposal ini.",
+      available: "Tersedia",
       items: {
         consistency: {
           title: "Cek Konsistensi",

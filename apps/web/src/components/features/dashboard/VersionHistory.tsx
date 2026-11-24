@@ -5,14 +5,14 @@ import { SegmentedBar } from "@/components/ui/SegmentedBar";
 import { copy } from "@/lib/copy";
 import type { VersionSummary } from "./sample";
 
-export function VersionHistory({ versions }: { versions: VersionSummary[] }) {
+export function VersionHistory({ versions, unitLabel }: { versions: VersionSummary[]; unitLabel?: string }) {
   const h = copy.dashboard.history;
   const c = copy.dashboard.check;
   return (
     <Section title={h.title} description={h.description}>
       <ul className="space-y-3">
         {versions.map((v) => {
-          const label = `${v.sectionsChecked} ${copy.dashboard.of} ${v.sectionsTotal} ${h.sectionsChecked}`;
+          const label = `${v.sectionsChecked} ${copy.dashboard.of} ${v.sectionsTotal} ${unitLabel ?? h.sectionsChecked}`;
           return (
             <li
               key={v.version}

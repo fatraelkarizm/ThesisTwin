@@ -18,17 +18,29 @@ const studentNext: Partial<Record<Status, { confirm: Status; reject: Status }>> 
   needs_user_confirmation: { confirm: "student_confirmed", reject: "rejected" },
 };
 
-export function FindingQueue({ initial }: { initial: Finding[] }) {
+interface FindingQueueProps {
+  initial: Finding[];
+  // Data nyata: transisi dikirim ke API. Tanpa ini (demo) transisi hanya lokal.
+  onDecide?: (id: string, target: "student_confirmed" | "rejected") => Promise<Finding>;
+}
+
+export function FindingQueue({ initial, onDecide }: FindingQueueProps) {
   const [items, setItems] = useState(initial);
   const q = copy.dashboard.queue;
 
-  const move = (id: string, to: "confirm" | "reject") =>
+  const move = async (id: string, to: "confirm" | "reject") => {
+    if (onDecide) {
+      const updated = await onDecide(id, to === "confirm" ? "student_confirmed" : "rejected");
+      setItems((prev) => prev.map((f) => (f.id === id ? updated : f)));
+      return;
+    }
     setItems((prev) =>
       prev.map((f) => {
         const next = studentNext[f.status];
         return f.id === id && next ? { ...f, status: next[to] } : f;
       }),
     );
+  };
 
   return (
     <Section id="temuan" title={q.title} description={q.description}>
@@ -79,7 +91,7 @@ export function FindingQueue({ initial }: { initial: Finding[] }) {
                     )}
                   </div>
                   <div className="flex flex-wrap items-center gap-2 pt-1">
-                    <AiLabel />
+                    {f.aiGenerated ? <AiLabel /> : null}
                     <span className="text-xs text-muted">{f.ruleId}</span>
                     {open ? (
                       <span className="ml-auto flex gap-2">

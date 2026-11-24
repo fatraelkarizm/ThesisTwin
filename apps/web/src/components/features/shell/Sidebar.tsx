@@ -39,6 +39,7 @@ export function Sidebar() {
                 </li>
               );
             }
+            // Beberapa menu menunjuk bagian di /proyek (#anchor); yang aktif hanya yang path-nya persis.
             const active = pathname === href;
             return (
               <li key={label}>
@@ -66,14 +67,12 @@ export function Sidebar() {
         </span>
         <p className="mt-3 text-sm font-semibold">{s.shareTitle}</p>
         <p className="mt-1 text-xs opacity-90">{s.shareBody}</p>
-        <button
-          type="button"
-          disabled
-          title={s.soonHint}
-          className="mt-3 min-h-11 w-full cursor-not-allowed rounded-lg border border-white/40 bg-white/15 text-sm font-medium"
+        <Link
+          href="/proyek#brief"
+          className="mt-3 flex min-h-11 w-full items-center justify-center rounded-lg border border-white/40 bg-white/15 text-sm font-medium hover:bg-white/25 focus-visible:outline-2 focus-visible:outline-white"
         >
-          {s.shareAction} · {copy.soon}
-        </button>
+          {s.shareAction}
+        </Link>
       </div>
     </aside>
   );
