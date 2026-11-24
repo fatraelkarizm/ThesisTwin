@@ -112,3 +112,19 @@ def test_upload_runs_structural_extraction_and_check(client):
     assert all(e["source"] == "auto" and e["verified"] for e in els)
     rules = {f["rule_id"] for f in client.get(f"/versions/{r['version']['id']}/findings").json()}
     assert "R-CAUSAL-01" in rules
+
+
+def test_resaved_docx_with_same_content_is_not_a_new_version(client):
+    import time
+
+    from tests.test_docx import _p, make_docx
+
+    pid = _project(client)
+    client.post(f"/projects/{pid}/consent")
+    first = make_docx(_p("Rumusan Masalah", "Heading1") + _p("1. Bagaimana X?"))
+    time.sleep(2.1)  # stempel waktu ZIP berbeda -> byte berbeda
+    second = make_docx(_p("Rumusan Masalah", "Heading1") + _p("1. Bagaimana X?"))
+    assert first != second
+    _upload(client, pid, first, name="a.docx")
+    again = _upload(client, pid, second, name="a.docx").json()
+    assert again["created"] is False and again["version"]["version_no"] == 1

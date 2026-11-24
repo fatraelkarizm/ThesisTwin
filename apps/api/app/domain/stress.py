@@ -69,6 +69,14 @@ FINDING_Q = {
         "Jumlah rumusan masalah dan tujuan Anda berbeda. Tujuan mana menjawab rumusan masalah yang "
         "mana, dan apakah ada tujuan yang sebenarnya manfaat atau keluaran penelitian?"
     ),
+    "R-VALIDITY-THREATS": (
+        "Ancaman validitas apa yang paling mungkin membuat hasil eksperimen Anda keliru, dan "
+        "bagaimana Anda mengendalikannya?"
+    ),
+    "R-STAT-TEST": (
+        "Bagaimana Anda tahu perbedaan antar-model itu bermakna dan bukan kebetulan satu kali "
+        "percobaan? Berapa pengulangan dan uji statistik apa yang dipakai?"
+    ),
     "R-CONCL-SCOPE": (
         "Sampel Anda terbatas. Sampai sejauh mana hasil boleh digeneralisasi, dan bagaimana Anda "
         "membatasi klaimnya?"

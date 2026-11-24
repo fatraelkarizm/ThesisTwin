@@ -58,4 +58,5 @@ npm run lint && npm run typecheck && npm test   # selalu lewat npm test, bukan n
 cd apps/api && python -m venv .venv && . .venv/Scripts/activate   # Windows Git Bash
 pip install -e ".[dev]" && uvicorn app.main:app --reload          # http://localhost:8000/docs
 ruff check . && pytest
+python -m scripts.smoke    # uji asap semua fitur pada API yang sedang berjalan
 ```

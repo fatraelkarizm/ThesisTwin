@@ -7,6 +7,10 @@ why_flagged: >-
 suggested_clarification: Teknik analisis apa yang akan dipakai untuk mencapai tujuan ini?
 basis: >-
   Setiap tujuan perlu rencana analisis data yang menunjukkan bagaimana tujuan itu dicapai dari data yang dikumpulkan. Perlu ditinjau dosen metodologi.
+references:
+  - "Creswell, J. W., & Creswell, J. D. (2018). Research design: Qualitative, quantitative, and mixed methods approaches (5th ed.). SAGE."
+suggestions:
+  - "Untuk tiap tujuan, tuliskan data yang dipakai dan teknik analisisnya dalam satu tabel rencana analisis."
 check:
   kind: requires
   source: {types: [objective]}

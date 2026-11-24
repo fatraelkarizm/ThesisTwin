@@ -49,6 +49,21 @@ describe("FindingCard", () => {
     expect(screen.getByText(new RegExp(copy.evidenceVerified))).toBeInTheDocument();
   });
 
+  it("menampilkan saran perbaikan dan rujukan akademik", () => {
+    render(
+      <FindingCard
+        finding={{
+          ...finding,
+          suggestions: ["Tambahkan kelompok pembanding."],
+          references: ["Campbell, D. T., & Stanley, J. C. (1963). Experimental and quasi-experimental designs for research."],
+        }}
+      />,
+    );
+    expect(screen.getByText(copy.suggestionsTitle)).toBeInTheDocument();
+    expect(screen.getByText("Tambahkan kelompok pembanding.")).toBeInTheDocument();
+    expect(screen.getByText(copy.referencesTitle(1))).toBeInTheDocument();
+  });
+
   it("menampilkan dasar metodologi aturan bila ada", () => {
     render(<FindingCard finding={{ ...finding, basis: "Klaim kausal butuh kelompok pembanding." }} />);
     expect(screen.getByText(/Klaim kausal butuh kelompok pembanding/)).toBeInTheDocument();

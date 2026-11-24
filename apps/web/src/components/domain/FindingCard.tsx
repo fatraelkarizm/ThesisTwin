@@ -33,11 +33,36 @@ export function FindingCard({ finding, onConfirm, onReject }: FindingCardProps) 
         <span className="font-medium">{copy.suggestion}: </span>
         {finding.suggestedClarification}
       </p>
+      {finding.suggestions?.length ? (
+        <div className="rounded-lg bg-brand-soft/60 p-3">
+          <p className="text-sm font-semibold text-brand-strong">{copy.suggestionsTitle}</p>
+          <ol className="mt-1.5 list-decimal space-y-1 pl-5 text-sm">
+            {finding.suggestions.map((s) => (
+              <li key={s}>{s}</li>
+            ))}
+          </ol>
+        </div>
+      ) : null}
       {finding.basis ? (
         <p className="border-l-2 border-line pl-2 text-xs text-muted">
           <span className="font-medium">{copy.basis}: </span>
           {finding.basis}
         </p>
+      ) : null}
+      {finding.references?.length ? (
+        <details className="text-xs">
+          <summary className="cursor-pointer font-medium text-brand-strong">
+            {copy.referencesTitle(finding.references.length)}
+          </summary>
+          <ul className="mt-1.5 space-y-1 pl-4 text-muted">
+            {finding.references.map((r) => (
+              <li key={r} className="-indent-4 pl-4">
+                {r}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-1 italic text-muted">{copy.referencesNote}</p>
+        </details>
       ) : null}
       <div className="flex flex-wrap gap-2">
         {hasEvidence ? (

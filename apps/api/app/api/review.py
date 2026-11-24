@@ -25,14 +25,20 @@ from app.services import review as svc
 from app.services import share
 from app.services import stress as stress_svc
 from app.services.findings import change_status
-from app.services.rules import rule_basis
+from app.services.rules import rule_meta
 
 router = APIRouter(tags=["review"])
 
 
 def _finding_out(row) -> FindingOut:
     out = FindingOut.model_validate(row)
-    out.basis = rule_basis().get(out.rule_id)
+    rule = rule_meta().get(out.rule_id)
+    if rule:
+        out.basis, out.references, out.suggestions = (
+            rule.basis,
+            rule.references,
+            rule.suggestions,
+        )
     return out
 
 

@@ -11,6 +11,12 @@ basis: >-
   Proposal penelitian memuat rencana (latar belakang, kajian pustaka, metode); hasil dan
   kesimpulan ditulis setelah data dikumpulkan. Hasil yang belum diperoleh tidak boleh disajikan
   sebagai temuan (integritas data).
+references:
+  - "Creswell, J. W., & Creswell, J. D. (2018). Research design: Qualitative, quantitative, and mixed methods approaches (5th ed.). SAGE."
+suggestions:
+  - "Hapus Bab Hasil/Kesimpulan dari proposal, atau pindahkan ke lampiran dengan label jelas 'uji coba/simulasi' beserta sumber angkanya."
+  - "Ganti dengan rencana analisis dan tabel kerangka hasil kosong (dummy table) yang menunjukkan bentuk hasil yang akan dilaporkan."
+  - "Bila angka berasal dari uji coba awal (pilot), sebutkan kapan, bagaimana, dan dengan data apa uji itu dilakukan."
 check:
   kind: forbidden_sections
   sections:

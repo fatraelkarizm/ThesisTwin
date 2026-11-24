@@ -107,6 +107,15 @@ class CountMatchCheck(BaseModel):
     b: Match
 
 
+class MissingTermsCheck(BaseModel):
+    """Terpicu bila elemen `when` ada, tetapi dokumen tidak memuat satu pun istilah `absent`
+    (mis. desain eksperimen tanpa pembahasan ancaman validitas)."""
+
+    kind: Literal["missing_terms"]
+    when: Match
+    absent: list[str] = Field(min_length=1)
+
+
 class ForbiddenSectionsCheck(BaseModel):
     """Terpicu per bagian yang **tidak seharusnya** ada di dokumen (mis. Bab Hasil di proposal)."""
 
@@ -119,6 +128,7 @@ Check = Annotated[
     | RequiresCheck
     | RequiredSectionsCheck
     | CountMatchCheck
+    | MissingTermsCheck
     | ForbiddenSectionsCheck,
     Field(discriminator="kind"),
 ]
@@ -143,6 +153,10 @@ class Rule(BaseModel):
     reviewed_by_supervisor: bool = False
     # Dasar metodologis aturan (prinsip/rujukan), agar temuan bisa diperiksa dosen.
     basis: str | None = None
+    # Rujukan akademik (APA). Tanpa nomor halaman: tim memverifikasi halaman sebelum dipakai.
+    references: list[str] = Field(default_factory=list)
+    # Langkah perbaikan yang bisa dikerjakan mahasiswa. Tindakan, bukan teks skripsi.
+    suggestions: list[str] = Field(default_factory=list)
 
     def applies_to(self, program: str) -> bool:
         return self.enabled and ("*" in self.programs or program in self.programs)
@@ -206,6 +220,9 @@ def evaluate(
             )
             return [_finding(rule, a + b, f"{rule.why_flagged} ({counts})", counts)]
         return []
+    if isinstance(check, MissingTermsCheck):
+        when = check.when.select(elements)
+        return [_finding(rule, when)] if when and not has_term(document_text, check.absent) else []
     if isinstance(check, ForbiddenSectionsCheck):
         out = []
         for s in check.sections:

@@ -7,6 +7,12 @@ why_flagged: >-
 suggested_clarification: Instrumen apa yang dipakai untuk mengukur variabel ini?
 basis: >-
   Variabel harus didefinisikan secara operasional dan diukur dengan instrumen tertentu (tes, angket, observasi, atau alat ukur), beserta uji validitas/reliabilitasnya. Perlu ditinjau dosen metodologi.
+references:
+  - "Sugiyono. (2019). Metode penelitian kuantitatif, kualitatif, dan R&D. Alfabeta."
+  - "Creswell, J. W., & Creswell, J. D. (2018). Research design: Qualitative, quantitative, and mixed methods approaches (5th ed.). SAGE."
+suggestions:
+  - "Tulis definisi operasional tiap variabel: indikator, cara ukur, skala data."
+  - "Sebutkan instrumen untuk tiap variabel beserta rencana uji validitas dan reliabilitasnya."
 check:
   kind: requires
   source: {types: [variable]}

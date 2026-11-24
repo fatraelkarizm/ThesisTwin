@@ -27,7 +27,13 @@ def storage(tmp_path):
 
 def _add(session, storage, project_id, data: bytes):
     return add_version(
-        session, storage, project_id, "p.pdf", "application/pdf", data, {"pages": {"1": "x"}}
+        session,
+        storage,
+        project_id,
+        "p.pdf",
+        "application/pdf",
+        data,
+        {"pages": {"1": data.decode()}},  # isi terbaca mengikuti data
     )
 
 

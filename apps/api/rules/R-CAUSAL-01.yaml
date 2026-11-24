@@ -11,6 +11,13 @@ suggested_clarification: >-
   pembanding agar klaim kausal dapat didukung?
 basis: >-
   Klaim sebab-akibat butuh desain yang mengendalikan penjelasan alternatif (mis. kelompok pembanding, randomisasi). Desain satu kelompok pre/post, survei satu kali, dan korelasi umumnya hanya menunjukkan perubahan atau hubungan (validitas internal). Perlu ditinjau dosen metodologi.
+references:
+  - "Campbell, D. T., & Stanley, J. C. (1963). Experimental and quasi-experimental designs for research. Rand McNally."
+  - "Shadish, W. R., Cook, T. D., & Campbell, D. T. (2002). Experimental and quasi-experimental designs for generalized causal inference. Houghton Mifflin."
+suggestions:
+  - "Tentukan apakah pertanyaanmu sebab-akibat atau hubungan/perubahan; samakan kata kerjanya di RQ, tujuan, dan kesimpulan."
+  - "Bila tetap kausal: tambahkan kelompok pembanding (kuasi-eksperimen) atau jelaskan kontrol terhadap ancaman validitas internal."
+  - "Bila tidak: ganti bahasa 'pengaruh/dampak' dengan 'hubungan/perbedaan/perubahan' dan tulis keterbatasan desainnya."
 check:
   kind: conflict
   a:

@@ -37,6 +37,14 @@ def _now() -> datetime:
     return datetime.now(UTC)
 
 
+def _content_key(parsed: dict[str, Any]) -> str:
+    """Sidik isi: teks per halaman/bagian yang dinormalkan spasinya (plus komentar DOCX)."""
+    pages = {k: " ".join(str(v).split()) for k, v in parsed.get("pages", {}).items()}
+    comments = [(c.get("author"), c.get("text")) for c in parsed.get("comments", [])]
+    payload = json.dumps([parsed.get("kind"), pages, comments], sort_keys=True, ensure_ascii=False)
+    return hashlib.sha256(payload.encode()).hexdigest()
+
+
 def create_project(session: Session, title: str, program: str) -> Project:
     project = Project(id=str(uuid.uuid4()), title=title, program=program)
     session.add(project)
@@ -79,7 +87,12 @@ def add_version(
         .order_by(DocumentVersion.version_no.desc())
         .limit(1)
     ).first()
-    if latest is not None and latest.sha256 == digest:
+    # Duplikat bila byte sama ATAU isi terbaca sama: menyimpan ulang file Word tanpa perubahan
+    # mengubah metadata/stempel waktu ZIP, tetapi bukan versi baru dari sudut pandang penelitian.
+    if latest is not None and (
+        latest.sha256 == digest
+        or _content_key(json.loads(latest.parsed_json)) == _content_key(parsed)
+    ):
         return AddedVersion(latest, created=False)
 
     version_no = 1 if latest is None else latest.version_no + 1

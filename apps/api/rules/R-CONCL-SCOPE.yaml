@@ -9,6 +9,12 @@ suggested_clarification: >-
   agar generalisasi lebih luas dapat didukung?
 basis: >-
   Generalisasi hasil dibatasi oleh populasi dan teknik sampling (validitas eksternal); sampel non-probabilitas atau satu kelas tidak mendukung generalisasi luas. Perlu ditinjau dosen metodologi.
+references:
+  - "Shadish, W. R., Cook, T. D., & Campbell, D. T. (2002). Experimental and quasi-experimental designs for generalized causal inference. Houghton Mifflin."
+  - "Creswell, J. W., & Creswell, J. D. (2018). Research design: Qualitative, quantitative, and mixed methods approaches (5th ed.). SAGE."
+suggestions:
+  - "Batasi kesimpulan pada populasi dan konteks sampel, atau ubah teknik sampling bila ingin generalisasi lebih luas."
+  - "Tulis batas generalisasi di bagian keterbatasan penelitian."
 check:
   kind: conflict
   a:

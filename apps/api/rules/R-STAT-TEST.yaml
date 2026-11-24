@@ -1,0 +1,35 @@
+id: R-STAT-TEST
+priority: medium
+title: Perbandingan tanpa uji statistik
+why_flagged: >-
+  Analisis membandingkan kelompok/model (mis. selisih rata-rata), tetapi dokumen tidak
+  menyebutkan uji statistik atau jumlah pengulangan untuk menilai apakah perbedaannya bermakna
+suggested_clarification: >-
+  Bagaimana kamu akan memastikan perbedaan yang teramati bukan kebetulan, dan berapa kali
+  eksperimen diulang?
+basis: >-
+  Perbedaan rata-rata dari satu kali percobaan belum menunjukkan perbedaan yang bermakna;
+  perbandingan model/kelompok perlu pengulangan dan uji statistik yang sesuai asumsi datanya.
+  Perlu ditinjau dosen metodologi.
+references:
+  - "Demšar, J. (2006). Statistical comparisons of classifiers over multiple data sets. Journal of Machine Learning Research, 7, 1–30."
+  - "Wohlin, C., Runeson, P., Höst, M., Ohlsson, M. C., Regnell, B., & Wesslén, A. (2012). Experimentation in software engineering. Springer."
+suggestions:
+  - "Tetapkan jumlah pengulangan (mis. beberapa seed acak) untuk tiap model dan laporkan rata-rata beserta simpangan bakunya."
+  - "Pilih uji statistik sesuai data: uji t berpasangan bila asumsi normal terpenuhi, Wilcoxon signed-rank bila tidak."
+  - "Tentukan taraf signifikansi dan ukuran efek sebelum eksperimen dijalankan."
+check:
+  kind: missing_terms
+  when:
+    types: [analysis]
+    any_terms: [perbandingan, membandingkan, dibandingkan, rata-rata, selisih, comparison, compare]
+  absent: [uji t, t test, t-test, wilcoxon, mann whitney, anova, kruskal, uji statistik, uji beda, p value, p-value, signifikansi statistik, uji signifikansi]
+examples:
+  fires:
+    elements:
+      - {type: analysis, content: "Analisis berfokus pada perbandingan nilai rata-rata akurasi kedua model."}
+    document_text: "Analisis berfokus pada perbandingan nilai rata-rata akurasi kedua model."
+  quiet:
+    elements:
+      - {type: analysis, content: "Analisis berfokus pada perbandingan nilai rata-rata akurasi kedua model."}
+    document_text: "Perbandingan diuji dengan Wilcoxon signed-rank pada 10 kali pengulangan."

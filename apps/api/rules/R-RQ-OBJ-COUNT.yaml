@@ -11,6 +11,13 @@ suggested_clarification: >-
 basis: >-
   Prinsip keselarasan rumusan masalah–tujuan (alignment) pada penulisan proposal; tujuan adalah
   jawaban yang ingin dicapai atas rumusan masalah. Perlu ditinjau dosen metodologi.
+references:
+  - "Creswell, J. W., & Creswell, J. D. (2018). Research design: Qualitative, quantitative, and mixed methods approaches (5th ed.). SAGE."
+  - "Sugiyono. (2019). Metode penelitian kuantitatif, kualitatif, dan R&D. Alfabeta."
+suggestions:
+  - "Buat tabel pemetaan satu-satu: RQ1 → Tujuan 1, dst."
+  - "Tujuan yang tidak menjawab RQ mana pun (mis. 'memberikan rekomendasi') pindahkan ke Manfaat Penelitian atau keluaran."
+  - "Bila tujuan itu memang penting, tambahkan rumusan masalah yang sepadan."
 check:
   kind: count_match
   a: {types: [research_question], label: rumusan masalah}

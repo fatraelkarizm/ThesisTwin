@@ -30,6 +30,6 @@ def load_rules(directory: Path = RULES_DIR) -> list[Rule]:
 
 
 @cache
-def rule_basis() -> dict[str, str]:
-    """id aturan -> dasar metodologisnya (dimuat sekali per proses)."""
-    return {r.id: r.basis for r in load_rules() if r.basis}
+def rule_meta() -> dict[str, Rule]:
+    """id aturan -> aturan (dasar, rujukan, saran). Dimuat sekali per proses."""
+    return {r.id: r for r in load_rules()}

@@ -1,0 +1,34 @@
+id: R-VALIDITY-THREATS
+priority: medium
+title: Desain eksperimen tanpa pembahasan ancaman validitas
+why_flagged: >-
+  Desain penelitian memakai eksperimen/kuasi-eksperimen, tetapi dokumen tidak membahas ancaman
+  terhadap validitas (internal, eksternal, konstruk, kesimpulan statistik)
+suggested_clarification: >-
+  Ancaman validitas apa yang paling mungkin memengaruhi hasil eksperimenmu, dan bagaimana kamu
+  mengendalikan atau melaporkannya?
+basis: >-
+  Laporan eksperimen yang baik memuat analisis ancaman validitas beserta mitigasinya, karena
+  hasil eksperimen hanya dapat dipercaya sejauh penjelasan alternatifnya dikendalikan.
+  Perlu ditinjau dosen metodologi.
+references:
+  - "Shadish, W. R., Cook, T. D., & Campbell, D. T. (2002). Experimental and quasi-experimental designs for generalized causal inference. Houghton Mifflin."
+  - "Wohlin, C., Runeson, P., Höst, M., Ohlsson, M. C., Regnell, B., & Wesslén, A. (2012). Experimentation in software engineering. Springer."
+suggestions:
+  - "Tambahkan subbab 'Ancaman Validitas' di Bab III dengan empat jenis: internal, eksternal, konstruk, dan kesimpulan statistik."
+  - "Untuk tiap ancaman tulis: penyebab yang mungkin, dampaknya pada hasil, dan cara mitigasinya (mis. perangkat keras sama, seed acak tetap, pengulangan run)."
+check:
+  kind: missing_terms
+  when:
+    types: [method]
+    any_terms: [eksperimen, eksperimental, kuasi eksperimen, quasi experiment, experiment, experimental]
+  absent: [ancaman validitas, ancaman terhadap validitas, threats to validity, threat to validity, validity threats]
+examples:
+  fires:
+    elements:
+      - {type: method, content: "Penelitian ini memakai metode eksperimental dengan pendekatan komparatif."}
+    document_text: "Metode eksperimental. Validitas internal dijaga dengan perangkat keras yang sama."
+  quiet:
+    elements:
+      - {type: method, content: "Penelitian ini memakai metode eksperimental dengan pendekatan komparatif."}
+    document_text: "3.13 Ancaman Validitas: internal, eksternal, konstruk, kesimpulan statistik."

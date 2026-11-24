@@ -62,6 +62,8 @@ export interface FindingApi {
   ai_generated: boolean;
   evidence: { element: string; document: string; page: number }[];
   basis: string | null;
+  references: string[];
+  suggestions: string[];
 }
 
 export interface CommentStatusOut {
@@ -138,6 +140,8 @@ export function toFinding(f: FindingApi, unit: "page" | "section"): Finding {
     status: f.status,
     aiGenerated: f.ai_generated,
     basis: f.basis ?? undefined,
+    references: f.references ?? [],
+    suggestions: f.suggestions ?? [],
   };
 }
 

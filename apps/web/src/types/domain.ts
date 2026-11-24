@@ -30,4 +30,6 @@ export interface Finding {
   // yang dimasukkan mahasiswa = false; label AI tidak boleh dipasang palsu.
   aiGenerated: boolean;
   basis?: string; // dasar metodologis aturan
+  references?: string[]; // rujukan akademik (APA)
+  suggestions?: string[]; // langkah perbaikan, bukan teks skripsi
 }
