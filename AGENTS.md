@@ -10,15 +10,15 @@ Struktur folder + aturan komponen: **[docs/worktree.md](docs/worktree.md)** (waj
 - **Jangan pernah commit/kerja langsung di `main`.** Selalu branch `feature/<slug-pendek>` (bug: `fix/<slug>`, docs: `docs/<slug>`, chore: `chore/<slug>`).
 - Cek `git branch --show-current` sebelum mengedit. Kalau `main`, buat branch dulu.
 - Commit kecil, Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, `test:`, `refactor:`).
-- Jangan push, merge, force-push, atau ubah `main` tanpa diminta. PR ke `main`.
+- **Setelah setiap perubahan yang di-commit, langsung `git push` branch fitur** (`git push -u origin <branch>` pertama kali). Jangan merge, force-push, atau ubah `main` tanpa diminta. PR ke `main`.
 - Jangan commit `.env`, secret, dokumen mahasiswa asli, atau data peserta.
 
 ## 2. Stack (keputusan sementara, finalisasi via ADR di `docs/adr/`)
 | Layer | Pilihan |
 |---|---|
 | Frontend | Next.js (App Router) + TypeScript + Tailwind — `apps/web` |
-| Backend | FastAPI + Pydantic v2 + SQLAlchemy 2 async — `apps/api` |
-| DB | PostgreSQL + pgvector. Graph = relasional dulu |
+| Backend | FastAPI + Pydantic v2 + SQLAlchemy 2 (sync) — `apps/api` |
+| DB | **SQLite untuk sekarang** (`THESISTWIN_DATABASE_URL`). Kode DB tidak boleh bergantung fitur khusus SQLite, supaya pindah ke PostgreSQL (+ pgvector untuk retrieval) mudah. Graph = relasional |
 | AI | LLM → JSON terstruktur, provider di balik adapter (ADR-003) |
 
 Mengganti stack/dependensi besar = tulis ADR dulu, jangan diam-diam.

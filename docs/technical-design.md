@@ -39,7 +39,7 @@ Proposal / Guideline / Feedback / Version History
 |---|---|---|
 | Frontend | Next.js PWA / Flutter Web | Next.js (ekosistem visualisasi graph) |
 | Backend | FastAPI / Node.js | FastAPI (ekosistem parser DOCX/PDF & AI) |
-| DB | PostgreSQL | PostgreSQL |
+| DB | PostgreSQL | **SQLite dulu** (keputusan tim, 2026-11-24); PostgreSQL + pgvector saat butuh retrieval/produksi |
 | Graph | Relational; Neo4j opsional | Relational dulu |
 | Storage | S3-compatible | S3-compatible |
 | Retrieval | pgvector / vector DB | pgvector |
