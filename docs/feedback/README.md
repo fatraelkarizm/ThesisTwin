@@ -9,6 +9,7 @@ Folder ini menyimpan umpan balik juri fase Preliminary dan analisis kesenjangann
 | [baseline-audit.md](baseline-audit.md) | **Audit janji abstrak vs repo + kesiapan baseline LLM-only** |
 | [not-a-wrapper.md](not-a-wrapper.md) | **Bukan LLM wrapper?** Kerja kode vs kerja LLM, dengan status nyata di repo |
 | [comparison.md](comparison.md) | Pembanding praktik nyata + rancangan uji 3 lengan (G2) |
+| [supervisor-burden.md](supervisor-burden.md) | **Beban dosen**: apa yang diminta aplikasi dari dosen (fakta kode) vs hipotesis yang perlu ditanyakan |
 | [evidence/](evidence/README.md) | Panduan wawancara, consent, log anonim, literatur (G1) |
 | [images/](images/) | Tangkapan layar asli (skor juri dan analisis kritik vs repo) |
 

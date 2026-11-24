@@ -32,6 +32,11 @@ Dasar: [research-validation-plan.md](../../research-validation-plan.md) §11.1. 
 3. Informasi apa yang kamu butuhkan sebelum bimbingan agar sesi lebih efektif?
 4. Bagaimana kamu melacak feedback yang sudah/ belum ditindaklanjuti?
 5. Kekhawatiran terkait alat AI di bimbingan?
+6. Berapa menit yang wajar untuk membaca ringkasan sebelum satu sesi bimbingan? Lewat dari berapa menit terasa membebani?
+7. Mau membuka tautan dari mahasiswa (tanpa akun), atau lebih suka ringkasan dikirim sebagai PDF/cetak?
+8. (Tunjukkan halaman dosen) Bagian mana yang akan dibaca, mana yang dilewati? Ada yang terasa seperti pekerjaan tambahan?
+9. Untuk memutuskan setuju/tidak pada sebuah temuan, informasi apa yang harus terlihat agar tidak perlu membuka dokumen mahasiswa?
+10. Bila aplikasi menawarkan "arah yang bisa dieksplorasi" kepada mahasiswa, apakah itu membantu atau justru mengambil peran pembimbing? Landasan apa (panduan prodi, buku metodologi, konvensi penulisan matematika, gaya IEEE/jurnal) yang dianggap sah?
 
 ## Koordinator / staf akademik
 
