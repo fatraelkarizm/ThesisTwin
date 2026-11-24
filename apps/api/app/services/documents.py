@@ -11,9 +11,10 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db.models import Document, DocumentVersion, Project
-from app.parsing.detect import DOCX_MEDIA, PDF_MEDIA, detect
+from app.parsing.detect import DOCX_MEDIA, PDF_MEDIA, TEX_MEDIA, detect
 from app.parsing.docx import DocxError, parse_docx
 from app.parsing.pdf import read_pages
+from app.parsing.tex import parse_tex
 from app.storage import LocalStorage
 
 
@@ -124,6 +125,8 @@ def ingest_upload(
             media = PDF_MEDIA
         elif kind == "docx":
             parsed, media = parse_docx(data), DOCX_MEDIA
+        elif kind == "tex":
+            parsed, media = parse_tex(data), TEX_MEDIA
         else:
             raise UnsupportedFile(filename)
     except (PdfReadError, DocxError) as exc:

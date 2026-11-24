@@ -14,6 +14,9 @@ class FindingRow(Base):
     __tablename__ = "findings"
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
+    # Nullable: temuan lama (sebelum per-versi) tidak punya proyek/versi.
+    project_id: Mapped[str | None] = mapped_column(String, default=None, index=True)
+    version_id: Mapped[str | None] = mapped_column(String, default=None, index=True)
     rule_id: Mapped[str] = mapped_column(String)
     priority: Mapped[str] = mapped_column(String)
     title: Mapped[str] = mapped_column(String)
@@ -88,6 +91,51 @@ class DocumentVersion(Base):
     uploaded_at: Mapped[datetime]
 
     document: Mapped[Document] = relationship(back_populates="versions")
+
+
+class ElementRow(Base):
+    """Elemen penelitian per versi (RQ, tujuan, metode, ...). Sumber: AI atau mahasiswa."""
+
+    __tablename__ = "elements"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    version_id: Mapped[str] = mapped_column(
+        ForeignKey("document_versions.id", ondelete="CASCADE"), index=True
+    )
+    type: Mapped[str] = mapped_column(String)
+    content: Mapped[str] = mapped_column(Text)
+    quote: Mapped[str] = mapped_column(Text)
+    page: Mapped[int]
+    verified: Mapped[bool]  # kutipan cocok dengan teks halaman/bagian
+    source: Mapped[str] = mapped_column(String)  # ai | student
+    status: Mapped[str] = mapped_column(String)
+    created_at: Mapped[datetime] = mapped_column(default=_utcnow)
+
+
+class CommentReview(Base):
+    """Konfirmasi mahasiswa: apakah komentar dosen di versi lama sudah ditindaklanjuti."""
+
+    __tablename__ = "comment_reviews"
+    __table_args__ = (UniqueConstraint("version_id", "comment_id"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    version_id: Mapped[str] = mapped_column(ForeignKey("document_versions.id", ondelete="CASCADE"))
+    comment_id: Mapped[str] = mapped_column(String)
+    addressed: Mapped[bool]
+    at: Mapped[datetime]
+
+
+class ShareLink(Base):
+    """Tautan untuk dosen tanpa akun (abstrak §2). Hanya hash token yang disimpan."""
+
+    __tablename__ = "share_links"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    project_id: Mapped[str] = mapped_column(ForeignKey("projects.id", ondelete="CASCADE"))
+    token_sha256: Mapped[str] = mapped_column(String(64), unique=True)
+    created_at: Mapped[datetime]
+    expires_at: Mapped[datetime]
+    revoked: Mapped[bool] = mapped_column(default=False)
 
 
 class AuditLog(Base):

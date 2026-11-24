@@ -1,0 +1,131 @@
+"""Supervision Brief satu halaman (Langkah 20; abstrak §4 langkah 3).
+
+Hanya merangkum **state** (perubahan, komentar, temuan, keputusan). Tidak menulis isi penelitian.
+Murni: data masuk -> struktur brief -> teks pesan chat.
+"""
+
+from dataclasses import dataclass, field
+from datetime import datetime
+
+from app.domain.comments import CommentState, CommentStatus
+from app.domain.diff import ElementDiff
+
+TYPE_LABEL = {
+    "research_question": "Rumusan masalah",
+    "objective": "Tujuan",
+    "variable": "Variabel",
+    "population": "Populasi",
+    "method": "Metode/desain",
+    "instrument": "Instrumen",
+    "analysis": "Analisis",
+    "claim": "Klaim",
+    "limitation": "Keterbatasan",
+}
+
+
+@dataclass(frozen=True)
+class BriefFinding:
+    id: str
+    rule_id: str
+    title: str
+    priority: str
+    status: str
+
+
+@dataclass
+class Brief:
+    project_title: str
+    program: str
+    from_version: int | None
+    to_version: int
+    generated_at: datetime
+    changes: list[str] = field(default_factory=list)
+    comments: list[CommentStatus] = field(default_factory=list)
+    open_findings: list[BriefFinding] = field(default_factory=list)
+    awaiting_supervisor: list[BriefFinding] = field(default_factory=list)
+    resolved_rules: list[str] = field(default_factory=list)
+
+
+def _label(t: str) -> str:
+    return TYPE_LABEL.get(t, t)
+
+
+def describe_changes(d: ElementDiff) -> list[str]:
+    lines = [f"Diubah — {_label(c.new.type)}: “{c.new.content}”" for c in d.changed]
+    lines += [f"Baru — {_label(e.type)}: “{e.content}”" for e in d.added]
+    lines += [f"Dihapus — {_label(e.type)}: “{e.content}”" for e in d.removed]
+    return lines
+
+
+def build_brief(
+    *,
+    project_title: str,
+    program: str,
+    from_version: int | None,
+    to_version: int,
+    generated_at: datetime,
+    diff: ElementDiff | None,
+    comments: list[CommentStatus],
+    findings: list[BriefFinding],
+    previous_rules: set[str],
+) -> Brief:
+    open_ = [f for f in findings if f.status in {"ai_suggested", "needs_user_confirmation"}]
+    awaiting = [f for f in findings if f.status == "student_confirmed"]
+    current_rules = {f.rule_id for f in findings if f.status != "rejected"}
+    return Brief(
+        project_title=project_title,
+        program=program,
+        from_version=from_version,
+        to_version=to_version,
+        generated_at=generated_at,
+        changes=describe_changes(diff) if diff else [],
+        comments=comments,
+        open_findings=open_,
+        awaiting_supervisor=awaiting,
+        resolved_rules=sorted(previous_rules - current_rules),
+    )
+
+
+_STATE_TEXT = {
+    CommentState.POSSIBLY_ADDRESSED: "bagian yang dikomentari sudah berubah",
+    CommentState.NOT_ADDRESSED: "bagian yang dikomentari belum berubah",
+    CommentState.UNKNOWN: "tidak menempel ke paragraf tertentu",
+}
+
+
+def render_text(b: Brief) -> str:
+    """Teks pesan chat (WhatsApp/email). Pendek, faktual, tanpa penilaian."""
+    head = f"Supervision Brief — {b.project_title} ({b.program})"
+    span = f"v{b.from_version} → v{b.to_version}" if b.from_version else f"v{b.to_version}"
+    out = [head, f"Versi: {span}", ""]
+
+    out.append("Yang berubah:")
+    out += [f"- {c}" for c in b.changes] or ["- Tidak ada perubahan elemen yang terdeteksi."]
+
+    out += ["", "Komentar dosen sebelumnya:"]
+    if b.comments:
+        for c in b.comments:
+            confirmed = (
+                ""
+                if c.confirmed is None
+                else (" (mahasiswa: sudah)" if c.confirmed else " (mahasiswa: belum)")
+            )
+            out.append(f"- “{c.text}” — {_STATE_TEXT[c.state]}{confirmed}")
+    else:
+        out.append("- Tidak ada komentar yang terbaca.")
+
+    out += ["", "Menunggu keputusan dosen:"]
+    out += [f"- [{f.rule_id}] {f.title}" for f in b.awaiting_supervisor] or ["- Tidak ada."]
+
+    out += ["", "Temuan terbuka (belum dikonfirmasi mahasiswa):"]
+    out += [f"- [{f.rule_id}] {f.title}" for f in b.open_findings] or ["- Tidak ada."]
+
+    if b.resolved_rules:
+        out += ["", "Tidak muncul lagi di versi ini: " + ", ".join(b.resolved_rules)]
+
+    out += [
+        "",
+        "Dibuat otomatis oleh ThesisTwin dari catatan versi. Bukan penilaian; temuan adalah "
+        "pertanyaan untuk didiskusikan.",
+    ]
+    return "\n".join(out)

@@ -4,10 +4,13 @@ import zipfile
 from io import BytesIO
 from typing import Literal
 
-Kind = Literal["pdf", "docx"]
+from app.parsing.tex import looks_like_tex
+
+Kind = Literal["pdf", "docx", "tex"]
 
 PDF_MEDIA = "application/pdf"
 DOCX_MEDIA = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+TEX_MEDIA = "application/x-tex"
 
 
 def detect(data: bytes) -> Kind | None:
@@ -20,4 +23,6 @@ def detect(data: bytes) -> Kind | None:
         except zipfile.BadZipFile:
             return "docx" if b"word/" in data else None  # biar parser yang melaporkan rusak
         return "docx" if "word/document.xml" in names else None
+    if looks_like_tex(data):
+        return "tex"
     return None
