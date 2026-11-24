@@ -13,6 +13,9 @@ from app.schemas.review import (
     ElementIn,
     ElementOut,
     FindingOut,
+    GraphEdge,
+    GraphGap,
+    GraphOut,
     ShareOut,
     StatusIn,
 )
@@ -33,6 +36,19 @@ def add_element(version_id: str, body: ElementIn, session: SessionDep) -> Elemen
 @router.get("/versions/{version_id}/elements")
 def list_elements(version_id: str, session: SessionDep) -> list[ElementOut]:
     return [ElementOut.model_validate(r) for r in svc.list_elements(session, version_id)]
+
+
+@router.get("/versions/{version_id}/graph")
+def graph(version_id: str, session: SessionDep) -> GraphOut:
+    g, rows = svc.version_graph(session, version_id)
+    by_id = {r.id: r for r in rows}
+    return GraphOut(
+        nodes=[ElementOut.model_validate(by_id[n.id]) for n in g.nodes],
+        edges=[GraphEdge(src=e.src, dst=e.dst, type=e.type) for e in g.edges],
+        gaps=[
+            GraphGap(from_type=x.from_type, to_type=x.to_type, relation=x.relation) for x in g.gaps
+        ],
+    )
 
 
 @router.post("/versions/{version_id}/check")

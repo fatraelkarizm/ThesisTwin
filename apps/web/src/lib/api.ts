@@ -91,6 +91,12 @@ export interface BriefOut {
   resolved_rules: string[];
 }
 
+export interface GraphOut {
+  nodes: ElementOut[];
+  edges: { src: string; dst: string; type: string }[];
+  gaps: { from_type: ElementType; to_type: ElementType; relation: string }[];
+}
+
 export interface ShareOut {
   token: string;
   path: string;
@@ -109,7 +115,7 @@ export function toFinding(f: FindingApi, unit: "page" | "section"): Finding {
     evidence: f.evidence.map((e) => ({ ...e, unit })),
     confidence: f.confidence,
     status: f.status,
-    aiGenerated: true,
+    aiGenerated: f.ai_generated,
   };
 }
 
@@ -160,6 +166,7 @@ export const api = {
   elements: (versionId: string) => request<ElementOut[]>(`/versions/${versionId}/elements`),
   addElement: (versionId: string, body: { type: ElementType; content: string; quote: string; page: number }) =>
     request<ElementOut>(`/versions/${versionId}/elements`, json(body)),
+  graph: (versionId: string) => request<GraphOut>(`/versions/${versionId}/graph`),
   check: (versionId: string) => request<FindingApi[]>(`/versions/${versionId}/check`, { method: "POST" }),
   findings: (versionId: string) => request<FindingApi[]>(`/versions/${versionId}/findings`),
   setStatus: (findingId: string, target: "student_confirmed" | "rejected") =>

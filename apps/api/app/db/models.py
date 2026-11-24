@@ -40,6 +40,7 @@ class EvidenceRow(Base):
     element: Mapped[str] = mapped_column(String)
     document: Mapped[str] = mapped_column(String)
     page: Mapped[int]
+    element_id: Mapped[str | None] = mapped_column(String, default=None)  # elemen sumber
 
     finding: Mapped[FindingRow] = relationship(back_populates="evidence")
 

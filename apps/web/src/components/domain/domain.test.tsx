@@ -42,6 +42,13 @@ describe("FindingCard", () => {
     expect(screen.getByText(copy.aiLabel)).toBeInTheDocument();
   });
 
+  it("temuan aturan tanpa AI tidak diberi label AI dan angkanya bukan 'perkiraan AI'", () => {
+    render(<FindingCard finding={{ ...finding, aiGenerated: false }} />);
+    expect(screen.queryByText(copy.aiLabel)).not.toBeInTheDocument();
+    expect(screen.queryByText(new RegExp(copy.confidence))).not.toBeInTheDocument();
+    expect(screen.getByText(new RegExp(copy.evidenceVerified))).toBeInTheDocument();
+  });
+
   it("tanpa evidence: status dipaksa 'perlu konfirmasi' dan sumber dinyatakan kosong", () => {
     render(<FindingCard finding={{ ...finding, evidence: [] }} />);
     expect(screen.getByText(copy.status.needs_user_confirmation)).toBeInTheDocument();

@@ -14,11 +14,13 @@ import {
   type ElementOut,
   type ElementType,
   type FindingApi,
+  type GraphOut,
   type VersionOut,
 } from "@/lib/api";
 import { copy } from "@/lib/copy";
 import { savedProjectId } from "@/lib/project";
 import { ElementsPanel } from "./ElementsPanel";
+import { GraphView } from "./GraphView";
 import { BriefPanel, CommentsPanel } from "./SidePanels";
 
 const OPEN = new Set(["ai_suggested", "needs_user_confirmation"]);
@@ -31,6 +33,7 @@ export function Workspace() {
   const [versionId, setVersionId] = useState<string | null>(null);
   const [elements, setElements] = useState<ElementOut[]>([]);
   const [findings, setFindings] = useState<FindingApi[]>([]);
+  const [graph, setGraph] = useState<GraphOut | null>(null);
   const [comments, setComments] = useState<CommentStatusOut[]>([]);
   const [brief, setBrief] = useState("");
   const [checking, setChecking] = useState(false);
@@ -67,10 +70,11 @@ export function Workspace() {
 
   useEffect(() => {
     if (!versionId) return;
-    Promise.all([api.elements(versionId), api.findings(versionId)])
-      .then(([e, f]) => {
+    Promise.all([api.elements(versionId), api.findings(versionId), api.graph(versionId)])
+      .then(([e, f, g]) => {
         setElements(e);
         setFindings(f);
+        setGraph(g);
       })
       .catch(fail);
   }, [versionId]);
@@ -94,6 +98,7 @@ export function Workspace() {
     try {
       const el = await api.addElement(version!.id, body);
       setElements((prev) => [...prev, el]);
+      setGraph(await api.graph(version!.id));
       setError(null);
     } catch (e) {
       fail(e);
@@ -165,6 +170,8 @@ export function Workspace() {
         ) : null}
 
         <ElementsPanel elements={elements} unit={unit} onAdd={addElement} />
+
+        {graph ? <GraphView graph={graph} unit={unit} /> : null}
 
         <Section
           id="temuan"

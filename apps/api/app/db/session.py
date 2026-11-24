@@ -28,7 +28,34 @@ SessionLocal = sessionmaker(bind=engine, expire_on_commit=False)
 def init_db(bind: Engine | None = None) -> None:
     from app.db import models  # noqa: F401  (daftarkan tabel)
 
-    Base.metadata.create_all(bind or engine)
+    target = bind or engine
+    Base.metadata.create_all(target)
+    _add_missing_nullable_columns(target)
+
+
+def _add_missing_nullable_columns(target: Engine) -> None:
+    """Migrasi aditif minimal: kolom baru yang nullable ditambahkan ke tabel lama.
+
+    create_all tidak mengubah tabel yang sudah ada. Ini cukup untuk perubahan aditif selama
+    SQLite dipakai; perubahan lain (ubah tipe, hapus kolom) butuh Alembic.
+    """
+    from sqlalchemy import inspect, text
+
+    insp = inspect(target)
+    with target.begin() as conn:
+        for table in Base.metadata.sorted_tables:
+            if not insp.has_table(table.name):
+                continue
+            existing = {c["name"] for c in insp.get_columns(table.name)}
+            for col in table.columns:
+                if col.name in existing:
+                    continue
+                if not col.nullable:
+                    raise RuntimeError(
+                        f"Kolom wajib baru {table.name}.{col.name} butuh migrasi manual (Alembic)."
+                    )
+                ddl = col.type.compile(dialect=target.dialect)
+                conn.execute(text(f'ALTER TABLE "{table.name}" ADD COLUMN "{col.name}" {ddl}'))
 
 
 def get_session() -> Iterator[Session]:

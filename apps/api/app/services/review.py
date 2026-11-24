@@ -21,6 +21,7 @@ from app.db.models import (
 from app.domain import brief as brief_mod
 from app.domain.comments import CommentStatus, comment_statuses
 from app.domain.diff import ElementDiff, diff_elements
+from app.domain.graph import Graph, build_graph
 from app.domain.rules import Element, Rule, run
 from app.domain.status import Status
 from app.domain.verification import verify_quote
@@ -152,6 +153,7 @@ def run_check(
                 ai_generated=any(e.source == "ai" for e in evidence),
                 evidence=[
                     EvidenceRow(
+                        element_id=e.id,
                         element=brief_mod.TYPE_LABEL.get(e.type, e.type),
                         document=f"v{version.version_no}",
                         page=e.page,
@@ -274,3 +276,8 @@ def build_brief(
         findings=findings,
         previous_rules=previous_rules,
     )
+
+
+def version_graph(session: Session, version_id: str) -> tuple[Graph, list[ElementRow]]:
+    rows = list_elements(session, version_id)
+    return build_graph(_domain_elements(rows)), rows

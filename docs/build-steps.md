@@ -110,11 +110,11 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 ### Langkah 11 — Simpan elemen sebagai node + edge
 - **Output:** tabel `nodes`, `edges` sesuai [data-model.md](data-model.md); inferensi edge `addresses`, `requires`, `measured_by`, `analyzed_with`.
 - **Selesai jika:** node tanpa evidence hanya berstatus `needs_user_confirmation`; tes lulus.
-- **Status:** ⬜
+- **Status:** ✅ (2026-11-24) — graph **diturunkan** dari elemen (tidak disimpan) agar tidak pernah basi; edge sesuai ontologi; celah = tipe yang diharapkan tidak ada. Migrasi aditif kolom nullable di init_db.
 
 ### Langkah 12 — Tampilan dependency graph
 - **Output:** halaman `/graph`: node + edge, klik node → panel sumber/status.
-- **Status:** ⬜ (butuh 11)
+- **Status:** ✅ (2026-11-24) — /proyek: kolom per rantai dependency, klik elemen → kutipan + lokasi + relasi; celah sebagai badge. 3 tes komponen.
 
 ---
 

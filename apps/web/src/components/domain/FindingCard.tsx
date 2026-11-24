@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { copy } from "@/lib/copy";
 import type { Finding } from "@/types/domain";
@@ -20,8 +21,8 @@ export function FindingCard({ finding, onConfirm, onReject }: FindingCardProps) 
       <header className="flex flex-wrap items-center gap-2">
         <PriorityTag priority={finding.priority} />
         <StatusBadge status={hasEvidence ? finding.status : "needs_user_confirmation"} />
-        <AiLabel />
-        <ConfidenceMeter value={finding.confidence} />
+        {finding.aiGenerated ? <AiLabel /> : <Badge>{copy.ruleBased} {finding.ruleId}</Badge>}
+        <ConfidenceMeter value={finding.confidence} aiGenerated={finding.aiGenerated} />
       </header>
       <h3 className="text-base font-semibold">{finding.title}</h3>
       <p className="text-sm">

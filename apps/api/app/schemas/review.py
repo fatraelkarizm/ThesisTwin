@@ -80,3 +80,21 @@ class ShareOut(BaseModel):
     @classmethod
     def _utc(cls, v: datetime) -> datetime:
         return v if v.tzinfo else v.replace(tzinfo=UTC)
+
+
+class GraphEdge(BaseModel):
+    src: str
+    dst: str
+    type: str
+
+
+class GraphGap(BaseModel):
+    from_type: str
+    to_type: str
+    relation: str
+
+
+class GraphOut(BaseModel):
+    nodes: list[ElementOut]
+    edges: list[GraphEdge]
+    gaps: list[GraphGap]
