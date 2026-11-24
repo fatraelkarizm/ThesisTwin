@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fafaf9;
+  --foreground: #1c1917;
+  --muted: #57534e;
+  --surface: #ffffff;
+  --surface-muted: #f5f5f4;
+  --line: #d6d3d1;
+  --brand: #1d4ed8;
+  --brand-hover: #1e40af;
+  --brand-fg: #ffffff;
+  --tone-neutral-bg: #e7e5e4;
+  --tone-neutral-fg: #292524;
+  --tone-info-bg: #dbeafe;
+  --tone-info-fg: #1e3a8a;
+  --tone-success-bg: #dcfce7;
+  --tone-success-fg: #14532d;
+  --tone-warning-bg: #fef3c7;
+  --tone-warning-fg: #78350f;
+  --tone-danger-bg: #fee2e2;
+  --tone-danger-fg: #7f1d1d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0c0a09;
+    --foreground: #f5f5f4;
+    --muted: #a8a29e;
+    --surface: #1c1917;
+    --surface-muted: #292524;
+    --line: #44403c;
+    --brand: #60a5fa;
+    --brand-hover: #93c5fd;
+    --brand-fg: #0c0a09;
+    --tone-neutral-bg: #44403c;
+    --tone-neutral-fg: #f5f5f4;
+    --tone-info-bg: #1e3a8a;
+    --tone-info-fg: #dbeafe;
+    --tone-success-bg: #14532d;
+    --tone-success-fg: #dcfce7;
+    --tone-warning-bg: #78350f;
+    --tone-warning-fg: #fef3c7;
+    --tone-danger-bg: #7f1d1d;
+    --tone-danger-fg: #fee2e2;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-fg: var(--brand-fg);
+  --color-tone-neutral-bg: var(--tone-neutral-bg);
+  --color-tone-neutral-fg: var(--tone-neutral-fg);
+  --color-tone-info-bg: var(--tone-info-bg);
+  --color-tone-info-fg: var(--tone-info-fg);
+  --color-tone-success-bg: var(--tone-success-bg);
+  --color-tone-success-fg: var(--tone-success-fg);
+  --color-tone-warning-bg: var(--tone-warning-bg);
+  --color-tone-warning-fg: var(--tone-warning-fg);
+  --color-tone-danger-bg: var(--tone-danger-bg);
+  --color-tone-danger-fg: var(--tone-danger-fg);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
