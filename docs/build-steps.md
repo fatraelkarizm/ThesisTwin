@@ -85,7 +85,7 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 ### Langkah 8 — Layar unggah di web
 - **Output:** halaman `/upload`: pilih prodi (rule set), centang consent, unggah DOCX/PDF, status hasil.
 - **Selesai jika:** alur berjalan ke API lokal; error tampil jelas dalam bahasa Indonesia.
-- **Status:** ⬜ (butuh 6)
+- **Status:** ✅ (2026-11-24) — 4 tes komponen + uji end-to-end di browser (web :3123 → API :8000, PDF abstrak nyata → v1, 2 halaman). Proyek aktif disimpan di localStorage. Untuk dev: set `NEXT_PUBLIC_API_URL` bila API bukan di :8000, dan `THESISTWIN_CORS_ORIGINS` bila web bukan di :3000.
 
 ---
 

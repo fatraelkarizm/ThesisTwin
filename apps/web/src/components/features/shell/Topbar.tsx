@@ -1,5 +1,6 @@
 import { BookOpenCheck, Plus, Search, Upload } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import Link from "next/link";
+import { Button, buttonClass } from "@/components/ui/Button";
 import { copy } from "@/lib/copy";
 
 export function Topbar() {
@@ -29,10 +30,10 @@ export function Topbar() {
           <p className="text-sm font-medium">{s.project}</p>
           <p className="text-xs text-muted">{s.program}</p>
         </div>
-        <Button variant="secondary" disabled title={s.soonHint} aria-label={s.upload}>
+        <Link href="/upload" aria-label={s.upload} className={buttonClass("secondary")}>
           <Upload aria-hidden="true" className="size-4" />
           <span className="hidden sm:inline">{s.upload}</span>
-        </Button>
+        </Link>
         <Button disabled title={s.soonHint} aria-label={s.newProject}>
           <Plus aria-hidden="true" className="size-4" />
           <span className="hidden sm:inline">{s.newProject}</span>
