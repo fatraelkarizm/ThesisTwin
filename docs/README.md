@@ -13,6 +13,8 @@ Dokumentasi untuk **ThesisTwin** — AI-powered navigation & consistency engine 
 | [BRD.md](BRD.md) | Kebutuhan bisnis, stakeholder, KPI, scope | Bisnis, juri |
 | [PRD.md](PRD.md) | Persona, requirement fungsional & non-fungsional, guardrail | Produk, engineering |
 | [UAT.md](UAT.md) | Rencana & skenario uji penerimaan | QA, pengguna uji |
+| [build-steps.md](build-steps.md) | **Rencana kerja langkah 1–27**, satu langkah per putaran | Tim, AI agent |
+| [design/](design/README.md) | Referensi desain UI dan keputusan visual | Tim, AI agent |
 | [step-plan.md](step-plan.md) | Breakdown milestone → task, dependensi, critical path | Tim |
 | [technical-design.md](technical-design.md) | Arsitektur, komponen, kontrak data, keamanan | Engineering |
 | [data-model.md](data-model.md) | Ontologi graph & skema relasional | Engineering |

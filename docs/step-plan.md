@@ -1,5 +1,7 @@
 # Step Plan — Breakdown Eksekusi
 
+> Rencana kerja harian yang dipecah per langkah bernomor ada di **[build-steps.md](build-steps.md)**. Dokumen ini tetap menjadi peta milestone.
+
 **Produk:** ThesisTwin · **Versi:** 1.0 (draft) · **Tanggal:** 2026-11-20
 Mengikuti fase STACK 2026: Preliminary → Semifinal → Pre-final → Final Day → Post-hackathon (proposal §14).
 
