@@ -11,7 +11,8 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db.models import Document, DocumentVersion, Project
-from app.parsing.detect import PDF_MEDIA, detect
+from app.parsing.detect import DOCX_MEDIA, PDF_MEDIA, detect
+from app.parsing.docx import DocxError, parse_docx
 from app.parsing.pdf import read_pages
 from app.storage import LocalStorage
 
@@ -112,14 +113,22 @@ def ingest_upload(
 ) -> AddedVersion:
     """Deteksi tipe dari isi file, parse, lalu simpan sebagai versi baru."""
     kind = detect(data)
-    if kind != "pdf":
-        raise UnsupportedFile(filename)
     try:
-        pages = read_pages(data)
-    except PdfReadError as exc:
+        if kind == "pdf":
+            pages = read_pages(data)
+            parsed: dict[str, Any] = {
+                "kind": "pdf",
+                "unit": "page",
+                "pages": {str(n): t for n, t in pages.items()},
+            }
+            media = PDF_MEDIA
+        elif kind == "docx":
+            parsed, media = parse_docx(data), DOCX_MEDIA
+        else:
+            raise UnsupportedFile(filename)
+    except (PdfReadError, DocxError) as exc:
         raise UnreadableFile(filename) from exc
-    parsed = {"kind": "pdf", "pages": {str(n): t for n, t in pages.items()}}
-    return add_version(session, storage, project_id, filename, PDF_MEDIA, data, parsed)
+    return add_version(session, storage, project_id, filename, media, data, parsed)
 
 
 def list_versions(session: Session, project_id: str) -> list[DocumentVersion]:

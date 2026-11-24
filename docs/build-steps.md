@@ -80,7 +80,7 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 ### Langkah 7 — Parser DOCX + komentar pembimbing
 - **Output:** `parsing/docx.py`: paragraf, heading, tabel, **komentar** (penulis, teks, anchor).
 - **Selesai jika:** komentar DOCX terbaca; keterbatasan halaman DOCX terdokumentasi (DOCX tidak punya halaman tetap → pakai nomor bagian/paragraf).
-- **Status:** ⬜
+- **Status:** ✅ (2026-11-24) — 12 tes. Lokasi DOCX = **nomor bagian** (dipotong per heading, `unit: "section"`), bukan halaman. XML dibaca dengan defusedxml + batas ukuran. Belum diuji dengan file Word/Google Docs nyata. Catatan privasi: nama penulis komentar (dosen) ikut tersimpan.
 
 ### Langkah 8 — Layar unggah di web
 - **Output:** halaman `/upload`: pilih prodi (rule set), centang consent, unggah DOCX/PDF, status hasil.

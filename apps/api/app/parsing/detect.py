@@ -1,5 +1,7 @@
 """Deteksi tipe file dari isi (magic bytes), bukan dari nama file atau header klien."""
 
+import zipfile
+from io import BytesIO
 from typing import Literal
 
 Kind = Literal["pdf", "docx"]
@@ -11,7 +13,11 @@ DOCX_MEDIA = "application/vnd.openxmlformats-officedocument.wordprocessingml.doc
 def detect(data: bytes) -> Kind | None:
     if data.startswith(b"%PDF-"):
         return "pdf"
-    # DOCX = ZIP berisi word/document.xml; cek ZIP di sini, isi divalidasi parser DOCX.
-    if data.startswith(b"PK\x03\x04") and b"word/" in data[:4096]:
-        return "docx"
+    if data.startswith(b"PK\x03\x04"):
+        # Urutan isi ZIP berbeda per aplikasi (Word, Google Docs, LibreOffice): cek daftar isinya.
+        try:
+            names = zipfile.ZipFile(BytesIO(data)).namelist()
+        except zipfile.BadZipFile:
+            return "docx" if b"word/" in data else None  # biar parser yang melaporkan rusak
+        return "docx" if "word/document.xml" in names else None
     return None

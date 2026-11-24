@@ -8,6 +8,7 @@ from app.api.deps import get_storage
 from app.db.session import get_session, init_db
 from app.main import app
 from app.storage import LocalStorage
+from tests.test_docx import SAMPLE
 from tests.test_pdf import _pdf
 
 
@@ -78,6 +79,15 @@ def test_corrupt_pdf_is_422(client):
     client.post(f"/projects/{pid}/consent")
     r = _upload(client, pid, b"%PDF-1.4\nrusak")
     assert r.status_code == 422
+
+
+def test_docx_upload_keeps_comments(client):
+    pid = _project(client)
+    client.post(f"/projects/{pid}/consent")
+    r = _upload(client, pid, SAMPLE, name="proposal.docx")
+    assert r.status_code == 201
+    assert r.json()["version"]["media_type"].endswith("wordprocessingml.document")
+    assert r.json()["pages"] == 2  # 2 bagian (per heading), bukan halaman
 
 
 def test_unknown_project_is_404(client):
