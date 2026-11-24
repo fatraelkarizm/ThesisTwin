@@ -1,7 +1,9 @@
 @import "tailwindcss";
 
 /* Token visual. Referensi & alasan: docs/design/README.md. Kontras diverifikasi >= 4.5:1 (WCAG AA). */
+/* Selalu tema terang (keputusan tim 2026-11-24), tidak mengikuti mode gelap sistem. */
 :root {
+  color-scheme: light;
   --background: #f4f6fb;
   --foreground: #161b26;
   --muted: #5b6475;
@@ -25,33 +27,6 @@
   --tone-danger-bg: #fee2e2;
   --tone-danger-fg: #7f1d1d;
   --card-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 1px 3px rgb(15 23 42 / 0.05);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0b1020;
-    --foreground: #e6eaf2;
-    --muted: #a3acbd;
-    --surface: #131a2a;
-    --surface-muted: #1a2234;
-    --line: #273149;
-    --brand: #60a5fa;
-    --brand-hover: #93c5fd;
-    --brand-fg: #0b1220;
-    --brand-soft: #172554;
-    --brand-strong: #93c5fd;
-    --tone-neutral-bg: #273149;
-    --tone-neutral-fg: #e6eaf2;
-    --tone-info-bg: #4c1d95;
-    --tone-info-fg: #ddd6fe;
-    --tone-success-bg: #14532d;
-    --tone-success-fg: #dcfce7;
-    --tone-warning-bg: #78350f;
-    --tone-warning-fg: #fef3c7;
-    --tone-danger-bg: #7f1d1d;
-    --tone-danger-fg: #fee2e2;
-    --card-shadow: 0 1px 2px rgb(0 0 0 / 0.3);
-  }
 }
 
 @theme inline {

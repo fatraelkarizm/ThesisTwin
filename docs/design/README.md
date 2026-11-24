@@ -41,7 +41,9 @@ Didefinisikan di [globals.css](../../apps/web/src/app/globals.css), dipakai lewa
 
 | Token | Terang | Gelap | Catatan |
 |---|---|---|---|
-**Warna utama biru** (keputusan tim 2026-11-24, menggantikan hijau Notalx). Kontras dihitung, bukan ditebak:
+**Warna utama biru** (keputusan tim 2026-11-24, menggantikan hijau Notalx). Kontras dihitung, bukan ditebak.
+
+**Selalu tema terang** (keputusan tim 2026-11-24): aplikasi tidak mengikuti mode gelap sistem; `globals.css` memakai `color-scheme: light`. Kolom "Gelap" di bawah hanya arsip nilai kalau mode gelap dihidupkan lagi; nilainya **tidak dipakai** di kode saat ini.
 
 | Token | Terang | Gelap | Kontras / catatan |
 |---|---|---|---|
