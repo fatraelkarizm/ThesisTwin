@@ -1,0 +1,25 @@
+# CONTOH UMUM, BUKAN panduan prodi Matematika. Ganti/lengkapi dengan bagian wajib dari panduan
+# resmi prodi (docs/build-steps.md keputusan 0.5) lalu set reviewed_by_supervisor: true.
+id: R-SECTIONS-UMUM
+priority: low
+title: Bagian proposal yang umum diwajibkan tidak ditemukan
+why_flagged: Bagian yang umumnya diwajibkan dalam proposal Bab 1–3 tidak ditemukan di dokumen
+suggested_clarification: >-
+  Apakah bagian ini memang belum ditulis, ditulis dengan judul lain, atau tidak diwajibkan oleh
+  panduan prodi?
+check:
+  kind: required_sections
+  sections:
+    - {name: Latar Belakang, any_terms: [latar belakang, background]}
+    - {name: Rumusan Masalah, any_terms: [rumusan masalah, research question, pertanyaan penelitian]}
+    - {name: Tujuan Penelitian, any_terms: [tujuan penelitian, research objective]}
+    - {name: Manfaat Penelitian, any_terms: [manfaat penelitian, kegunaan penelitian]}
+    - {name: Kajian Pustaka, any_terms: [kajian pustaka, tinjauan pustaka, kajian teori, landasan teori, literature review]}
+    - {name: Metode Penelitian, any_terms: [metode penelitian, metodologi penelitian, research method]}
+examples:
+  fires:
+    document_text: "BAB I PENDAHULUAN Latar Belakang ... Rumusan Masalah ... BAB III Metode Penelitian ..."
+  quiet:
+    document_text: >-
+      Latar Belakang. Rumusan Masalah. Tujuan Penelitian. Manfaat Penelitian.
+      BAB II Kajian Pustaka. BAB III Metode Penelitian.

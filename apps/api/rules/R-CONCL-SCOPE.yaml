@@ -1,0 +1,26 @@
+id: R-CONCL-SCOPE
+priority: medium
+title: Klaim mungkin melampaui cakupan sampel
+why_flagged: >-
+  Klaim atau tujuan memakai bahasa generalisasi luas, sedangkan sampelnya tampak terbatas
+  (satu kelas, satu sekolah, atau dipilih secara purposive).
+suggested_clarification: >-
+  Apakah kesimpulan akan dibatasi pada sampel yang diteliti, atau teknik sampling perlu diubah
+  agar generalisasi lebih luas dapat didukung?
+check:
+  kind: conflict
+  a:
+    types: [claim, objective, research_question]
+    any_terms: [semua siswa, seluruh siswa, seluruh mahasiswa, di indonesia, secara umum, generalisasi]
+  b:
+    types: [method, population]
+    any_terms: [satu kelas, satu sekolah, purposive, purposive sampling, convenience sampling, sampel jenuh]
+examples:
+  fires:
+    elements:
+      - {type: claim, content: "Hasil penelitian berlaku untuk seluruh siswa SMP di Indonesia.", page: 8}
+      - {type: method, content: "Sampel satu kelas dipilih dengan purposive sampling.", page: 22}
+  quiet:
+    elements:
+      - {type: claim, content: "Hasil penelitian berlaku untuk siswa kelas VIII-A SMP N 1.", page: 8}
+      - {type: method, content: "Sampel satu kelas dipilih dengan purposive sampling.", page: 22}

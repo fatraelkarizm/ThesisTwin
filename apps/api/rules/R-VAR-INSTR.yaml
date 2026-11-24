@@ -1,0 +1,19 @@
+id: R-VAR-INSTR
+priority: medium
+title: Variabel penelitian belum terhubung ke instrumen
+why_flagged: >-
+  Ditemukan variabel penelitian, tetapi tidak ditemukan instrumen untuk mengukurnya
+  (tes, angket, lembar observasi, pedoman wawancara).
+suggested_clarification: Instrumen apa yang dipakai untuk mengukur variabel ini?
+check:
+  kind: requires
+  source: {types: [variable]}
+  target: {types: [instrument]}
+examples:
+  fires:
+    elements:
+      - {type: variable, content: "Kemampuan pemecahan masalah matematis.", page: 12}
+  quiet:
+    elements:
+      - {type: variable, content: "Kemampuan pemecahan masalah matematis.", page: 12}
+      - {type: instrument, content: "Tes uraian pemecahan masalah 5 soal.", page: 24}

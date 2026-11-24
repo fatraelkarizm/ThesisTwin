@@ -1,0 +1,19 @@
+id: R-OBJ-ANALYSIS
+priority: high
+title: Tujuan penelitian belum memiliki rencana analisis
+why_flagged: >-
+  Ditemukan tujuan penelitian, tetapi tidak ditemukan teknik analisis data. Tanpa rencana
+  analisis, belum jelas bagaimana tujuan akan dicapai.
+suggested_clarification: Teknik analisis apa yang akan dipakai untuk mencapai tujuan ini?
+check:
+  kind: requires
+  source: {types: [objective]}
+  target: {types: [analysis]}
+examples:
+  fires:
+    elements:
+      - {type: objective, content: "Mengetahui perbedaan hasil belajar sebelum dan sesudah perlakuan.", page: 5}
+  quiet:
+    elements:
+      - {type: objective, content: "Mengetahui perbedaan hasil belajar sebelum dan sesudah perlakuan.", page: 5}
+      - {type: analysis, content: "Uji t berpasangan (paired sample t-test).", page: 30}

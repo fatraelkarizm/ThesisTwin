@@ -122,7 +122,7 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 ### Langkah 14 — 5–10 aturan pertama
 - **Output:** termasuk **pertanyaan kausal vs desain one-group pre/post-test** (abstrak [3]), RQ→objective, objective→analisis, variabel→instrumen, **bagian wajib panduan Matematika**.
 - **Selesai jika:** tiap aturan punya contoh lulus + gagal; bahasa temuan berupa pertanyaan.
-- **Status:** ⬜ (bagian panduan butuh 0.5)
+- **Status:** 🔄 (2026-11-24) — 6 aturan: R-CAUSAL-01, R-RQ-OBJ, R-OBJ-ANALYSIS, R-VAR-INSTR, R-CONCL-SCOPE, R-SECTIONS-UMUM; 71 tes API lulus. **Belum selesai:** (a) bagian wajib masih contoh umum, bukan panduan Matematika (butuh 0.5); (b) semua `reviewed_by_supervisor: false` sampai ditinjau dosen metodologi; (c) R-POP-CHANGE menunggu diff versi (Langkah 18).
 
 ### Langkah 15 — Jalankan 10 proposal + laporan (tenggat 30 Nov)
 - **Output:** `docs/reports/2026-11-30-extraction.md`: rasio verifikasi, precision/recall vs label manual, kegagalan.

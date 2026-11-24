@@ -1,0 +1,19 @@
+id: R-RQ-OBJ
+priority: high
+title: Rumusan masalah belum disertai tujuan penelitian
+why_flagged: >-
+  Ditemukan rumusan masalah, tetapi tidak ditemukan tujuan penelitian. Setiap rumusan masalah
+  biasanya dijawab oleh minimal satu tujuan.
+suggested_clarification: Tujuan penelitian mana yang menjawab rumusan masalah ini?
+check:
+  kind: requires
+  source: {types: [research_question]}
+  target: {types: [objective]}
+examples:
+  fires:
+    elements:
+      - {type: research_question, content: "Bagaimana kemampuan representasi matematis siswa kelas VIII?", page: 4}
+  quiet:
+    elements:
+      - {type: research_question, content: "Bagaimana kemampuan representasi matematis siswa kelas VIII?", page: 4}
+      - {type: objective, content: "Mendeskripsikan kemampuan representasi matematis siswa kelas VIII.", page: 5}

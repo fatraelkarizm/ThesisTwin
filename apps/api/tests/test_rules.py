@@ -32,8 +32,8 @@ def test_rule_examples(rule: Rule):
 @pytest.mark.parametrize("rule", RULES, ids=lambda r: r.id)
 def test_findings_are_questions_not_verdicts(rule: Rule):
     assert rule.suggested_clarification.rstrip().endswith("?")
-    for banned in ("salah", "gagal", "tidak valid"):
-        assert banned not in rule.title.lower()
+    # Per kata utuh: "masalah" bukan "salah".
+    assert not has_term(rule.title, ["salah", "keliru", "gagal", "tidak valid"])
 
 
 def test_normalize_and_terms():
