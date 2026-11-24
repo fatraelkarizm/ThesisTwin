@@ -61,7 +61,7 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 ### Langkah 4 — Tes komponen web (vitest + Testing Library)
 - **Tujuan:** memenuhi aturan [worktree.md](worktree.md) §3.11.
 - **Selesai jika:** `StatusBadge`, `FindingCard`, `EvidenceChip`, panel Tools punya tes render; `npm test` lulus.
-- **Status:** ⬜
+- **Status:** ✅ (2026-11-24) — 12 tes. Jalankan lewat `npm test` (scripts/vitest.mjs menormalkan huruf drive Windows).
 
 ---
 

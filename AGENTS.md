@@ -52,7 +52,7 @@ Setiap fitur merujuk ID kebutuhan (`FR-xxx`, `NFR-xx`) dan task (`Txx.x`) di [do
 ```bash
 # web
 cd apps/web && npm install && npm run dev        # http://localhost:3000
-npm run lint && npm run typecheck && npm test
+npm run lint && npm run typecheck && npm test   # selalu lewat npm test, bukan npx vitest (masalah huruf drive Windows)
 
 # api
 cd apps/api && python -m venv .venv && . .venv/Scripts/activate   # Windows Git Bash
