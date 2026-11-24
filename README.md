@@ -20,7 +20,7 @@ pip install -e ".[dev]" && uvicorn app.main:app --reload
 Cek kualitas: `npm run lint && npm run typecheck && npm run build` (web), `ruff check . && pytest` (api).
 
 ## Alur kerja
-Jangan kerja di `main`. Buat branch `feature/<nama>`, commit kecil, buka PR. Detail di [AGENTS.md](AGENTS.md).
+Jangan kerja di `main`. Semua kerja di branch `features`, commit kecil, push, lalu buka PR ke `main`. Detail di [AGENTS.md](AGENTS.md).
 
 ## Status
 Scaffold awal: UI komponen domain (StatusBadge, EvidenceChip, FindingCard) dengan data simulasi, dan backend dengan state machine status + invarian evidence. Belum ada ingestion, ekstraksi LLM, atau database.

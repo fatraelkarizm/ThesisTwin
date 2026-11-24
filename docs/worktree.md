@@ -106,7 +106,7 @@ Berlaku untuk semua file di `components/ui` dan `components/domain`.
 | util / non-komponen TS | `kebab-case.ts` |
 | Python modul | `snake_case.py` |
 | Rule ID | `R-<TOPIK>-<NN>` (mis. `R-CAUSAL-01`) sesuai [alignment-rules.md](alignment-rules.md) |
-| Branch | `feature/…`, `fix/…`, `docs/…`, `chore/…` |
+| Branch | hanya `features` |
 | ADR | `docs/adr/ADR-NNN-judul.md` |
 
 ## 6. Checklist Sebelum Menambah File/Komponen

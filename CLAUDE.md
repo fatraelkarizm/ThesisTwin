@@ -21,7 +21,7 @@ Pakai sesuai konteks, jangan semuanya sekaligus:
 | Hemat token | `caveman` (opsional, atas permintaan) |
 
 ## Cara kerja
-- Mulai sesi: `git branch --show-current`. Di `main` → buat `feature/...` dulu.
+- Mulai sesi: `git branch --show-current`. Harus `features`; jangan buat branch lain.
 - Sebelum menambah komponen/folder: baca [docs/worktree.md](docs/worktree.md) dan ikuti kontrak per layer.
 - Untuk pertanyaan arsitektur/dokumen, baca `docs/` dulu (jangan menebak). Konflik antar dokumen → proposal menang.
 - Bila docs dan kode berbeda, tanyakan; jangan diam-diam mengubah salah satunya.

@@ -7,10 +7,10 @@ Source of truth produk: [docs/source/01-proposal-full.md](docs/source/01-proposa
 Struktur folder + aturan komponen: **[docs/worktree.md](docs/worktree.md)** (wajib dibaca sebelum menambah file).
 
 ## 1. Git — WAJIB
-- **Jangan pernah commit/kerja langsung di `main`.** Selalu branch `feature/<slug-pendek>` (bug: `fix/<slug>`, docs: `docs/<slug>`, chore: `chore/<slug>`).
-- Cek `git branch --show-current` sebelum mengedit. Kalau `main`, buat branch dulu.
+- **Hanya satu branch kerja: `features`.** Jangan membuat branch lain (tidak ada `feature/...`, `fix/...`, dll.) kecuali diminta eksplisit. Jangan commit/kerja langsung di `main`.
+- Cek `git branch --show-current` sebelum mengedit. Bukan `features` → `git checkout features`.
 - Commit kecil, Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, `test:`, `refactor:`).
-- **Setelah setiap perubahan yang di-commit, langsung `git push` branch fitur** (`git push -u origin <branch>` pertama kali). Jangan merge, force-push, atau ubah `main` tanpa diminta. PR ke `main`.
+- **Setelah setiap perubahan yang di-commit, langsung `git push` ke `features`** (`git push origin features`). Jangan merge, force-push, atau ubah `main` tanpa diminta. PR ke `main`.
 - Jangan commit `.env`, secret, dokumen mahasiswa asli, atau data peserta.
 
 ## 2. Stack (keputusan sementara, finalisasi via ADR di `docs/adr/`)
