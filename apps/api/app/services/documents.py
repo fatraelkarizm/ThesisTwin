@@ -6,10 +6,13 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any
 
+from pypdf.errors import PdfReadError
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db.models import Document, DocumentVersion, Project
+from app.parsing.detect import PDF_MEDIA, detect
+from app.parsing.pdf import read_pages
 from app.storage import LocalStorage
 
 
@@ -94,6 +97,41 @@ def add_version(
     session.add(version)
     session.commit()
     return AddedVersion(version, created=True)
+
+
+class UnsupportedFile(ValueError):
+    pass
+
+
+class UnreadableFile(ValueError):
+    pass
+
+
+def ingest_upload(
+    session: Session, storage: LocalStorage, project_id: str, filename: str, data: bytes
+) -> AddedVersion:
+    """Deteksi tipe dari isi file, parse, lalu simpan sebagai versi baru."""
+    kind = detect(data)
+    if kind != "pdf":
+        raise UnsupportedFile(filename)
+    try:
+        pages = read_pages(data)
+    except PdfReadError as exc:
+        raise UnreadableFile(filename) from exc
+    parsed = {"kind": "pdf", "pages": {str(n): t for n, t in pages.items()}}
+    return add_version(session, storage, project_id, filename, PDF_MEDIA, data, parsed)
+
+
+def list_versions(session: Session, project_id: str) -> list[DocumentVersion]:
+    _get_project(session, project_id)
+    return list(
+        session.scalars(
+            select(DocumentVersion)
+            .join(Document)
+            .where(Document.project_id == project_id)
+            .order_by(DocumentVersion.version_no)
+        )
+    )
 
 
 def _get_project(session: Session, project_id: str) -> Project:

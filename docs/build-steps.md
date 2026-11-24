@@ -75,7 +75,7 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 ### Langkah 6 — API upload PDF + consent gate
 - **Output:** `POST /projects/{id}/documents` (multipart), penyimpanan file lokal di folder yang di-ignore git, tolak bila consent belum diberikan.
 - **Selesai jika:** upload tanpa consent → 403; PDF valid → versi tersimpan + halaman terparse; tes API lulus.
-- **Status:** ⬜
+- **Status:** ✅ (2026-11-24) — 6 tes API + uji asap uvicorn dengan PDF abstrak nyata (403 tanpa consent, 201 v1 dua halaman). Tipe file dideteksi dari isi, bukan nama. Error service dipetakan ke HTTP di `app/api/errors.py`.
 
 ### Langkah 7 — Parser DOCX + komentar pembimbing
 - **Output:** `parsing/docx.py`: paragraf, heading, tabel, **komentar** (penulis, teks, anchor).

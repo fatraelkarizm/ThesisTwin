@@ -50,6 +50,7 @@ ThesisTwin/
 | `api/app/api` | routing, auth dependency, status code | logika domain, query SQL langsung, panggilan LLM |
 | `api/app/domain` | fungsi/kelas murni, deterministik | IO (DB, HTTP, file, LLM), `datetime.now()` langsung (inject clock) |
 | `api/app/services` | orkestrasi: DB + LLM + domain | aturan bisnis inti (taruh di `domain/`) |
+| `api/app/storage.py` | simpan/baca file unggahan | logika bisnis |
 | `api/app/parsing` | membaca file, memetakan halaman | memanggil LLM, aturan bisnis |
 | `api/app/llm` | prompt, panggilan provider, validasi skema, retry | keputusan alignment |
 | `api/rules` | aturan sebagai data + metadata (id, prioritas, pesan) | kode |
