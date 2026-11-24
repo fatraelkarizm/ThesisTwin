@@ -9,6 +9,7 @@ from datetime import datetime
 
 from app.domain.comments import CommentState, CommentStatus
 from app.domain.diff import ElementDiff
+from app.domain.impact import Impact
 
 TYPE_LABEL = {
     "research_question": "Rumusan masalah",
@@ -44,6 +45,7 @@ class Brief:
     open_findings: list[BriefFinding] = field(default_factory=list)
     awaiting_supervisor: list[BriefFinding] = field(default_factory=list)
     resolved_rules: list[str] = field(default_factory=list)
+    impacts: list[str] = field(default_factory=list)
 
 
 def _label(t: str) -> str:
@@ -54,6 +56,17 @@ def describe_changes(d: ElementDiff) -> list[str]:
     lines = [f"Diubah — {_label(c.new.type)}: “{c.new.content}”" for c in d.changed]
     lines += [f"Baru — {_label(e.type)}: “{e.content}”" for e in d.added]
     lines += [f"Dihapus — {_label(e.type)}: “{e.content}”" for e in d.removed]
+    return lines
+
+
+def describe_impacts(impacts: list[Impact]) -> list[str]:
+    lines = []
+    for i in impacts:
+        src, dst = _label(i.changed_type), _label(i.affected_type).lower()
+        if not i.affected_elements:
+            continue  # tidak ada elemen terdampak yang tercatat; celahnya sudah dilaporkan graph
+        stale = " — belum berubah sejak versi lalu" if i.stale else ""
+        lines.append(f"{src} berubah → cek {dst}: {i.check}{stale}")
     return lines
 
 
@@ -68,6 +81,7 @@ def build_brief(
     comments: list[CommentStatus],
     findings: list[BriefFinding],
     previous_rules: set[str],
+    impacts: list[Impact] | None = None,
 ) -> Brief:
     open_ = [f for f in findings if f.status in {"ai_suggested", "needs_user_confirmation"}]
     awaiting = [f for f in findings if f.status == "student_confirmed"]
@@ -83,6 +97,7 @@ def build_brief(
         open_findings=open_,
         awaiting_supervisor=awaiting,
         resolved_rules=sorted(previous_rules - current_rules),
+        impacts=describe_impacts(impacts or []),
     )
 
 
@@ -101,6 +116,10 @@ def render_text(b: Brief) -> str:
 
     out.append("Yang berubah:")
     out += [f"- {c}" for c in b.changes] or ["- Tidak ada perubahan elemen yang terdeteksi."]
+
+    if b.impacts:
+        out += ["", "Perlu dicek ulang karena perubahan:"]
+        out += [f"- {line}" for line in b.impacts]
 
     out += ["", "Komentar dosen sebelumnya:"]
     if b.comments:

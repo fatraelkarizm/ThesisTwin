@@ -154,6 +154,7 @@ export const copy = {
     title: "Supervision Brief",
     note: "Dibuat otomatis dari catatan versi mahasiswa. Bukan penilaian; temuan adalah pertanyaan untuk didiskusikan.",
     changes: "Yang berubah",
+    impacts: "Perlu dicek ulang karena perubahan",
     noChanges: "Tidak ada perubahan elemen yang terdeteksi.",
     comments: "Komentar Anda sebelumnya",
     awaiting: "Menunggu keputusan Anda",

@@ -22,6 +22,7 @@ from app.domain import brief as brief_mod
 from app.domain.comments import CommentStatus, comment_statuses
 from app.domain.diff import ElementDiff, diff_elements
 from app.domain.graph import Graph, build_graph
+from app.domain.impact import change_impact
 from app.domain.rules import Element, Rule, run
 from app.domain.status import Status
 from app.domain.verification import verify_quote
@@ -252,6 +253,11 @@ def build_brief(
 ) -> brief_mod.Brief:
     project, versions = project_versions(session, project_id)
     from_v, to_v, diff = latest_diff(session, project_id)
+    impacts = (
+        change_impact(diff, _domain_elements(list_elements(session, versions[-1].id)))
+        if diff
+        else []
+    )
     findings = [
         brief_mod.BriefFinding(f.id, f.rule_id, f.title, f.priority, f.status)
         for f in list_findings(session, versions[-1].id)
@@ -275,6 +281,7 @@ def build_brief(
         comments=latest_comments(session, project_id),
         findings=findings,
         previous_rules=previous_rules,
+        impacts=impacts,
     )
 
 

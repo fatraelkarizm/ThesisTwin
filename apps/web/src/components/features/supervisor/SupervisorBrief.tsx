@@ -155,6 +155,18 @@ export function SupervisorBrief({ token }: { token: string }) {
             )}
           </Section>
 
+          {brief.impacts.length > 0 ? (
+            <Section title={s.impacts}>
+              <ul className="space-y-1.5 text-sm">
+                {brief.impacts.map((line) => (
+                  <li key={line} className="rounded-lg border border-tone-warning-bg bg-surface px-3 py-2">
+                    {line}
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          ) : null}
+
           {brief.comments.length > 0 ? (
             <Section title={s.comments}>
               <ul className="space-y-2">

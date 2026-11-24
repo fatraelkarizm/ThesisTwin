@@ -89,6 +89,7 @@ export interface BriefOut {
   open_findings: BriefFindingOut[];
   awaiting_supervisor: BriefFindingOut[];
   resolved_rules: string[];
+  impacts: string[];
 }
 
 export interface GraphOut {
