@@ -3,7 +3,6 @@
 import { BookOpenCheck, Share2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/Button";
 import { copy } from "@/lib/copy";
 import { navItems } from "./nav";
 
@@ -14,16 +13,15 @@ export function Sidebar() {
   const s = copy.shell;
 
   return (
-    <aside className="hidden w-60 shrink-0 flex-col border-r border-line bg-surface md:flex">
-      <div className="flex h-16 items-center gap-2 px-5">
-        <span className="flex size-8 items-center justify-center rounded-lg bg-brand text-brand-fg">
+    <aside className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col border-r border-line bg-background md:flex">
+      <div className="flex h-16 items-center gap-2.5 px-5">
+        <span className="flex size-8 items-center justify-center rounded-lg bg-brand text-brand-fg shadow-card">
           <BookOpenCheck aria-hidden="true" className="size-4" />
         </span>
-        <span className="text-lg font-semibold">{s.appName}</span>
+        <span className="text-lg font-semibold tracking-tight">{s.appName}</span>
       </div>
 
-      <nav aria-label={s.navLabel} className="flex-1 px-3 py-2">
-        <p className="px-3 pb-2 text-xs font-medium text-muted">{s.menu}</p>
+      <nav aria-label={s.navLabel} className="flex-1 overflow-y-auto px-3 py-2">
         <ul className="space-y-1">
           {navItems.map(({ label, icon: Icon, href }) => {
             if (!href) {
@@ -36,7 +34,7 @@ export function Sidebar() {
                   >
                     <Icon aria-hidden="true" className="size-4" />
                     <span className="flex-1">{label}</span>
-                    <span className="text-[11px]">{copy.soon}</span>
+                    <span className="rounded-full bg-surface-muted px-2 py-0.5 text-[11px]">{copy.soon}</span>
                   </span>
                 </li>
               );
@@ -49,11 +47,11 @@ export function Sidebar() {
                   aria-current={active ? "page" : undefined}
                   className={`${itemBase} focus-visible:outline-2 focus-visible:outline-brand ${
                     active
-                      ? "border border-brand bg-brand-soft font-medium text-foreground"
-                      : "text-foreground hover:bg-surface-muted"
+                      ? "border border-brand bg-surface font-medium text-foreground shadow-card"
+                      : "text-foreground hover:bg-surface"
                   }`}
                 >
-                  <Icon aria-hidden="true" className="size-4" />
+                  <Icon aria-hidden="true" className={`size-4 ${active ? "text-brand-strong" : ""}`} />
                   {label}
                 </Link>
               </li>
@@ -62,13 +60,20 @@ export function Sidebar() {
         </ul>
       </nav>
 
-      <div className="m-3 rounded-card bg-brand p-4 text-brand-fg">
-        <Share2 aria-hidden="true" className="mb-2 size-5" />
-        <p className="text-sm font-semibold">{s.shareTitle}</p>
-        <p className="mt-1 text-xs">{s.shareBody}</p>
-        <Button variant="secondary" disabled title={s.soonHint} className="mt-3 w-full">
+      <div className="m-3 rounded-2xl bg-gradient-to-br from-brand to-brand-hover p-4 text-brand-fg shadow-card">
+        <span className="flex size-8 items-center justify-center rounded-lg bg-white/20">
+          <Share2 aria-hidden="true" className="size-4" />
+        </span>
+        <p className="mt-3 text-sm font-semibold">{s.shareTitle}</p>
+        <p className="mt-1 text-xs opacity-90">{s.shareBody}</p>
+        <button
+          type="button"
+          disabled
+          title={s.soonHint}
+          className="mt-3 min-h-11 w-full cursor-not-allowed rounded-lg border border-white/40 bg-white/15 text-sm font-medium"
+        >
           {s.shareAction} · {copy.soon}
-        </Button>
+        </button>
       </div>
     </aside>
   );

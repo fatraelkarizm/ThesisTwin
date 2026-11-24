@@ -76,6 +76,8 @@ export const copy = {
       description: "Keselarasan pertanyaan penelitian, tujuan, metode, dan analisis per versi.",
       openFindings: "Temuan terbuka",
       uploaded: "Diunggah",
+      latest: "Terbaru",
+      archived: "Arsip",
     },
     queue: {
       title: "Temuan untuk ditinjau",
@@ -113,11 +115,11 @@ export const copy = {
       title: "Statistik",
       description: "Kondisi versi terbaru.",
       verified: "Elemen terverifikasi",
-      verifiedUnit: "kutipan cocok dengan halaman",
+      verifiedUnit: "elemen",
       comments: "Komentar ditangani",
-      commentsUnit: "dari komentar dosen",
+      commentsUnit: "komentar",
       waiting: "Menunggu feedback",
-      waitingUnit: "hari sejak unggahan",
+      waitingUnit: "hari",
     },
   },
 } as const;

@@ -1,5 +1,5 @@
 import { CheckCircle2, Clock, MessageSquareText, type LucideIcon } from "lucide-react";
-import { Card } from "@/components/ui/Card";
+import { Section } from "@/components/ui/Section";
 import { copy } from "@/lib/copy";
 import type { stats as Stats } from "./sample";
 
@@ -18,21 +18,17 @@ export function StatTiles({ stats }: { stats: typeof Stats }) {
     { icon: Clock, label: s.waiting, value: String(stats.waitingDays), unit: s.waitingUnit },
   ];
   return (
-    <Card title={s.title} description={s.description}>
-      <ul className="space-y-2">
+    <Section title={s.title} description={s.description}>
+      <ul className="grid grid-cols-3 gap-2.5">
         {tiles.map(({ icon: Icon, label, value, unit }) => (
-          <li key={label} className="flex items-center gap-3 rounded-xl border border-line p-3">
-            <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-brand">
-              <Icon aria-hidden="true" className="size-4" />
-            </span>
-            <span className="min-w-0 flex-1">
-              <span className="block text-sm font-medium">{label}</span>
-              <span className="block text-xs text-muted">{unit}</span>
-            </span>
-            <span className="text-2xl font-semibold">{value}</span>
+          <li key={label} className="flex flex-col rounded-card border border-line bg-surface p-3 shadow-card">
+            <Icon aria-hidden="true" className="size-4 text-brand-strong" />
+            <p className="mt-1.5 text-xs font-medium leading-snug">{label}</p>
+            <p className="mt-auto pt-4 text-2xl font-semibold tabular-nums">{value}</p>
+            <p className="text-[11px] text-muted">{unit}</p>
           </li>
         ))}
       </ul>
-    </Card>
+    </Section>
   );
 }

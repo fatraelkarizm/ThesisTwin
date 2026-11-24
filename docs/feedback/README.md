@@ -7,6 +7,7 @@ Folder ini menyimpan umpan balik juri fase Preliminary dan analisis kesenjangann
 | [features.md](features.md) | Skor juri, komentar juri, dan **fokus fitur** yang diturunkan dari komentar itu |
 | [gap.md](gap.md) | Kritik juri vs isi repo: apa yang sudah terjawab, apa yang masih kurang |
 | [baseline-audit.md](baseline-audit.md) | **Audit janji abstrak vs repo + kesiapan baseline LLM-only** |
+| [not-a-wrapper.md](not-a-wrapper.md) | **Bukan LLM wrapper?** Kerja kode vs kerja LLM, dengan status nyata di repo |
 | [comparison.md](comparison.md) | Pembanding praktik nyata + rancangan uji 3 lengan (G2) |
 | [evidence/](evidence/README.md) | Panduan wawancara, consent, log anonim, literatur (G1) |
 | [images/](images/) | Tangkapan layar asli (skor juri dan analisis kritik vs repo) |

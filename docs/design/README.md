@@ -15,14 +15,14 @@ Referensi utama: **Notalx** ([01-notalx-dashboard.png](references/01-notalx-dash
 | Pola Notalx | Versi ThesisTwin |
 |---|---|
 | Sidebar kiri: logo, menu, item aktif berbingkai | Dashboard, Proposal, Temuan, Versi, Supervision Brief, Defense Stress-Test. Menu yang belum dibangun = non-aktif + label "Segera" |
-| Topbar: pencarian + "Upload File" + tombol hijau "New Document" | Pencarian + "Unggah Draf" + tombol utama "Proyek Baru" |
+| Topbar: pencarian + "Upload File" + tombol "New Document" | Pencarian + "Unggah Draf" + tombol utama "Proyek Baru" |
 | Judul bagian + subjudul kecil + ikon info | Setiap kartu: judul tebal, satu baris penjelasan abu-abu |
 | **Kartu dokumen** dengan badge huruf, label kecil, angka besar berwarna | **Kartu versi proposal**: badge versi, label "Temuan terbuka", angka besar, ringkasan, waktu unggah |
 | **Panel "Tools"**: ikon, judul, badge kecil, deskripsi satu baris, chevron | **Panel Tools ThesisTwin**: Cek Konsistensi, Bandingkan Versi, Supervision Brief, Defense Stress-Test. Badge = **status nyata** ("Data simulasi", "Segera"), bukan angka pertumbuhan |
 | Ubin statistik: ikon, label, angka besar, satuan kecil | Elemen terverifikasi, komentar ditangani, temuan terbuka (berlabel simulasi) |
 | Daftar "Suggestions" dengan aksi "Mark as Done" dan badge waktu | Daftar temuan dengan aksi **Konfirmasi / Tolak** (state machine), badge prioritas |
 | "Recent Documents" dengan bar progres bersegmen | Riwayat versi dengan bar **bagian yang sudah dicek** (bersegmen) |
-| Warna utama hijau, latar abu sangat muda, kartu putih, sudut membulat besar, bayangan halus | Diadopsi sebagai token (§4) |
+| Warna utama hijau, latar abu sangat muda, kartu putih, sudut membulat, bayangan halus | Struktur diadopsi; warna utama diganti **biru** (§4) |
 
 ## 3. Yang sengaja **tidak** diambil
 
@@ -41,19 +41,26 @@ Didefinisikan di [globals.css](../../apps/web/src/app/globals.css), dipakai lewa
 
 | Token | Terang | Gelap | Catatan |
 |---|---|---|---|
-| `brand` | `#15803d` | `#4ade80` | Hijau ala Notalx; kontras teks putih di atas `brand` ≈ 5:1 (AA) |
-| `brand-soft` | `#dcfce7` | `#14532d` | Latar item aktif, ikon |
-| `background` | `#f6f7f6` | `#0c0f0d` | Latar halaman abu-hijau sangat muda |
-| `surface` | `#ffffff` | `#151a17` | Kartu |
-| `line` | `#e3e7e4` | `#2a322d` | Batas kartu tipis |
-| `muted` | `#5b645e` | `#a3aca6` | Teks sekunder; ≥ 4.5:1 di atas `surface` |
-| `radius-card` | 16px | | Sudut kartu besar seperti referensi |
-| `shadow-card` | sangat halus | | Bayangan tipis, tidak dramatis |
+**Warna utama biru** (keputusan tim 2026-11-24, menggantikan hijau Notalx). Kontras dihitung, bukan ditebak:
+
+| Token | Terang | Gelap | Kontras / catatan |
+|---|---|---|---|
+| `brand` | `#2563eb` | `#60a5fa` | teks putih di atas brand 5.17:1; teks gelap di atas brand gelap 7.36:1 |
+| `brand-strong` | `#1d4ed8` | `#93c5fd` | teks/ikon biru di atas `brand-soft`: 5.49:1 / 8.15:1 |
+| `brand-soft` | `#dbeafe` | `#172554` | latar ikon, item aktif |
+| `background` | `#f4f6fb` | `#0b1020` | latar sidebar dan kolom kanan (abu-biru sangat muda) |
+| `surface` | `#ffffff` | `#131a2a` | kolom utama dan kartu |
+| `line` | `#e3e8f0` | `#273149` | batas kartu tipis |
+| `muted` | `#5b6475` | `#a3acbd` | teks sekunder: 5.96:1 di surface, 5.51:1 di background |
+| `tone-info` | `#ede9fe` / `#5b21b6` | `#4c1d95` / `#ddd6fe` | **label AI berwarna ungu** (7.57:1) agar tidak tertukar dengan brand biru |
+| `radius-card` | 12px | | kartu kecil-padat seperti referensi |
+| `shadow-card` | sangat halus | | bayangan tipis, tidak dramatis |
 
 ## 5. Aturan tata letak
 
-- Desktop: sidebar 240px + konten; konten dibagi **kolom utama + kolom kanan 340px** (pola Notalx).
+- Desktop: sidebar 240px + konten; konten dibagi **kolom utama putih + kolom kanan 360px berwarna `background`** (pola Notalx).
+- Section **terbuka**: judul + deskripsi langsung di halaman; yang berbingkai hanya item di dalamnya (komponen `Section`). `Card` dipakai untuk formulir.
 - < 1024px: kolom kanan turun ke bawah. < 768px: sidebar disembunyikan.
-- Satu tombol utama (hijau) per layar. Aksi lain sekunder.
+- Satu tombol utama (biru) per area. Aksi lain sekunder.
 - Angka besar hanya untuk hitungan yang bisa dipertanggungjawabkan; selalu sebut satuannya.
 - Setiap layar yang memakai data simulasi menampilkan label **"Data simulasi"** yang terlihat.

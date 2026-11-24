@@ -2,45 +2,48 @@
 
 /* Token visual. Referensi & alasan: docs/design/README.md. Kontras diverifikasi >= 4.5:1 (WCAG AA). */
 :root {
-  --background: #f6f7f6;
-  --foreground: #161a17;
-  --muted: #5b645e;
+  --background: #f4f6fb;
+  --foreground: #161b26;
+  --muted: #5b6475;
   --surface: #ffffff;
-  --surface-muted: #f3f5f3;
-  --line: #e3e7e4;
-  --brand: #15803d;
-  --brand-hover: #166534;
+  --surface-muted: #f1f4f9;
+  --line: #e3e8f0;
+  --brand: #2563eb;
+  --brand-hover: #1d4ed8;
   --brand-fg: #ffffff;
-  --brand-soft: #dcfce7;
-  --tone-neutral-bg: #e7e5e4;
-  --tone-neutral-fg: #292524;
-  --tone-info-bg: #dbeafe;
-  --tone-info-fg: #1e3a8a;
+  --brand-soft: #dbeafe;
+  --brand-strong: #1d4ed8;
+  --tone-neutral-bg: #eef1f6;
+  --tone-neutral-fg: #334155;
+  /* "info" dipakai untuk label AI: ungu, agar tidak tertukar dengan warna brand. */
+  --tone-info-bg: #ede9fe;
+  --tone-info-fg: #5b21b6;
   --tone-success-bg: #dcfce7;
   --tone-success-fg: #14532d;
   --tone-warning-bg: #fef3c7;
   --tone-warning-fg: #78350f;
   --tone-danger-bg: #fee2e2;
   --tone-danger-fg: #7f1d1d;
-  --card-shadow: 0 1px 2px rgb(16 24 20 / 0.04), 0 1px 3px rgb(16 24 20 / 0.06);
+  --card-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 1px 3px rgb(15 23 42 / 0.05);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0c0f0d;
-    --foreground: #e8ece9;
-    --muted: #a3aca6;
-    --surface: #151a17;
-    --surface-muted: #1c221e;
-    --line: #2a322d;
-    --brand: #4ade80;
-    --brand-hover: #86efac;
-    --brand-fg: #0c0f0d;
-    --brand-soft: #14532d;
-    --tone-neutral-bg: #44403c;
-    --tone-neutral-fg: #f5f5f4;
-    --tone-info-bg: #1e3a8a;
-    --tone-info-fg: #dbeafe;
+    --background: #0b1020;
+    --foreground: #e6eaf2;
+    --muted: #a3acbd;
+    --surface: #131a2a;
+    --surface-muted: #1a2234;
+    --line: #273149;
+    --brand: #60a5fa;
+    --brand-hover: #93c5fd;
+    --brand-fg: #0b1220;
+    --brand-soft: #172554;
+    --brand-strong: #93c5fd;
+    --tone-neutral-bg: #273149;
+    --tone-neutral-fg: #e6eaf2;
+    --tone-info-bg: #4c1d95;
+    --tone-info-fg: #ddd6fe;
     --tone-success-bg: #14532d;
     --tone-success-fg: #dcfce7;
     --tone-warning-bg: #78350f;
@@ -62,6 +65,7 @@
   --color-brand-hover: var(--brand-hover);
   --color-brand-fg: var(--brand-fg);
   --color-brand-soft: var(--brand-soft);
+  --color-brand-strong: var(--brand-strong);
   --color-tone-neutral-bg: var(--tone-neutral-bg);
   --color-tone-neutral-fg: var(--tone-neutral-fg);
   --color-tone-info-bg: var(--tone-info-bg);
@@ -72,7 +76,7 @@
   --color-tone-warning-fg: var(--tone-warning-fg);
   --color-tone-danger-bg: var(--tone-danger-bg);
   --color-tone-danger-fg: var(--tone-danger-fg);
-  --radius-card: 1rem;
+  --radius-card: 0.75rem;
   --shadow-card: var(--card-shadow);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);

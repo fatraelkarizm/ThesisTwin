@@ -82,6 +82,12 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 - **Selesai jika:** komentar DOCX terbaca; keterbatasan halaman DOCX terdokumentasi (DOCX tidak punya halaman tetap → pakai nomor bagian/paragraf).
 - **Status:** ✅ (2026-11-24) — 12 tes. Lokasi DOCX = **nomor bagian** (dipotong per heading, `unit: "section"`), bukan halaman. XML dibaca dengan defusedxml + batas ukuran. Belum diuji dengan file Word/Google Docs nyata. Catatan privasi: nama penulis komentar (dosen) ikut tersimpan.
 
+### Langkah 7b — Parser `.tex` (prodi Matematika)
+- **Tujuan:** banyak proposal Matematika ditulis di LaTeX; PDF hasil LaTeX sering merusak simbol dan persamaan. Membaca `.tex` langsung lebih andal dan **tidak butuh LLM** ([feedback/not-a-wrapper.md](feedback/not-a-wrapper.md)).
+- **Output:** `parsing/tex.py`: bagian (`\section`, `\subsection`), lingkungan teorema/definisi/lema, `\label` dan `\ref` (termasuk rujukan yang tidak punya label), notasi `\newcommand`; persamaan disimpan utuh, tidak dikirim ke LLM untuk "dirapikan".
+- **Selesai jika:** `\ref` tanpa `\label` terdeteksi; tes dengan contoh `.tex` kecil; upload `.tex` diterima API.
+- **Status:** ⬜
+
 ### Langkah 8 — Layar unggah di web
 - **Output:** halaman `/upload`: pilih prodi (rule set), centang consent, unggah DOCX/PDF, status hasil.
 - **Selesai jika:** alur berjalan ke API lokal; error tampil jelas dalam bahasa Indonesia.

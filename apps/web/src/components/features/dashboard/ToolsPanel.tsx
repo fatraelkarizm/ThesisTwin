@@ -1,7 +1,7 @@
 import { ChevronRight, FileOutput, GitCompare, ScanSearch, ShieldQuestion, type LucideIcon } from "lucide-react";
 import { SimulatedBadge } from "@/components/domain/SimulatedBadge";
 import { Badge } from "@/components/ui/Badge";
-import { Card } from "@/components/ui/Card";
+import { Section } from "@/components/ui/Section";
 import { copy } from "@/lib/copy";
 
 interface Tool {
@@ -18,23 +18,29 @@ const tools: Tool[] = [
   { key: "stressTest", icon: ShieldQuestion },
 ];
 
-const row = "flex items-center gap-3 rounded-xl border border-line p-3";
+const row = "flex items-center gap-3 rounded-card border border-line bg-surface p-3 shadow-card";
 
 export function ToolsPanel() {
   const t = copy.dashboard.tools;
   return (
-    <Card title={t.title} description={t.description}>
-      <ul className="space-y-2">
+    <Section title={t.title} description={t.description}>
+      <ul className="space-y-2.5">
         {tools.map(({ key, icon: Icon, href }) => {
           const item = t.items[key];
           const body = (
             <>
-              <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-brand">
-                <Icon aria-hidden="true" className="size-5" />
+              <span
+                className={`flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-dashed ${
+                  href ? "border-brand text-brand-strong" : "border-line text-muted"
+                }`}
+              >
+                <Icon aria-hidden="true" className="size-4" />
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block text-sm font-semibold">{item.title}</span>
-                <span className="mt-1 block">{href ? <SimulatedBadge /> : <Badge>{copy.soon}</Badge>}</span>
+                <span className="mt-1 flex flex-wrap items-center gap-1.5">
+                  {href ? <SimulatedBadge /> : <Badge>{copy.soon}</Badge>}
+                </span>
                 <span className="mt-1 block text-xs text-muted">{item.body}</span>
               </span>
               <ChevronRight aria-hidden="true" className={`size-4 shrink-0 ${href ? "text-foreground" : "text-muted"}`} />
@@ -43,10 +49,7 @@ export function ToolsPanel() {
           return (
             <li key={key}>
               {href ? (
-                <a
-                  href={href}
-                  className={`${row} hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-brand`}
-                >
+                <a href={href} className={`${row} hover:border-brand focus-visible:outline-2 focus-visible:outline-brand`}>
                   {body}
                 </a>
               ) : (
@@ -58,6 +61,6 @@ export function ToolsPanel() {
           );
         })}
       </ul>
-    </Card>
+    </Section>
   );
 }
