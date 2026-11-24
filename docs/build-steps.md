@@ -42,7 +42,7 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 - **Output:** `docs/design/README.md`, `docs/design/references/*`, token warna/radius/shadow di `apps/web/src/app/globals.css`.
 - **Selesai jika:** brief desain menjelaskan apa yang diambil dan **apa yang sengaja tidak diambil** dari tiap referensi; token baru dipakai komponen yang ada.
 - **Verifikasi:** `npm run typecheck && npm run lint && npm run build`.
-- **Status:** ⬜
+- **Status:** ✅ (2026-11-24)
 
 ### Langkah 2 — App shell: sidebar + topbar
 - **Tujuan:** kerangka navigasi seperti Notalx: sidebar kiri, topbar dengan pencarian dan aksi utama.

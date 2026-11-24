@@ -1,15 +1,17 @@
 @import "tailwindcss";
 
+/* Token visual. Referensi & alasan: docs/design/README.md. Kontras diverifikasi >= 4.5:1 (WCAG AA). */
 :root {
-  --background: #fafaf9;
-  --foreground: #1c1917;
-  --muted: #57534e;
+  --background: #f6f7f6;
+  --foreground: #161a17;
+  --muted: #5b645e;
   --surface: #ffffff;
-  --surface-muted: #f5f5f4;
-  --line: #d6d3d1;
-  --brand: #1d4ed8;
-  --brand-hover: #1e40af;
+  --surface-muted: #f3f5f3;
+  --line: #e3e7e4;
+  --brand: #15803d;
+  --brand-hover: #166534;
   --brand-fg: #ffffff;
+  --brand-soft: #dcfce7;
   --tone-neutral-bg: #e7e5e4;
   --tone-neutral-fg: #292524;
   --tone-info-bg: #dbeafe;
@@ -20,19 +22,21 @@
   --tone-warning-fg: #78350f;
   --tone-danger-bg: #fee2e2;
   --tone-danger-fg: #7f1d1d;
+  --card-shadow: 0 1px 2px rgb(16 24 20 / 0.04), 0 1px 3px rgb(16 24 20 / 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0c0a09;
-    --foreground: #f5f5f4;
-    --muted: #a8a29e;
-    --surface: #1c1917;
-    --surface-muted: #292524;
-    --line: #44403c;
-    --brand: #60a5fa;
-    --brand-hover: #93c5fd;
-    --brand-fg: #0c0a09;
+    --background: #0c0f0d;
+    --foreground: #e8ece9;
+    --muted: #a3aca6;
+    --surface: #151a17;
+    --surface-muted: #1c221e;
+    --line: #2a322d;
+    --brand: #4ade80;
+    --brand-hover: #86efac;
+    --brand-fg: #0c0f0d;
+    --brand-soft: #14532d;
     --tone-neutral-bg: #44403c;
     --tone-neutral-fg: #f5f5f4;
     --tone-info-bg: #1e3a8a;
@@ -43,6 +47,7 @@
     --tone-warning-fg: #fef3c7;
     --tone-danger-bg: #7f1d1d;
     --tone-danger-fg: #fee2e2;
+    --card-shadow: 0 1px 2px rgb(0 0 0 / 0.3);
   }
 }
 
@@ -56,6 +61,7 @@
   --color-brand: var(--brand);
   --color-brand-hover: var(--brand-hover);
   --color-brand-fg: var(--brand-fg);
+  --color-brand-soft: var(--brand-soft);
   --color-tone-neutral-bg: var(--tone-neutral-bg);
   --color-tone-neutral-fg: var(--tone-neutral-fg);
   --color-tone-info-bg: var(--tone-info-bg);
@@ -66,6 +72,8 @@
   --color-tone-warning-fg: var(--tone-warning-fg);
   --color-tone-danger-bg: var(--tone-danger-bg);
   --color-tone-danger-fg: var(--tone-danger-fg);
+  --radius-card: 1rem;
+  --shadow-card: var(--card-shadow);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

@@ -16,7 +16,7 @@ interface FindingCardProps {
 export function FindingCard({ finding, onConfirm, onReject }: FindingCardProps) {
   const hasEvidence = finding.evidence.length > 0;
   return (
-    <article className="space-y-3 rounded-lg border border-line bg-surface p-4">
+    <article className="space-y-3 rounded-card border border-line bg-surface p-4 shadow-card">
       <header className="flex flex-wrap items-center gap-2">
         <PriorityTag priority={finding.priority} />
         <StatusBadge status={hasEvidence ? finding.status : "needs_user_confirmation"} />
