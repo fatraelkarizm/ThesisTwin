@@ -37,6 +37,9 @@ class VersionNotFound(LookupError):
     pass
 
 
+DOC_EVIDENCE = ("section:", "pattern:")
+
+
 def _now() -> datetime:
     return datetime.now(UTC)
 
@@ -147,8 +150,8 @@ def run_check(
         if (rf.rule_id, rf.why_flagged) in reviewed:
             continue
         evidence = [by_id[e.element] for e in rf.evidence if e.element in by_id]
-        # Evidence bagian dokumen (mis. "section:Hasil dan Pembahasan"): teks bagian itu sendiri.
-        sections = [e for e in rf.evidence if e.element.startswith("section:")]
+        # Evidence teks dokumen itu sendiri, bukan elemen: "section:Hasil" atau "pattern:IEEE [n]".
+        sections = [e for e in rf.evidence if e.element.startswith(DOC_EVIDENCE)]
         verified = sum(e.verified for e in evidence) + len(sections)
         total = len(evidence) + len(sections)
         session.add(
@@ -176,7 +179,7 @@ def run_check(
                 ]
                 + [
                     EvidenceRow(
-                        element=e.element.removeprefix("section:"),
+                        element=e.element.split(":", 1)[1],
                         document=f"v{version.version_no}",
                         page=e.page,
                     )

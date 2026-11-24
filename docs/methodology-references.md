@@ -12,9 +12,24 @@ Setiap aturan di [apps/api/rules/](../apps/api/rules/README.md) membawa `basis` 
 | Sugiyono. (2019). *Metode penelitian kuantitatif, kualitatif, dan R&D.* Alfabeta. | R-RQ-OBJ, R-RQ-OBJ-COUNT, R-VAR-INSTR | Rumusan masalah dan tujuan; definisi operasional variabel; instrumen serta validitas/reliabilitas (rujukan umum di kampus Indonesia) |
 | Wohlin, C., Runeson, P., Höst, M., Ohlsson, M. C., Regnell, B., & Wesslén, A. (2012). *Experimentation in software engineering.* Springer. | R-VALIDITY-THREATS, R-STAT-TEST | Eksperimen di rekayasa perangkat lunak; analisis ancaman validitas; uji hipotesis |
 | Demšar, J. (2006). Statistical comparisons of classifiers over multiple data sets. *Journal of Machine Learning Research, 7*, 1–30. | R-STAT-TEST | Perbandingan model/klasifier perlu uji statistik yang tepat, bukan hanya selisih rata-rata |
+| IEEE. (n.d.). *IEEE reference guide.* IEEE Periodicals. | R-CITE-STYLE-MIX | Sistem sitasi bernomor; daftar pustaka menurut urutan kemunculan. **Tahun/versi panduan belum diverifikasi** |
+| American Psychological Association. (2020). *Publication manual of the American Psychological Association* (7th ed.). | R-CITE-STYLE-MIX | Sistem sitasi penulis–tahun; daftar pustaka alfabetis |
+| Bureau International des Poids et Mesures. (2019). *The International System of Units (SI)* (9th ed.). BIPM. | R-DECIMAL-MIX | Penanda desimal boleh titik atau koma |
+| Higham, N. J. (2020). *Handbook of writing for the mathematical sciences* (3rd ed.). SIAM. | R-DECIMAL-MIX | Konsistensi notasi dalam tulisan matematika |
+
+## Asal landasan (`source_types`)
+
+| Nilai | Arti | Aturan |
+|---|---|---|
+| `prodi_guideline` | Panduan resmi prodi | R-SECTIONS-UMUM (**masih contoh umum**, menunggu panduan Matematika; build-steps 0.5) |
+| `methodology` | Buku/artikel metodologi penelitian | 9 aturan metodologi |
+| `math_writing` | Konvensi penulisan matematika | R-DECIMAL-MIX |
+| `publication_style` | Gaya publikasi (IEEE, APA, template jurnal) | R-CITE-STYLE-MIX |
 
 ## Yang belum dicakup (jujur)
 
 - **Panduan resmi prodi** (bagian wajib proposal): R-SECTIONS-UMUM masih contoh umum tanpa rujukan.
 - **Rujukan khusus pendidikan Matematika** belum ada; aturan saat ini bersifat lintas bidang.
+- **Konvensi penulisan matematika yang butuh pemahaman isi** belum dicek: simbol didefinisikan sebelum dipakai, kalimat tidak diawali simbol, hanya persamaan yang dirujuk yang diberi nomor (Higham 2020). Kata kunci tidak cukup untuk ini; kandidat untuk ekstraksi LLM + konfirmasi manusia.
+- **SINTA** bukan template penulisan, melainkan indeks jurnal nasional. Tiap jurnal terakreditasi SINTA punya template sendiri (umumnya struktur IMRaD). Relevan untuk proposal hanya bila prodi mewajibkan luaran artikel; aturan per jurnal sebaiknya ditambah per kasus.
 - Aturan bekerja dengan kata kunci; ia **tidak memahami** isi argumen. Rujukan menjelaskan *mengapa* sebuah pola layak ditanyakan, bukan membuktikan bahwa proposal itu salah.

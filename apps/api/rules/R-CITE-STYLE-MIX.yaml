@@ -1,0 +1,42 @@
+# Konsistensi gaya sitasi. Aturan ini tidak memilih gaya; panduan prodi/jurnal target yang menentukan.
+id: R-CITE-STYLE-MIX
+priority: low
+title: Gaya sitasi bercampur
+why_flagged: >-
+  Dokumen memuat sitasi bernomor (mis. [1], gaya IEEE) dan sitasi penulis–tahun (mis. Sugiyono,
+  2019, gaya APA) sekaligus. Pembaca jadi sulit mencocokkan sitasi dengan daftar pustaka. Pola
+  [angka] juga bisa berupa interval atau nomor langkah, jadi temuan ini perlu dicek manual.
+suggested_clarification: >-
+  Gaya sitasi mana yang diwajibkan panduan prodi atau jurnal target, dan apakah semua sitasi sudah
+  mengikutinya?
+basis: >-
+  Gaya sitasi bernomor (IEEE) dan penulis–tahun (APA) adalah dua sistem berbeda dengan aturan
+  urutan daftar pustaka yang berbeda; satu dokumen lazimnya memakai satu sistem. Gaya yang
+  berlaku ditentukan panduan prodi atau template jurnal target (termasuk jurnal terakreditasi
+  SINTA). Edisi panduan perlu diverifikasi tim.
+references:
+  - "IEEE. (n.d.). IEEE reference guide. IEEE Periodicals."
+  - "American Psychological Association. (2020). Publication manual of the American Psychological Association (7th ed.)."
+source_types: [publication_style]
+directions:
+  - option: "Sitasi bernomor (gaya IEEE)"
+    implication: "Nomor diberikan menurut urutan kemunculan; daftar pustaka diurutkan menurut nomor, bukan alfabet."
+  - option: "Sitasi penulis–tahun (gaya APA)"
+    implication: "Daftar pustaka diurutkan alfabetis menurut penulis; sitasi [n] di teks ikut berubah menjadi nama dan tahun."
+  - option: "Mengikuti gaya yang ditetapkan prodi atau jurnal target"
+    implication: "Jurnal biasanya menyediakan template sendiri; yang bisa dicek: apakah luaran skripsi diwajibkan berupa artikel jurnal?"
+  - option: "Tanda [angka] itu bukan sitasi (mis. interval atau nomor langkah)"
+    implication: "Temuan ini bisa ditolak."
+check:
+  kind: mixed_patterns
+  min_each: 2
+  patterns:
+    - name: "IEEE [n]"
+      regex: '\[[1-9]\d{0,2}(?:\s*[,–-]\s*[1-9]\d{0,2})*\]'
+    - name: "penulis–tahun"
+      regex: '\([A-Z][^()\d]{1,80}?,\s(?:19|20)\d{2}[a-z]?(?:[;:,][^()]*)?\)|\b[A-Z][\w''-]+(?: et al\.| dkk\.)? \((?:19|20)\d{2}[a-z]?\)'
+examples:
+  fires:
+    document_text: "Penelitian sebelumnya [1], [2] menunjukkan hal ini. Menurut Sugiyono (2019) dan (Creswell & Creswell, 2018)."
+  quiet:
+    document_text: "Penelitian sebelumnya [1], [2] menunjukkan hal ini [3]. Interval [0, 1] dipakai."

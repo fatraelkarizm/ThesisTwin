@@ -9,7 +9,7 @@ import re
 from dataclasses import dataclass, field, replace
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from app.domain.status import Status
 
@@ -123,13 +123,37 @@ class ForbiddenSectionsCheck(BaseModel):
     sections: list[Section] = Field(min_length=1)
 
 
+class Pattern(BaseModel):
+    name: str  # ditampilkan di temuan, mis. "IEEE [1]"
+    regex: str  # dicocokkan pada teks asli (bukan hasil normalize): tanda baca bermakna di sini
+
+    @field_validator("regex")
+    @classmethod
+    def _compiles(cls, v: str) -> str:
+        try:
+            re.compile(v)
+        except re.error as exc:  # pesan validasi yang menyebut file aturan, bukan crash
+            raise ValueError(f"regex tidak valid: {exc}") from exc
+        return v
+
+
+class MixedPatternsCheck(BaseModel):
+    """Terpicu bila >= 2 pola gaya penulisan masing-masing muncul >= `min_each` kali
+    (mis. sitasi IEEE dan APA bercampur). Konsistensi, bukan benar/salah gaya tertentu."""
+
+    kind: Literal["mixed_patterns"]
+    patterns: list[Pattern] = Field(min_length=2)
+    min_each: int = Field(default=2, ge=1)
+
+
 Check = Annotated[
     ConflictCheck
     | RequiresCheck
     | RequiredSectionsCheck
     | CountMatchCheck
     | MissingTermsCheck
-    | ForbiddenSectionsCheck,
+    | ForbiddenSectionsCheck
+    | MixedPatternsCheck,
     Field(discriminator="kind"),
 ]
 
@@ -209,6 +233,28 @@ def locate(pages: dict[int, str], terms: list[str]) -> int | None:
     return None
 
 
+def _first_page(pages: dict[int, str], regex: str) -> int | None:
+    for n in sorted(pages):
+        if not TOC_PAGE.search(pages[n]) and re.search(regex, pages[n]):
+            return n
+    return None
+
+
+def _mixed(
+    rule: Rule, check: MixedPatternsCheck, text: str, pages: dict[int, str]
+) -> list[RuleFinding]:
+    counts = {p.name: len(re.findall(p.regex, text)) for p in check.patterns}
+    used = [p for p in check.patterns if counts[p.name] >= check.min_each]
+    if len(used) < 2:
+        return []
+    detail = ", ".join(f"{p.name} {counts[p.name]}×" for p in used)
+    found = [(p.name, _first_page(pages, p.regex)) for p in used]
+    evidence = [Evidence(f"pattern:{name}", page) for name, page in found if page is not None]
+    status = Status.AI_SUGGESTED if len(evidence) == len(found) else Status.NEEDS_USER_CONFIRMATION
+    f = _finding(rule, [], f"{rule.why_flagged} ({detail})", detail)
+    return [replace(f, evidence=evidence, status=status)]
+
+
 def evaluate(
     rule: Rule,
     elements: list[Element],
@@ -234,6 +280,8 @@ def evaluate(
     if isinstance(check, MissingTermsCheck):
         when = check.when.select(elements)
         return [_finding(rule, when)] if when and not has_term(document_text, check.absent) else []
+    if isinstance(check, MixedPatternsCheck):
+        return _mixed(rule, check, document_text, pages or {})
     if isinstance(check, ForbiddenSectionsCheck):
         out = []
         for s in check.sections:

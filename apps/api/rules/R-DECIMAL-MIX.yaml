@@ -1,0 +1,40 @@
+# Konvensi penulisan matematika: satu penanda desimal di seluruh dokumen.
+id: R-DECIMAL-MIX
+priority: low
+title: Penanda desimal bercampur (koma dan titik)
+why_flagged: >-
+  Dokumen memuat bilangan desimal dengan koma (mis. 0,05) dan dengan titik (mis. 0.05). Ini
+  sering terjadi saat angka disalin dari output perangkat lunak. Di dokumen berbahasa Indonesia,
+  titik juga dipakai sebagai pemisah ribuan, sehingga campuran ini bisa membingungkan pembaca.
+suggested_clarification: >-
+  Penanda desimal mana yang dipakai di dokumen ini, dan apakah angka dari tabel/output perangkat
+  lunak sudah mengikutinya?
+basis: >-
+  Sistem Satuan Internasional (SI) mengizinkan titik atau koma sebagai penanda desimal, dan
+  penulisan matematika menekankan notasi yang konsisten di seluruh dokumen. Teks berbahasa
+  Indonesia lazim memakai koma desimal; pastikan ke panduan prodi. Edisi dan halaman perlu
+  diverifikasi tim.
+references:
+  - "Bureau International des Poids et Mesures. (2019). The International System of Units (SI) (9th ed.). BIPM."
+  - "Higham, N. J. (2020). Handbook of writing for the mathematical sciences (3rd ed.). SIAM."
+source_types: [math_writing]
+directions:
+  - option: "Koma desimal di seluruh dokumen"
+    implication: "Lazim untuk teks berbahasa Indonesia; angka dari SPSS, Python, atau Excel yang memakai titik ikut disesuaikan, termasuk di tabel dan gambar."
+  - option: "Titik desimal di seluruh dokumen"
+    implication: "Lazim untuk naskah atau jurnal berbahasa Inggris; yang bisa dicek: apakah panduan prodi mengizinkannya?"
+  - option: "Titik desimal hanya muncul di abstrak berbahasa Inggris"
+    implication: "Penanda mengikuti bahasa abstraknya; temuan ini bisa ditolak."
+check:
+  kind: mixed_patterns
+  min_each: 2
+  patterns:
+    - name: "koma desimal"
+      regex: '\b0,\d+'
+    - name: "titik desimal"
+      regex: '\b0\.\d+'
+examples:
+  fires:
+    document_text: "Taraf signifikansi 0,05 dan rata-rata 0,73. Output: p = 0.012, r = 0.45."
+  quiet:
+    document_text: "Subbab 3.1 dan 3.2; biaya Rp10.000; taraf signifikansi 0,05 dan 0,01."

@@ -24,6 +24,17 @@ Prinsip: aturan bersifat deterministik & configurable; keluaran berupa **pertany
 | R-CONCL-SCOPE | Kesimpulan terencana dalam batas desain | Claim melampaui desain/populasi | Medium |
 | R-TERM-CONSIST | Terminologi konsisten antar bagian (mis. abstrak vs RQ) | Istilah kunci berbeda ("impact" vs "hubungan") | Low–Medium |
 
+## Aturan Konvensi Penulisan (konsistensi gaya, bukan isi)
+
+Landasan berasal dari konvensi penulisan matematika dan gaya publikasi, bukan metodologi. Keduanya **tidak memilih gaya**; yang diperiksa hanya konsistensi. Gaya yang berlaku ditentukan panduan prodi atau jurnal target.
+
+| ID | Aturan | Pemicu (`mixed_patterns`) | `source_types` | Prioritas |
+|---|---|---|---|---|
+| R-CITE-STYLE-MIX | Satu sistem sitasi per dokumen | ≥2 sitasi bernomor `[n]` **dan** ≥2 sitasi penulis–tahun | `publication_style` | Low |
+| R-DECIMAL-MIX | Satu penanda desimal per dokumen | ≥2 `0,dd` **dan** ≥2 `0.dd` | `math_writing` | Low |
+
+Setiap temuan menawarkan **arah** (`directions`) beserta konsekuensinya, termasuk arah "temuan ini bisa ditolak" bila polanya bukan yang dimaksud (interval `[0, 1]`, abstrak berbahasa Inggris).
+
 ## Format Konfigurasi (usulan)
 
 ```yaml

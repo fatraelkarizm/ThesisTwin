@@ -112,3 +112,43 @@ def test_invalid_rule_file_reports_filename(tmp_path):
     (tmp_path / "R-BAD.yaml").write_text("id: R-BAD\npriority: urgent\n", encoding="utf-8")
     with pytest.raises(RuleFileError, match="R-BAD.yaml"):
         load_rules(tmp_path)
+
+
+def _rule(rule_id: str) -> Rule:
+    return next(r for r in RULES if r.id == rule_id)
+
+
+def test_mixed_citation_styles_cite_first_page_of_each_style():
+    pages = {
+        1: "DAFTAR ISI ... [1] ... (Sugiyono, 2019)",
+        3: "Penelitian sebelumnya [1], [2] menunjukkan hal serupa [3].",
+        7: "Menurut Creswell (2018) dan (Campbell & Stanley, 1963), juga (Wohlin et al., 2012).",
+    }
+    text = "\n".join(pages.values())
+    [f] = evaluate(_rule("R-CITE-STYLE-MIX"), [], text, pages)
+    assert sorted(e.page for e in f.evidence) == [3, 7]
+    assert f.status is Status.AI_SUGGESTED
+
+
+def test_single_citation_style_is_quiet():
+    text = "Hal ini [1] didukung [2] dan [3, 4]. Interval [0, 1] dipakai."
+    assert evaluate(_rule("R-CITE-STYLE-MIX"), [], text) == []
+
+
+def test_mixed_decimal_markers():
+    rule = _rule("R-DECIMAL-MIX")
+    assert evaluate(rule, [], "taraf 0,05 dan rata-rata 0,73; output: p = 0.012, r = 0.45")
+    # Nomor subbab (3.1) dan ribuan (10.000) bukan desimal berawalan nol.
+    assert not evaluate(rule, [], "Subbab 3.1, 3.2, Rp10.000; taraf 0,05 dan 0,01")
+
+
+def test_invalid_regex_rejected():
+    from app.domain.rules import MixedPatternsCheck
+
+    with pytest.raises(ValueError):
+        MixedPatternsCheck.model_validate(
+            {
+                "kind": "mixed_patterns",
+                "patterns": [{"name": "a", "regex": "("}, {"name": "b", "regex": "x"}],
+            }
+        )

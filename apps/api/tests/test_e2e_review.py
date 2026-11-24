@@ -151,3 +151,20 @@ def test_expired_link_is_rejected():
         except share.LinkInvalid:
             pass
         assert [a.action for a in s.query(AuditLog)] == ["share_created"]  # hanya pembuatan tautan
+
+
+def test_style_finding_keeps_page_evidence(client):  # noqa: F811
+    pid = client.post("/projects", json={"title": "S", "program": "matematika"}).json()["id"]
+    client.post(f"/projects/{pid}/consent")
+    doc = make_docx(
+        _p("Metode", "Heading1")
+        + _p("Taraf signifikansi 0,05 dan rata-rata 0,73.")
+        + _p("Hasil Uji Coba", "Heading1")
+        + _p("Output: p = 0.012, r = 0.45.")
+    )
+    vid = _upload(client, pid, doc)
+    found = client.post(f"/versions/{vid}/check").json()
+    [f] = [f for f in found if f["rule_id"] == "R-DECIMAL-MIX"]
+    assert {e["element"] for e in f["evidence"]} == {"koma desimal", "titik desimal"}
+    assert all(e["page"] for e in f["evidence"])
+    assert f["source_types"] == ["math_writing"] and len(f["directions"]) == 3
