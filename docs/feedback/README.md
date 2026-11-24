@@ -6,6 +6,7 @@ Folder ini menyimpan umpan balik juri fase Preliminary dan analisis kesenjangann
 |---|---|
 | [features.md](features.md) | Skor juri, komentar juri, dan **fokus fitur** yang diturunkan dari komentar itu |
 | [gap.md](gap.md) | Kritik juri vs isi repo: apa yang sudah terjawab, apa yang masih kurang |
+| [baseline-audit.md](baseline-audit.md) | **Audit janji abstrak vs repo + kesiapan baseline LLM-only** |
 | [comparison.md](comparison.md) | Pembanding praktik nyata + rancangan uji 3 lengan (G2) |
 | [evidence/](evidence/README.md) | Panduan wawancara, consent, log anonim, literatur (G1) |
 | [images/](images/) | Tangkapan layar asli (skor juri dan analisis kritik vs repo) |
@@ -24,4 +25,4 @@ Folder ini menyimpan umpan balik juri fase Preliminary dan analisis kesenjangann
 
 Poin hilang total 14 dari 100. Tiga gap terbesar semuanya soal **bukti dan perbandingan**, bukan soal kode.
 
-> Catatan: teks abstrak yang dikirim ke juri tidak ada di repo ini. Detail abstrak di folder ini (7 mahasiswa + 1 pembimbing, 10 proposal per 30 Nov, 50% waktu review, Defense Stress-Test, prodi Matematika) diambil dari tangkapan layar analisis, bukan dari dokumen sumber. **Salin teks abstrak ke repo** supaya bisa dirujuk.
+> Abstrak yang dikirim ke juri sudah ada di repo: [../source/02-abstract.md](../source/02-abstract.md).

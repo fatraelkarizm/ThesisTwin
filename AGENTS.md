@@ -3,7 +3,7 @@
 ThesisTwin = AI-powered navigation & consistency engine untuk skripsi (STACK 2026 · Case 1).
 > *"ThesisTwin tidak menulis skripsi mahasiswa. ThesisTwin mencegah mahasiswa tersesat ketika menyelesaikannya."*
 
-Source of truth produk: [docs/source/01-proposal-full.md](docs/source/01-proposal-full.md). Peta dokumen: [docs/README.md](docs/README.md).
+Source of truth produk: [abstrak juri](docs/source/02-abstract.md) (komitmen yang dinilai) dan [proposal detail](docs/source/01-proposal-full.md). Bila bertentangan, catat di [docs/feedback/baseline-audit.md](docs/feedback/baseline-audit.md) §3. Peta dokumen: [docs/README.md](docs/README.md).
 Struktur folder + aturan komponen: **[docs/worktree.md](docs/worktree.md)** (wajib dibaca sebelum menambah file).
 
 ## 1. Git — WAJIB
@@ -32,7 +32,8 @@ Mengganti stack/dependensi besar = tulis ADR dulu, jangan diam-diam.
 6. **Redaction** (NIM, telepon, email, data peserta) sebelum teks dikirim ke LLM. Kirim konteks minimum.
 7. Versi dokumen **append-only**; node lama ditandai `superseded_by`, tidak dihapus.
 8. Aturan alignment = **data/konfigurasi**, bukan hard-code di logic.
-9. Target metrik di docs = hipotesis. Data simulasi wajib berlabel. Jangan menyatakan hasil yang belum diukur.
+9. **Dosen tidak perlu akun** (abstrak): dosen menerima ringkasan/brief tanpa login. Jangan membuat fitur yang mewajibkan akun dosen tanpa keputusan tim.
+10. Target metrik di docs = hipotesis. Data simulasi wajib berlabel. Jangan menyatakan hasil yang belum diukur.
 
 ## 4. Aturan Kode
 - **Reuse dulu.** Cari komponen/fungsi yang sudah ada sebelum membuat baru. Buat baru hanya bila dipakai ≥2 tempat atau jelas akan dipakai ulang.

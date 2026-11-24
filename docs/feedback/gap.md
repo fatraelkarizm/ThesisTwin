@@ -6,17 +6,19 @@ Legenda status: ❌ belum sama sekali · 🟡 sebagian · ✅ terjawab.
 
 ## 0. Status penutupan (diperbarui 2026-11-24)
 
+> Audit menyeluruh terhadap janji abstrak: [baseline-audit.md](baseline-audit.md).
+
 | Gap | Status | Yang sudah dikerjakan | Yang masih butuh tim |
 |---|---|---|---|
 | G1 Bukti kecil (−6) | 🟡 alat siap, **data belum** | [evidence/](evidence/README.md): panduan wawancara, consent, log anonim, catatan literatur | **Isi log dari wawancara nyata**; tambah responden (target 15–30 mahasiswa, 3–5 dosen); baca ref [5]. Tidak bisa dikerjakan dengan kode |
 | G2 Pembanding (−5) | 🟡 desain siap, **uji belum jalan** | [comparison.md](comparison.md): pembanding praktik nyata + rancangan uji 3 lengan | Jalankan uji T1–T3; validasi kolom "batasan" lewat wawancara |
 | G3 Mitigasi ekstraksi (−3) | ✅ **dibangun & dites** (30 tes) | Verifikasi halaman + kutipan, redaction, retry skema, parser PDF, metrik | Belum diuji pada proposal nyata; persamaan/DOCX belum ditangani |
-| R1 Tanggal milestone | 🟡 | Tabel bertanggal di README; 30 Nov terisi | Isi tanggal resmi STACK (`TODO`) |
+| R1 Tanggal milestone | ✅ | 30 Nov (semifinal) dan 16 Des (Final Day) dari abstrak | Tanggal fase lain bila ada |
 | R2 Scope melebar | ✅ | README memusatkan version record + brief | — |
-| R3 Judul lama | ❌ | — | **Teks abstrak/judul baru dibutuhkan** |
+| R3 Judul lama | ✅ | Judul README disamakan dengan abstrak ([02-abstract.md](../source/02-abstract.md)) | — |
 | R4 Metrik berbeda | ✅ | README memuat 50% waktu review (abstrak) dan 30% action plan | Tim putuskan satu metrik utama |
-| R5 Stress-Test, Matematika | 🟡 | Matematika dan Stress-Test disebut di README | **Spesifikasi Defense Stress-Test** dari tim |
-| R6 Identitas tim | ❌ | — | Nama tim, anggota, kontribusi, deklarasi (ditandatangani) |
+| R5 Stress-Test, Matematika | 🟡 | Keduanya ada di README; Stress-Test didefinisikan dari abstrak | Spesifikasi detail + FR/UAT Stress-Test ([baseline-audit.md](baseline-audit.md) §3) |
+| R6 Identitas tim | 🟡 | Nama tim dan anggota diisi dari abstrak | Peran/kontribusi per anggota; deklarasi ditandatangani |
 
 ## 1. Kritik juri
 

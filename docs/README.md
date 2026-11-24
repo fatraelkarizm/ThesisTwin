@@ -8,7 +8,8 @@ Dokumentasi untuk **ThesisTwin** — AI-powered navigation & consistency engine 
 
 | Dokumen | Isi | Audiens |
 |---|---|---|
-| [source/01-proposal-full.md](source/01-proposal-full.md) | Konversi penuh proposal PDF (source of truth) | Semua |
+| [source/02-abstract.md](source/02-abstract.md) | Abstrak Preliminary yang dinilai juri (komitmen: tim, alur inti, target, tenggat) | Semua |
+| [source/01-proposal-full.md](source/01-proposal-full.md) | Konversi penuh proposal PDF (source of truth detail) | Semua |
 | [BRD.md](BRD.md) | Kebutuhan bisnis, stakeholder, KPI, scope | Bisnis, juri |
 | [PRD.md](PRD.md) | Persona, requirement fungsional & non-fungsional, guardrail | Produk, engineering |
 | [UAT.md](UAT.md) | Rencana & skenario uji penerimaan | QA, pengguna uji |
@@ -24,7 +25,7 @@ Dokumentasi untuk **ThesisTwin** — AI-powered navigation & consistency engine 
 | [feedback/](feedback/README.md) | Skor & komentar juri Preliminary, fokus fitur, gap vs repo | Semua |
 
 ## Urutan Baca yang Disarankan
-1. `source/01-proposal-full.md` → 2. `BRD` → 3. `PRD` → 4. `step-plan` → 5. `UAT`.
+1. `source/02-abstract.md` → `source/01-proposal-full.md` → 2. `BRD` → 3. `PRD` → 4. `step-plan` → 5. `UAT`.
 
 ## Konvensi
 - **Source of truth** = proposal v1.0 (8 Nov 2026). Rujukan `§n` = bagian proposal.

@@ -42,11 +42,14 @@ Juri memuji pembeda "rekam versi dan brief". README saat ini memperkenalkan enam
 
 Konsekuensi: README bagian "Distinguishing features" sebaiknya menonjolkan version record + brief di depan, bukan enam fitur sejajar.
 
-## Item terbuka dari abstrak
+## Item dari abstrak (sudah dibaca)
 
-| Item | Status di repo | Tindakan |
+Abstrak kini ada di repo: [02-abstract.md](../source/02-abstract.md).
+
+| Item | Isi di abstrak | Status |
 |---|---|---|
-| **Defense Stress-Test** | Tidak disebut di dokumen mana pun (grep 2026-11-24) | Tim definisikan fiturnya; belum ada FR |
-| **Prodi Matematika** sebagai satu prodi pilot | Tidak disebut; repo hanya bilang "satu prodi" | Tulis prodi target di README dan policy pack v0 (T0.7) |
-| **Target 50% waktu review** | Repo: turun ≥30% waktu action plan | Samakan metrik dengan abstrak atau jelaskan bedanya |
-| **Ekstraksi 10 proposal per 30 Nov** | Belum tercapai (kode ekstraksi belum ada) | Lihat [gap.md](gap.md) §Janji abstrak |
+| **Defense Stress-Test** | Sebelum seminar, ubah tautan terlemah graph jadi 3–5 pertanyaan penguji; minta mahasiswa membenarkan tiap pilihan | Terdefinisi; belum ada FR/UAT/kode |
+| **Prodi Matematika** | Versi pertama untuk satu prodi Matematika | Di README; risiko: persamaan/simbol |
+| **Dosen tanpa akun** | Dosen menerima ringkasan tanpa membuat akun | **Konflik dengan PRD** FR-001/FR-111, lihat [baseline-audit.md](baseline-audit.md) §3 |
+| **Target** | Waktu review −50%, kesepakatan ekstraksi 80%, rating stress-test 4/5, masing-masing ≥ baseline LLM-only | Pengukuran belum ada |
+| **Tenggat** | 10 proposal anonim end-to-end 30 Nov; brief + stress-test 16 Des | Lihat audit |

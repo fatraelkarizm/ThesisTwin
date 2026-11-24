@@ -2,7 +2,7 @@
 
 > *ThesisTwin does not write the student's thesis. It stops students from getting lost while finishing it.*
 
-**AI-powered navigation and consistency engine for the undergraduate thesis journey.**
+**AI-Assisted Consistency Checking and Supervision Briefs for Undergraduate Thesis Proposals.**
 STACK 2026 · Case 1: Smarter Campus and Learning
 
 ---
@@ -11,21 +11,24 @@ STACK 2026 · Case 1: Smarter Campus and Learning
 
 | | |
 |---|---|
-| **Project title** | ThesisTwin: AI-Powered Navigation and Consistency Engine for the Undergraduate Thesis Journey |
+| **Project title** | ThesisTwin: AI-Assisted Consistency Checking and Supervision Briefs for Undergraduate Thesis Proposals |
 | **Selected case** | Case 1, Smarter Campus and Learning |
-| **Team name** | `TODO` |
-| **Members and roles** | `TODO` (name, role, contribution) |
-| **Proposal version** | v1.0, 8 November 2026 ([full text](docs/source/01-proposal-full.md), [original PDF](docs/source/ThesisTwin_Detailed_Proposal_STACK_2026.pdf)) |
+| **Team name** | Reuni Kejauhan |
+| **Members** | Alief Nuzula (leader), Fatra Al Khawarizmi, Renadi Wilantara |
+| **Roles per member** | `TODO` (role and contribution per member) |
+| **Sources** | [Preliminary abstract](docs/source/02-abstract.md) (score 86.0/100) · detailed proposal v1.0, 8 Nov 2026 ([text](docs/source/01-proposal-full.md), [PDF](docs/source/ThesisTwin_Detailed_Proposal_STACK_2026.pdf)) |
 
 ## 2. Problem and User Analysis
 
 **Problem.** A thesis is not one document. It is a chain of dependent decisions: research problem, questions, objectives, variables, data, sampling, instrument, analysis, claims. Changing one link silently breaks others. Context is scattered across file versions, document comments, WhatsApp messages, personal notes, and decisions that were never written down. Students lose track of where they stand, why a revision was requested, and what a change affects. Supervisors re-read everything before every meeting to rebuild context.
 
 **Target users**
-- **Primary:** undergraduate students preparing a thesis proposal or thesis; thesis supervisors handling several students at once.
+- **Primary:** final-year undergraduates at Indonesian universities writing a thesis proposal (Chapters 1-3), and their supervisors, who **receive summaries without creating an account**.
 - **Supporting:** peer mentors, thesis coordinators, academic services.
 
-**Supporting evidence.** Indonesia's *Statistik Pendidikan Tinggi 2025* records 289,670 students who dropped out, up 2.62% from 2024. This shows that study continuity matters, but it does **not** show that the thesis causes dropout, and we make no causal claim. Thesis-specific evidence comes from our discovery research: 7 student interviews and 1 supervisor interview (small, exploratory; being expanded toward the 15-30 students / 3-5 supervisors in the [research plan](docs/research-validation-plan.md)). Interview guide, consent template, anonymised log, and literature notes live in [docs/feedback/evidence/](docs/feedback/evidence/README.md). Any number we report is labelled as measured or simulated and must trace to a row in that log.
+**Supporting evidence (from our preliminary abstract).** In interviews with 7 final-year students and 1 supervisor, students reported waiting **7-14 days** for feedback per revision, and the supervisor noted that revised drafts rarely state what changed. Published studies point the same way: among 113 Indonesian supervisors, 51.3% named methodology choice as the main Chapter 3 problem and 45.1% said students struggle to tie Chapters 1-4 together (Rangkuti et al., 2013); four of six seminar proposals mismatched research questions and design (Hapsari, 2026, n=6, ELT). Limits: the interviews are small and exploratory, three of four papers are from English-language-teaching fields while our pilot is Mathematics, and the larger survey promised before the semifinal is not yet done. See [docs/feedback/evidence/](docs/feedback/evidence/README.md).
+
+Context only: Indonesia's *Statistik Pendidikan Tinggi 2025* records 289,670 students who dropped out, up 2.62% from 2024. This shows that study continuity matters, but it does **not** show that the thesis causes dropout, and we make no causal claim. We are expanding the interviews toward the 15-30 students / 3-5 supervisors in the [research plan](docs/research-validation-plan.md). Any number we report is labelled as measured or simulated and must trace to a row in the evidence log.
 
 **What students and supervisors use today** (hypotheses to be validated; full comparison and test design in [docs/feedback/comparison.md](docs/feedback/comparison.md))
 
@@ -42,17 +45,15 @@ The strongest competitor to beat is *Word/Docs Compare + a chatbot with project 
 
 **Value offered.** ThesisTwin builds a *digital twin of the thesis journey* and answers four questions: **Where am I? What is inconsistent? What changes if I revise this? What should I do next?**
 
-**Scope (MVP).** Proposal Chapters 1-3, one campus guideline format, 5-10 alignment rules. Out of scope: auto-writing chapters, advanced statistical checks, full LMS integration, automatic defense-eligibility decisions, plagiarism detection, large-scale fine-tuning.
+**Scope (first version).** Proposal Chapters 1-3, **one Mathematics study program** and its rule set, 5-10 alignment rules. Out of scope: auto-writing chapters, advanced statistical checks, full LMS integration, automatic defense-eligibility decisions, plagiarism detection, large-scale fine-tuning.
 
-**Main user journey**
-1. Student uploads the first proposal version.
-2. ThesisTwin builds a research dependency graph.
-3. It flags three alignment issues, each with page evidence.
-4. Student enters supervisor feedback.
-5. Feedback becomes structured action items.
-6. Student uploads a revised version.
-7. ThesisTwin shows what changed, what is resolved, and the new impact.
-8. It generates a one-page supervision brief.
+**Core user flow** (from the abstract)
+1. The student selects their program's rule set and uploads the initial or revised draft (DOCX/PDF) with the supervisor's latest comments.
+2. The system extracts the research question, objectives, variables, method, and analysis into a dependency graph and flags mismatches (e.g. a causal question tested with a one-group pre-test/post-test design) and missing sections the program guideline requires.
+3. Each revision yields a one-page **Supervision Brief** (what changed, which comments were addressed, which decisions remain open), sent as a PDF or chat message.
+4. Before the seminar, a **Defense Stress-Test** turns the graph's weakest links into 3-5 likely examiner questions and asks the student to justify each choice.
+
+**Versus a general-purpose chatbot:** it keeps no versioned record of the research design, cannot tell which supervisor comments were resolved, needs program rules pasted each session, and will write thesis text on request. ThesisTwin keeps the record, applies the rules, and writes for the supervisor.
 
 **Core differentiators (demo focus).** Our edge is the **version record** and the **supervision brief**:
 - **Version record and diff at research-element level:** what changed, what is resolved, what a change affects.
@@ -62,8 +63,9 @@ The strongest competitor to beat is *Word/Docs Compare + a chatbot with project 
 - **Dependency graph and Alignment Checker:** deterministic rules that raise verifiable *questions*, not verdicts, each with page evidence.
 - **Feedback-to-Action:** vague feedback mapped to affected components and concrete actions, confirmed by the student.
 
+**Defense Stress-Test** (abstract step 4, due Final Day): 3-5 likely examiner questions from the graph's weakest links, each needing a student justification. Specification pending.
+
 **Later (not in the demo):** Thesis Route Map, Decision Memory, multi-supervisor conflict flag.
-**Open item:** *Defense Stress-Test* appears in the abstract; its specification is pending (see [docs/feedback/features.md](docs/feedback/features.md)).
 
 **Guardrails.** ThesisTwin never writes thesis content, never invents references, never decides that a methodology is correct, and never replaces supervisor approval. Every AI output is labelled AI-generated and goes through human confirmation.
 
@@ -105,7 +107,7 @@ Proposal / Guideline / Feedback / Versions
 |---|---|
 | Frontend | Next.js (App Router), TypeScript, Tailwind CSS |
 | Backend | FastAPI, Pydantic v2, SQLAlchemy 2 |
-| Database | SQLite for now; PostgreSQL + pgvector planned |
+| Database | SQLite for now. **The abstract promises PostgreSQL + pgvector**; this deviation needs an ADR and a migration test before the pilot |
 | Graph | Relational model first |
 | AI | LLM with structured JSON output behind a provider adapter |
 | Security | Consent gate, redaction before LLM, RBAC, audit log |
@@ -129,22 +131,21 @@ Quality checks: `npm run lint && npm run typecheck && npm run build` (web); `ruf
 
 ## 5. Development Plan
 
-**Milestones** (full breakdown in [step-plan](docs/step-plan.md)). Dates marked `TODO` must be filled from the official STACK 2026 calendar.
+**Milestones** (full breakdown in [step-plan](docs/step-plan.md)). Semifinal and Final Day dates come from the abstract; remaining `TODO` dates must be filled from the official STACK 2026 calendar.
 
 | Phase | Date | Focus | Deliverable | Status |
 |---|---|---|---|---|
-| Preliminary | `TODO` | Problem validation | Abstract, early interviews | Done. Score 86.0/100 ([feedback](docs/feedback/README.md)) |
-| Semifinal | `TODO` | Product definition | Proposal, user journey, prototype design | In progress |
-| Checkpoint | **30 Nov 2026** | Extraction on real proposals | Extract elements from 10 proposals (abstract commitment) | Not reached; extraction pipeline built, no real proposals processed yet |
+| Preliminary | done | Problem validation | Abstract, early interviews | Done. Score 86.0/100 ([feedback](docs/feedback/README.md)) |
+| Semifinal | **30 Nov 2026** | Upload, extraction, consistency checks end to end | 10 anonymised proposals (abstract commitment) | At risk: no proposal processed yet ([audit](docs/feedback/baseline-audit.md)) |
 | Pre-final | `TODO` | Core build | Parser, graph, rules, feedback mapping | Not started beyond parser/verification |
-| Final Day | `TODO` | Working demo | End-to-end core interaction and test results | Not started |
+| Final Day | **16 Dec 2026** | Brief and Defense Stress-Test | Working demo, pilot measurements | Not started |
 | Post-hackathon | `TODO` | Pilot | One study program (Mathematics, per abstract) | Planned |
 
 **Current progress** (honest status)
-- Done: full documentation set; project scaffold; domain UI components with **simulated, labelled** data; backend status state machine, evidence invariant, SQLite tables (findings, evidence, audit log); PDF page parser; PII redaction; extraction service with schema retry; quote/page verification; accuracy metrics. All unit-tested with a fake LLM.
-- Not yet built: a real LLM provider (ADR-003), DOCX parsing, knowledge graph, constraint engine, feedback mapping, version diff, authentication. No real proposal has been processed yet.
+- Done: full documentation set; Preliminary abstract transcribed; project scaffold; domain UI components with **simulated, labelled** data; backend status state machine, evidence invariant, SQLite tables (findings, evidence, audit log); PDF page parser; PII redaction; extraction service with schema retry; quote/page verification; accuracy metrics. All unit-tested with a fake LLM.
+- Not yet built: upload API, a real LLM provider (ADR-003), DOCX parsing, dependency graph, rule engine, versioned record and diff, Supervision Brief, Defense Stress-Test. No real proposal has been processed yet.
 
-**Member contributions.** `TODO`
+**Member contributions.** `TODO` (per member)
 
 **Planned Final Day tasks.** End-to-end demo of the 8-step core flow ([demo script](docs/pitch-and-demo-script.md)), baseline-versus-treatment evaluation, privacy and guardrail hardening, three consecutive clean demo runs with cached fallback data.
 
@@ -155,16 +156,17 @@ Quality checks: `npm run lint && npm run typecheck && npm run build` (web); `ruf
 - *Small evaluation set:* 20-30 anonymised proposals and 50-100 feedback snippets, labelled by at least two evaluators; if real documents are unavailable, a **labelled synthetic set**.
 - *Experiment:* baseline (LLM prompted to "review consistency") versus treatment (extraction + graph + constraints + retrieval).
 
-**Initial targets (hypotheses, not results)**
+**Targets from the abstract** (pilot: 10 students + 3 supervisors; each result must be **at least as good as an LLM-only baseline**; hypotheses, not results)
 
 | Goal | Metric | Target |
 |---|---|---|
-| Save time (abstract target) | Supervisor/student review time | down 50% (hypothesis) |
-| Save time | Time to build an action plan | down 30% or more |
-| Follow-through | Feedback turned into action items | 80% or more |
-| Accuracy | Alignment finding precision after confirmation | 75% or more |
-| Provenance | Findings with a valid source | 90% or more |
-| Usability | Task completion / SUS | 80% or more / 70 or more |
+| Save time | Review time per revision, using the brief | 50% lower |
+| Extraction quality | Agreement with manual annotation | 80% (definition pending; proposal: per-element F1) |
+| Useful stress-test | Supervisor rating of stress-test questions | 4/5 relevance |
+
+Secondary targets kept from the detailed proposal: provenance (findings with valid source) 90% or more, alignment precision after confirmation 75% or more, SUS 70 or more.
+
+Baseline readiness (LLM-only runner, gold set, measurement protocol) is tracked in [docs/feedback/baseline-audit.md](docs/feedback/baseline-audit.md).
 
 **Expected benefit.** Less time rebuilding context, fewer late-found inconsistencies, clearer supervision meetings.
 
@@ -191,7 +193,14 @@ Quality checks: `npm run lint && npm run typecheck && npm run build` (web); `ruf
 
 **Material AI assistance.** The documentation set, project scaffold, and initial code in this repository were drafted with the help of Claude (via Claude Code) and reviewed by the team. The product itself is designed so that AI never writes the student's thesis.
 
-**References**
+**References (abstract)**
+1. Preliminary interviews by the team: 7 final-year students and 1 thesis supervisor (unpublished data).
+2. Rangkuti, A. A., Listyasari, W. D., & Wahyuni, L. D. U. (2013). Kendala dosen dalam proses pembimbingan skripsi mahasiswa. *Perspektif Ilmu Pendidikan*, 27(2), 143-151.
+3. Hapsari, A. D. (2026). Mapping the challenges: An in-depth analysis of common flaws in six undergraduate ELT research proposals. *Bliss Journal*, 2(1), 1-14.
+4. Syafi'i, A., Munir, A., Anam, S., & Suhartono, S. (2024). Unleashing the power of supervisory feedback in academic writing: Strategies for timely undergraduate thesis completion. *TEFLIN Journal*, 35(2), 330-351.
+5. Rahma, M., Laksmi, E. D., & Febrianti, Y. (2025). Balancing workload and thesis guidance: How supervisors provide effective feedback to students. *Scope: Journal of English Language Teaching*, 9(2), 785-796.
+
+**Additional references (detailed proposal)**
 1. GDGoC ITB. (2026). *Handbook STACK 2026. Case 1: Smarter Campus and Learning.*
 2. Kementerian Pendidikan Tinggi, Sains, dan Teknologi. (2026). *Statistik Pendidikan Tinggi 2025.* https://kemdiktisaintek.go.id/library/book/statistik-pendidikan-tinggi-2025
 3. Xu, Z., Zhao, Y., Patwardhan, M., Vig, L., & Cohan, A. (2025). *Can LLMs Identify Critical Limitations within Scientific Research?* ACL 2025. https://aclanthology.org/2025.acl-long.1009/

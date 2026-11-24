@@ -1,14 +1,25 @@
 # Literatur [2]–[5] (dari abstrak)
 
-Nomor mengikuti daftar referensi proposal ([§Referensi](../../source/01-proposal-full.md)). Kolom "Mendukung klaim" hanya diisi bila proposal sendiri menyatakannya; sisanya `TODO` agar tidak ada klaim yang tidak diverifikasi.
+Sumber: [02-abstract.md](../../source/02-abstract.md). Kolom "Klaim di abstrak" menyalin apa yang abstrak katakan. Kolom "Perlu diverifikasi" adalah pekerjaan tim: baca artikelnya dan pastikan angkanya benar sebelum dipakai di pitch.
 
-| # | Referensi | Mendukung klaim | Batas interpretasi |
+> **Koreksi 2026-11-24:** versi awal berkas ini keliru memetakan [2]–[5] ke referensi proposal (Statistik Pendidikan Tinggi, LimitGen, dst.). Referensi abstrak berbeda; berkas ini sudah diganti. Referensi proposal tetap tercantum di README.
+
+| # | Referensi | Klaim di abstrak | Perlu diverifikasi |
 |---|---|---|---|
-| [2] | Kemdiktisaintek (2026). *Statistik Pendidikan Tinggi 2025.* https://kemdiktisaintek.go.id/library/book/statistik-pendidikan-tinggi-2025 | 289.670 mahasiswa putus kuliah (naik 2,62% dari 2024); kelompok 21–30 tahun tertinggi (proposal §3.3) | **Tidak** membuktikan skripsi penyebab putus kuliah. Jangan dipakai untuk klaim kausal |
-| [3] | Xu, Zhao, Patwardhan, Vig & Cohan (2025). *Can LLMs Identify Critical Limitations within Scientific Research?* ACL 2025. https://aclanthology.org/2025.acl-long.1009/ | Benchmark LimitGen; literature retrieval membantu kritik yang lebih konkret dan grounded (proposal §8.3) → mendukung desain retrieval + evidence | Domain makalah riset AI, bukan skripsi S1 |
-| [4] | de Wynter (2025). *Awes, Laws, and Flaws From Today's LLM Research.* Findings of ACL 2025. https://aclanthology.org/2025.findings-acl.664/ | Tren LLM sebagai evaluator tanpa human evaluation memadai (proposal §8.3) → mendukung "decision support, bukan penilaian final" | Survei tren riset, bukan uji produk |
-| [5] | Wu et al. (2026). *Can AI Be a Good Peer Reviewer?* ACL 2026. https://aclanthology.org/2026.acl-long.1504/ | `TODO` (proposal tidak menguraikan klaimnya; tim isi setelah membaca) | `TODO` |
+| [1] | Wawancara pendahuluan tim: 7 mahasiswa tingkat akhir + 1 pembimbing (data tidak dipublikasikan) | Tunggu feedback **7–14 hari** per revisi; draf revisi jarang menyebut apa yang berubah | Catatan primer → [interview-log.md](interview-log.md) |
+| [2] | Rangkuti, Listyasari & Wahyuni (2013). *Kendala dosen dalam proses pembimbingan skripsi mahasiswa.* Perspektif Ilmu Pendidikan, 27(2), 143–151 | Dari **113** pembimbing: **51,3%** menyebut pilihan metodologi sebagai masalah utama Bab 3; **45,1%** menyebut mahasiswa sulit mengaitkan Bab 1–4 | Angka 113/51,3%/45,1% sesuai artikel? Terbit 2013: apakah masih representatif? |
+| [3] | Hapsari (2026). *Mapping the challenges: common flaws in six undergraduate ELT research proposals.* Bliss Journal, 2(1), 1–14 | **4 dari 6** proposal seminar tidak selaras antara pertanyaan penelitian dan desain; contoh kausal vs one-group pre/post-test | **Sampel n=6, bidang ELT**: jangan diperlakukan sebagai angka umum; Matematika belum terwakili |
+| [4] | Syafi'i, Munir, Anam & Suhartono (2024). *Unleashing the power of supervisory feedback in academic writing.* TEFLIN Journal, 35(2), 330–351 | Feedback tepat waktu menjaga mahasiswa sesuai jadwal | Konteks penulisan akademik bahasa Inggris; cek relevansi ke proposal Matematika |
+| [5] | Rahma, Laksmi & Febrianti (2025). *Balancing workload and thesis guidance.* Scope: JELT, 9(2), 785–796 | Beban kerja pembimbing memengaruhi cara feedback diberikan | Cek temuannya benar mendukung klaim |
 
-Referensi [1] (Handbook STACK) dan [6] (Gao et al. 2025) tidak termasuk daftar abstrak, tetapi tetap tercantum di README.
+## Catatan kekuatan bukti
 
-**Tugas tim:** baca [5] dan tulis klaim yang benar-benar didukungnya; tambah literatur tentang bimbingan skripsi / dropout tugas akhir bila ada, agar P1 tidak bertumpu pada satu statistik nasional.
+- Tiga dari empat artikel berasal dari bidang **ELT / pendidikan bahasa Inggris**, sedangkan pilot ThesisTwin di **prodi Matematika**. Juri sudah menilai bukti "masih kecil"; keterbatasan bidang ini sebaiknya diakui terbuka.
+- [3] hanya enam proposal. Gunakan sebagai ilustrasi jenis ketidaksesuaian, bukan estimasi prevalensi.
+- Abstrak sendiri menyebut: *"A larger survey before the semifinal will test these findings."* Survei itu belum ada di repo (lihat [../baseline-audit.md](../baseline-audit.md) A14).
+
+## Tugas tim
+
+1. Baca [2]–[5] dan konfirmasi tiap klaim di tabel.
+2. Cari literatur pembimbingan skripsi pada bidang **eksakta/Matematika** dan di luar ELT.
+3. Rancang survei lebih besar (target proposal: 15–30 mahasiswa, 3–5 dosen) dengan [interview-guide.md](interview-guide.md).
