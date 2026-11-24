@@ -17,11 +17,11 @@ describe("ToolsPanel", () => {
 });
 
 describe("ToolsPanel (proyek nyata)", () => {
-  it("semua tool menaut ke Ruang Kerja dan berlabel Tersedia, bukan simulasi", () => {
+  it("tiap tool menaut ke halamannya sendiri dan berlabel Tersedia, bukan simulasi", () => {
     render(<ToolsPanel live />);
     const links = screen.getAllByRole("link");
     expect(links).toHaveLength(4);
-    expect(links.every((a) => a.getAttribute("href")?.startsWith("/proyek"))).toBe(true);
+    expect(links.map((a) => a.getAttribute("href"))).toEqual(["/temuan", "/versi", "/brief", "/stress-test"]);
     expect(screen.getAllByText(copy.dashboard.tools.available)).toHaveLength(4);
     expect(screen.queryByText(copy.simulated)).not.toBeInTheDocument();
   });

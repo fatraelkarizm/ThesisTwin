@@ -39,7 +39,6 @@ export function Sidebar() {
                 </li>
               );
             }
-            // Beberapa menu menunjuk bagian di /proyek (#anchor); yang aktif hanya yang path-nya persis.
             const active = pathname === href;
             return (
               <li key={label}>

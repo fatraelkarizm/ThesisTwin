@@ -18,12 +18,12 @@ const demoTools: Tool[] = [
   { key: "stressTest", icon: ShieldQuestion },
 ];
 
-// Dengan proyek nyata semua tool sudah tersedia di Ruang Kerja.
+// Dengan proyek nyata tiap tool punya halaman sendiri.
 const liveTools: Tool[] = [
-  { key: "consistency", icon: ScanSearch, href: "/proyek#temuan" },
-  { key: "compare", icon: GitCompare, href: "/proyek#brief" },
-  { key: "brief", icon: FileOutput, href: "/proyek#brief" },
-  { key: "stressTest", icon: ShieldQuestion, href: "/proyek#stress-test" },
+  { key: "consistency", icon: ScanSearch, href: "/temuan" },
+  { key: "compare", icon: GitCompare, href: "/versi" },
+  { key: "brief", icon: FileOutput, href: "/brief" },
+  { key: "stressTest", icon: ShieldQuestion, href: "/stress-test" },
 ];
 
 const row = "flex items-center gap-3 rounded-card border border-line bg-surface p-3 shadow-card";

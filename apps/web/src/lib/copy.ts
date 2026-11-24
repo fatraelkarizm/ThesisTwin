@@ -66,7 +66,7 @@ export const copy = {
       elements > 0
         ? `${elements} elemen penelitian terdeteksi dari struktur bab, ${findings} temuan dari cek aturan.`
         : "Belum ada elemen yang terdeteksi otomatis. Tambahkan elemen di Ruang Kerja.",
-    openWorkspace: "Buka Ruang Kerja",
+    openWorkspace: "Lihat isi proposal",
     pagesPdf: "halaman terbaca",
     sectionsDocx: "bagian terbaca (DOCX tidak punya nomor halaman tetap)",
     versionsTitle: "Versi di proyek ini",
@@ -84,11 +84,69 @@ export const copy = {
     claim: "Klaim",
     limitation: "Keterbatasan",
   },
+  // Alur kerja proyek: satu konsep per halaman, berurutan.
+  steps: [
+    {
+      href: "/proyek",
+      title: "Isi Proposal",
+      short: "Isi proposal",
+      description:
+        "Elemen penelitian yang terbaca dari proposalmu: rumusan masalah, tujuan, desain, variabel, data, instrumen, dan analisis. Periksa dulu sebelum lanjut.",
+    },
+    {
+      href: "/temuan",
+      title: "Cek Konsistensi",
+      short: "Cek konsistensi",
+      description:
+        "Ketidaksesuaian antarbagian proposal, diperiksa dengan aturan metodologi. Setiap temuan menyebut aturan, alasan, dan halamannya.",
+    },
+    {
+      href: "/stress-test",
+      title: "Defense Stress-Test",
+      short: "Latihan seminar",
+      description:
+        "Pertanyaan yang kemungkinan diajukan penguji, dipilih dari bagian proposal yang paling lemah. Jawab dengan kata-katamu sendiri.",
+    },
+    {
+      href: "/versi",
+      title: "Riwayat Versi",
+      short: "Perubahan versi",
+      description:
+        "Apa yang berubah sejak versi sebelumnya, bagian yang perlu dicek ulang, dan apakah komentar dosen sudah ditindaklanjuti.",
+    },
+    {
+      href: "/brief",
+      title: "Supervision Brief",
+      short: "Kirim ke dosen",
+      description:
+        "Ringkasan satu halaman untuk dosen dari semua langkah sebelumnya. Kirim sebagai teks chat atau tautan tanpa akun.",
+    },
+  ],
+  stepLabel: (n: number, total: number) => `Langkah ${n} dari ${total}`,
+  nextStep: "Langkah berikutnya",
   workspace: {
     title: "Ruang Kerja Proposal",
     subtitle: "Elemen penelitian, cek konsistensi, komentar dosen, dan Supervision Brief dari data nyata proyekmu.",
     empty: "Belum ada proyek. Unggah draf pertama untuk memulai.",
     loading: "Memuat proyek…",
+    showQuote: "Lihat kutipan",
+    addManual: "Tambah elemen manual",
+    addManualHint: "Untuk bagian yang tidak terdeteksi otomatis. Salin kalimat aslinya agar bisa diverifikasi.",
+    tabElements: "Elemen",
+    tabGraph: "Dependency graph",
+    summaryDetected: (n: number, verified: number) => `${n} elemen terbaca, ${verified} kutipannya cocok dengan dokumen.`,
+    toReview: "Perlu ditinjau",
+    reviewed: "Sudah ditinjau",
+    noneToReview: "Tidak ada temuan yang menunggu tinjauan.",
+    counts: (open: number, confirmed: number, rejected: number) =>
+      `${open} perlu ditinjau · ${confirmed} dikonfirmasi · ${rejected} ditolak`,
+    changesTitle: "Yang berubah",
+    changesDescription: "Perbandingan elemen versi terbaru dengan versi sebelumnya.",
+    singleVersion: "Baru ada satu versi. Unggah revisi untuk melihat perubahan.",
+    impactsTitle: "Perlu dicek ulang",
+    impactsDescription: "Bagian yang bergantung pada elemen yang berubah.",
+    noImpacts: "Tidak ada bagian yang perlu dicek ulang.",
+    versionsListTitle: "Semua versi",
     goUpload: "Unggah draf",
     version: "Versi",
     elementsTitle: "Elemen penelitian",
@@ -135,7 +193,7 @@ export const copy = {
     },
     addressedYes: "Sudah ditangani",
     addressedNo: "Belum",
-    briefTitle: "Supervision Brief",
+    briefTitle: "Isi brief",
     briefDescription: "Ringkasan untuk dosen. Hanya merangkum catatan, tidak menulis isi skripsi.",
     copy: "Salin teks",
     copied: "Tersalin",
@@ -143,8 +201,8 @@ export const copy = {
     shareNote: "Dosen membuka tautan ini tanpa akun. Berlaku 14 hari. Tautan hanya ditampilkan sekali.",
   },
   stress: {
-    title: "Defense Stress-Test",
-    description: "Pertanyaan penguji dari bagian proposal yang paling lemah. Jawab dengan kata-katamu sendiri.",
+    title: "Pertanyaan penguji",
+    description: "Diurutkan dari bagian yang paling lemah. Simpan jawabanmu untuk dibaca dosen.",
     generate: "Buat pertanyaan",
     regenerate: "Perbarui pertanyaan",
     empty: "Belum ada pertanyaan. Jalankan cek dulu, lalu buat pertanyaan.",

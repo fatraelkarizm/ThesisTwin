@@ -64,5 +64,7 @@ Didefinisikan di [globals.css](../../apps/web/src/app/globals.css), dipakai lewa
 - Section **terbuka**: judul + deskripsi langsung di halaman; yang berbingkai hanya item di dalamnya (komponen `Section`). `Card` dipakai untuk formulir.
 - < 1024px: kolom kanan turun ke bawah. < 768px: sidebar disembunyikan.
 - Satu tombol utama (biru) per area. Aksi lain sekunder.
+- **Satu konsep per halaman** (keputusan tim 2026-11-24, setelah halaman "Ruang Kerja" dinilai terlalu bercampur). Alur kerja proyek = 5 halaman berurutan: `/proyek` Isi Proposal → `/temuan` Cek Konsistensi → `/stress-test` Defense Stress-Test → `/versi` Riwayat Versi → `/brief` Supervision Brief. Semua memakai `ProjectPage`: label langkah, judul, satu kalimat "apa ini", penunjuk alur, isi, dan tautan "Langkah berikutnya".
+- Detail panjang dilipat (`<details>`): kutipan elemen, form tambah manual, temuan yang sudah ditinjau.
 - Angka besar hanya untuk hitungan yang bisa dipertanggungjawabkan; selalu sebut satuannya.
 - Setiap layar yang memakai data simulasi menampilkan label **"Data simulasi"** yang terlihat.
