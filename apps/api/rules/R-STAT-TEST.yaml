@@ -14,10 +14,14 @@ basis: >-
 references:
   - "Demšar, J. (2006). Statistical comparisons of classifiers over multiple data sets. Journal of Machine Learning Research, 7, 1–30."
   - "Wohlin, C., Runeson, P., Höst, M., Ohlsson, M. C., Regnell, B., & Wesslén, A. (2012). Experimentation in software engineering. Springer."
-suggestions:
-  - "Tetapkan jumlah pengulangan (mis. beberapa seed acak) untuk tiap model dan laporkan rata-rata beserta simpangan bakunya."
-  - "Pilih uji statistik sesuai data: uji t berpasangan bila asumsi normal terpenuhi, Wilcoxon signed-rank bila tidak."
-  - "Tentukan taraf signifikansi dan ukuran efek sebelum eksperimen dijalankan."
+source_types: [methodology]
+directions:
+  - option: "Uji parametrik (mis. uji t berpasangan)"
+    implication: "Butuh asumsi normalitas yang diperiksa dulu, serta jumlah pengulangan (seed/run) yang cukup."
+  - option: "Uji nonparametrik (mis. Wilcoxon signed-rank; Friedman untuk banyak model)"
+    implication: "Tidak bergantung asumsi normal; lebih umum untuk membandingkan model di beberapa dataset."
+  - option: "Perbandingan dilaporkan deskriptif saja"
+    implication: "Klaim 'lebih baik' perlu dilunakkan jadi selisih yang teramati, dengan rata-rata dan simpangan baku dari beberapa run."
 check:
   kind: missing_terms
   when:

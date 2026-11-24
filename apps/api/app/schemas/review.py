@@ -3,6 +3,8 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from app.domain.rules import Direction
+
 ElementType = Literal[
     "research_question",
     "objective",
@@ -57,9 +59,10 @@ class FindingOut(BaseModel):
     status: str
     ai_generated: bool
     evidence: list[EvidenceOut]
-    basis: str | None = None  # dasar metodologis aturan (dari rules/*.yaml)
+    basis: str | None = None  # dasar aturan (dari rules/*.yaml)
     references: list[str] = []
-    suggestions: list[str] = []
+    source_types: list[str] = []
+    directions: list[Direction] = []
 
 
 class StatusIn(BaseModel):

@@ -49,24 +49,33 @@ describe("FindingCard", () => {
     expect(screen.getByText(new RegExp(copy.evidenceVerified))).toBeInTheDocument();
   });
 
-  it("menampilkan saran perbaikan dan rujukan akademik", () => {
+  it("menampilkan arah beserta konsekuensinya dan rujukan akademik", () => {
     render(
       <FindingCard
         finding={{
           ...finding,
-          suggestions: ["Tambahkan kelompok pembanding."],
+          directions: [
+            { option: "Mempertahankan klaim kausal", implication: "Perlu kelompok pembanding." },
+            { option: "Merumuskan ulang sebagai hubungan", implication: "Kata kerja RQ ikut berubah." },
+          ],
           references: ["Campbell, D. T., & Stanley, J. C. (1963). Experimental and quasi-experimental designs for research."],
         }}
       />,
     );
-    expect(screen.getByText(copy.suggestionsTitle)).toBeInTheDocument();
-    expect(screen.getByText("Tambahkan kelompok pembanding.")).toBeInTheDocument();
+    expect(screen.getByText(copy.directionsTitle)).toBeInTheDocument();
+    expect(screen.getByText("Mempertahankan klaim kausal")).toBeInTheDocument();
+    expect(screen.getByText("Perlu kelompok pembanding.")).toBeInTheDocument();
     expect(screen.getByText(copy.referencesTitle(1))).toBeInTheDocument();
   });
 
   it("menampilkan dasar metodologi aturan bila ada", () => {
-    render(<FindingCard finding={{ ...finding, basis: "Klaim kausal butuh kelompok pembanding." }} />);
+    render(
+      <FindingCard
+        finding={{ ...finding, basis: "Klaim kausal butuh kelompok pembanding.", sourceTypes: ["methodology"] }}
+      />,
+    );
     expect(screen.getByText(/Klaim kausal butuh kelompok pembanding/)).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(copy.sourceType.methodology))).toBeInTheDocument();
   });
 
   it("tanpa evidence: status dipaksa 'perlu konfirmasi' dan sumber dinyatakan kosong", () => {

@@ -14,10 +14,12 @@ basis: >-
 references:
   - "Campbell, D. T., & Stanley, J. C. (1963). Experimental and quasi-experimental designs for research. Rand McNally."
   - "Shadish, W. R., Cook, T. D., & Campbell, D. T. (2002). Experimental and quasi-experimental designs for generalized causal inference. Houghton Mifflin."
-suggestions:
-  - "Tentukan apakah pertanyaanmu sebab-akibat atau hubungan/perubahan; samakan kata kerjanya di RQ, tujuan, dan kesimpulan."
-  - "Bila tetap kausal: tambahkan kelompok pembanding (kuasi-eksperimen) atau jelaskan kontrol terhadap ancaman validitas internal."
-  - "Bila tidak: ganti bahasa 'pengaruh/dampak' dengan 'hubungan/perbedaan/perubahan' dan tulis keterbatasan desainnya."
+source_types: [methodology]
+directions:
+  - option: "Mempertahankan pertanyaan sebab-akibat"
+    implication: "Desain perlu bisa menyingkirkan penjelasan alternatif: kelompok pembanding (kuasi-eksperimen) atau kontrol ancaman validitas internal. Yang bisa dicek: apakah kelas/kelompok pembanding memungkinkan didapat?"
+  - option: "Merumuskan ulang sebagai hubungan atau perubahan"
+    implication: "Desain sekarang tetap bisa dipakai; kata kerja di RQ, tujuan, dan kesimpulan ikut bergeser dari 'pengaruh/dampak' ke 'hubungan/perbedaan/perubahan', dan keterbatasan desain dicatat."
 check:
   kind: conflict
   a:

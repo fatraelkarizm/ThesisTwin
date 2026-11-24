@@ -14,10 +14,14 @@ basis: >-
 references:
   - "Creswell, J. W., & Creswell, J. D. (2018). Research design: Qualitative, quantitative, and mixed methods approaches (5th ed.). SAGE."
   - "Sugiyono. (2019). Metode penelitian kuantitatif, kualitatif, dan R&D. Alfabeta."
-suggestions:
-  - "Buat tabel pemetaan satu-satu: RQ1 → Tujuan 1, dst."
-  - "Tujuan yang tidak menjawab RQ mana pun (mis. 'memberikan rekomendasi') pindahkan ke Manfaat Penelitian atau keluaran."
-  - "Bila tujuan itu memang penting, tambahkan rumusan masalah yang sepadan."
+source_types: [methodology]
+directions:
+  - option: "Setiap rumusan masalah punya satu tujuan pasangan"
+    implication: "Tabel pemetaan RQ1 → Tujuan 1, dst. membuat kekurangan atau kelebihannya terlihat."
+  - option: "Tujuan tambahan sebenarnya manfaat atau keluaran"
+    implication: "Tujuan seperti 'memberikan rekomendasi' bisa pindah ke Manfaat Penelitian; jumlah tujuan dan RQ jadi sepadan."
+  - option: "Tujuan tambahan itu memang pertanyaan penelitian"
+    implication: "Perlu rumusan masalah baru yang sepadan, beserta data dan analisisnya."
 check:
   kind: count_match
   a: {types: [research_question], label: rumusan masalah}

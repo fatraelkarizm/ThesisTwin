@@ -10,9 +10,12 @@ basis: >-
 references:
   - "Creswell, J. W., & Creswell, J. D. (2018). Research design: Qualitative, quantitative, and mixed methods approaches (5th ed.). SAGE."
   - "Sugiyono. (2019). Metode penelitian kuantitatif, kualitatif, dan R&D. Alfabeta."
-suggestions:
-  - "Tulis satu tujuan untuk tiap rumusan masalah dengan kata kerja yang sepadan (mis. 'bagaimana besaran' → 'mengukur')."
-  - "Buat tabel pemetaan RQ → tujuan → data → analisis di Bab III."
+source_types: [methodology]
+directions:
+  - option: "Tujuan sudah ada, tetapi dengan judul lain"
+    implication: "Judul subbab bisa diselaraskan dengan istilah panduan agar mudah ditemukan pembaca."
+  - option: "Tujuan belum dirumuskan"
+    implication: "Tiap rumusan masalah butuh tujuan dengan kata kerja yang sepadan (mis. 'bagaimana besaran' → 'mengukur'), lalu dipetakan ke data dan analisis di Bab III."
 check:
   kind: requires
   source: {types: [research_question]}

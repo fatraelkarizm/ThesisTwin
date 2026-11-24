@@ -29,7 +29,15 @@ export interface Finding {
   // true = isi temuan/evidence berasal dari AI (ekstraksi). Temuan aturan atas elemen
   // yang dimasukkan mahasiswa = false; label AI tidak boleh dipasang palsu.
   aiGenerated: boolean;
-  basis?: string; // dasar metodologis aturan
+  basis?: string; // dasar aturan
   references?: string[]; // rujukan akademik (APA)
-  suggestions?: string[]; // langkah perbaikan, bukan teks skripsi
+  sourceTypes?: SourceType[];
+  directions?: Direction[]; // arah yang bisa dieksplorasi, bukan vonis atau teks skripsi
+}
+
+export type SourceType = "prodi_guideline" | "methodology" | "math_writing" | "publication_style";
+
+export interface Direction {
+  option: string;
+  implication: string;
 }

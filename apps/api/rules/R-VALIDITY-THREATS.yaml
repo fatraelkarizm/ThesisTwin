@@ -14,9 +14,12 @@ basis: >-
 references:
   - "Shadish, W. R., Cook, T. D., & Campbell, D. T. (2002). Experimental and quasi-experimental designs for generalized causal inference. Houghton Mifflin."
   - "Wohlin, C., Runeson, P., Höst, M., Ohlsson, M. C., Regnell, B., & Wesslén, A. (2012). Experimentation in software engineering. Springer."
-suggestions:
-  - "Tambahkan subbab 'Ancaman Validitas' di Bab III dengan empat jenis: internal, eksternal, konstruk, dan kesimpulan statistik."
-  - "Untuk tiap ancaman tulis: penyebab yang mungkin, dampaknya pada hasil, dan cara mitigasinya (mis. perangkat keras sama, seed acak tetap, pengulangan run)."
+source_types: [methodology]
+directions:
+  - option: "Subbab ancaman validitas di Bab III"
+    implication: "Empat jenis yang lazim dibahas: internal, eksternal, konstruk, dan kesimpulan statistik; tiap ancaman disertai penyebab, dampak, dan mitigasi."
+  - option: "Ancaman dibahas di bagian keterbatasan penelitian"
+    implication: "Lebih ringkas, tetapi mitigasi yang sudah direncanakan (perangkat sama, seed tetap, pengulangan run) tetap perlu terlihat."
 check:
   kind: missing_terms
   when:

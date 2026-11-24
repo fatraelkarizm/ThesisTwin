@@ -36,6 +36,40 @@ def test_findings_are_questions_not_verdicts(rule: Rule):
     assert not has_term(rule.title, ["salah", "keliru", "gagal", "tidak valid"])
 
 
+VERDICT_TERMS = ["bagus", "jelek", "buruk", "salah", "benar", "keliru", "gagal", "tidak valid"]
+# Arah = pilihan yang bisa dieksplorasi, bukan perintah. Kalimat perintah di awal opsi ditolak.
+IMPERATIVE_START = [
+    "hapus", "ganti", "tambahkan", "pilih", "tulis", "buat", "tentukan", "pindahkan",
+    "batasi", "cocokkan", "sebutkan", "tetapkan", "ubah", "perbaiki", "gunakan",
+]
+
+
+def _rule_texts(rule: Rule) -> list[str]:
+    texts = [rule.title, rule.why_flagged, rule.suggested_clarification]
+    return texts + [t for d in rule.directions for t in (d.option, d.implication)]
+
+
+@pytest.mark.parametrize("rule", RULES, ids=lambda r: r.id)
+def test_rule_texts_carry_no_verdict(rule: Rule):
+    for text in _rule_texts(rule):
+        assert not has_term(text, VERDICT_TERMS), text
+
+
+@pytest.mark.parametrize("rule", RULES, ids=lambda r: r.id)
+def test_directions_are_options_not_orders(rule: Rule):
+    assert len(rule.directions) >= 2, "navigasi butuh minimal dua arah untuk dibandingkan"
+    for d in rule.directions:
+        first = normalize(d.option).split()[0]
+        assert first not in IMPERATIVE_START, d.option
+
+
+@pytest.mark.parametrize("rule", RULES, ids=lambda r: r.id)
+def test_rule_declares_where_its_basis_comes_from(rule: Rule):
+    assert rule.source_types
+    if rule.references:
+        assert rule.basis
+
+
 def test_normalize_and_terms():
     assert normalize("One-Group  Pre-Test/Post-Test") == "one group pre test post test"
     assert has_term("Desain one-group pre-test", ["pre test"])

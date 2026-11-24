@@ -9,8 +9,14 @@ basis: >-
   Setiap tujuan perlu rencana analisis data yang menunjukkan bagaimana tujuan itu dicapai dari data yang dikumpulkan. Perlu ditinjau dosen metodologi.
 references:
   - "Creswell, J. W., & Creswell, J. D. (2018). Research design: Qualitative, quantitative, and mixed methods approaches (5th ed.). SAGE."
-suggestions:
-  - "Untuk tiap tujuan, tuliskan data yang dipakai dan teknik analisisnya dalam satu tabel rencana analisis."
+source_types: [methodology]
+directions:
+  - option: "Analisis kuantitatif (statistik deskriptif/inferensial)"
+    implication: "Tiap tujuan dipasangkan dengan data numerik dan uji yang sesuai skala datanya; tabel rencana analisis di Bab III memperlihatkan pasangannya."
+  - option: "Analisis kualitatif (mis. analisis tematik)"
+    implication: "Tiap tujuan dipasangkan dengan data teks/observasi dan prosedur pengodean; teknik keabsahan data ikut dijelaskan."
+  - option: "Tujuan yang tidak butuh analisis data"
+    implication: "Bisa jadi tujuan itu sebenarnya manfaat atau keluaran penelitian, dan lebih cocok dipindah ke bagian tersebut."
 check:
   kind: requires
   source: {types: [objective]}

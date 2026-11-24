@@ -34,11 +34,8 @@ def _finding_out(row) -> FindingOut:
     out = FindingOut.model_validate(row)
     rule = rule_meta().get(out.rule_id)
     if rule:
-        out.basis, out.references, out.suggestions = (
-            rule.basis,
-            rule.references,
-            rule.suggestions,
-        )
+        out.basis, out.references = rule.basis, rule.references
+        out.source_types, out.directions = list(rule.source_types), rule.directions
     return out
 
 

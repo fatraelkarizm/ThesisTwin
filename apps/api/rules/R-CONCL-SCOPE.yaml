@@ -12,9 +12,12 @@ basis: >-
 references:
   - "Shadish, W. R., Cook, T. D., & Campbell, D. T. (2002). Experimental and quasi-experimental designs for generalized causal inference. Houghton Mifflin."
   - "Creswell, J. W., & Creswell, J. D. (2018). Research design: Qualitative, quantitative, and mixed methods approaches (5th ed.). SAGE."
-suggestions:
-  - "Batasi kesimpulan pada populasi dan konteks sampel, atau ubah teknik sampling bila ingin generalisasi lebih luas."
-  - "Tulis batas generalisasi di bagian keterbatasan penelitian."
+source_types: [methodology]
+directions:
+  - option: "Kesimpulan berlaku untuk sampel dan konteks yang diteliti"
+    implication: "Teknik sampling tetap; klaim dan bagian keterbatasan menyebut batas generalisasinya."
+  - option: "Kesimpulan ditujukan untuk populasi yang lebih luas"
+    implication: "Teknik sampling dan ukuran sampel perlu ditinjau ulang (mis. probability sampling). Yang bisa dicek: apakah akses ke populasi itu realistis dalam waktu penelitian?"
 check:
   kind: conflict
   a:

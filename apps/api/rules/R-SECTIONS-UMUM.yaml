@@ -9,8 +9,14 @@ suggested_clarification: >-
   panduan prodi?
 basis: >-
   Struktur umum proposal Bab 1–3 (pendahuluan, kajian pustaka, metode). Daftar ini contoh umum dan harus diganti panduan resmi prodi. Perlu ditinjau dosen metodologi.
-suggestions:
-  - "Cocokkan daftar bab dengan panduan proposal resmi prodi; tambahkan bagian yang memang diwajibkan."
+source_types: [prodi_guideline]
+directions:
+  - option: "Bagian itu ada dengan judul lain"
+    implication: "Judul bisa disamakan dengan istilah panduan prodi agar pembimbing mudah menemukannya."
+  - option: "Bagian itu belum ditulis"
+    implication: "Panduan proposal resmi prodi jadi acuan isi minimalnya."
+  - option: "Bagian itu tidak diwajibkan prodi"
+    implication: "Temuan ini bisa ditolak; aturan perlu diperbarui sesuai panduan prodi."
 check:
   kind: required_sections
   sections:

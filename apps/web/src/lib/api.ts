@@ -1,6 +1,6 @@
 // Klien API bertipe. Tipe mencerminkan apps/api/app/schemas/project.py (ubah keduanya bersamaan).
 
-import type { Finding, Priority, Status } from "@/types/domain";
+import type { Direction, Finding, Priority, SourceType, Status } from "@/types/domain";
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -63,7 +63,8 @@ export interface FindingApi {
   evidence: { element: string; document: string; page: number }[];
   basis: string | null;
   references: string[];
-  suggestions: string[];
+  source_types: SourceType[];
+  directions: Direction[];
 }
 
 export interface CommentStatusOut {
@@ -141,7 +142,8 @@ export function toFinding(f: FindingApi, unit: "page" | "section"): Finding {
     aiGenerated: f.ai_generated,
     basis: f.basis ?? undefined,
     references: f.references ?? [],
-    suggestions: f.suggestions ?? [],
+    sourceTypes: f.source_types ?? [],
+    directions: f.directions ?? [],
   };
 }
 

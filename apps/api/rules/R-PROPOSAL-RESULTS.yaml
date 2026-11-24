@@ -5,7 +5,7 @@ why_flagged: >-
   Dokumen proposal (Bab 1–3) memuat bagian hasil/kesimpulan. Proposal disusun sebelum data
   dikumpulkan, sehingga angka hasil di dalamnya perlu dipastikan asal-usulnya
 suggested_clarification: >-
-  Apakah hasil ini sudah benar-benar diperoleh dari eksperimen, atau masih contoh/perkiraan yang
+  Apakah hasil ini sudah diperoleh dari eksperimen, atau masih contoh/perkiraan yang
   perlu diberi label jelas atau dihapus dari proposal?
 basis: >-
   Proposal penelitian memuat rencana (latar belakang, kajian pustaka, metode); hasil dan
@@ -13,10 +13,14 @@ basis: >-
   sebagai temuan (integritas data).
 references:
   - "Creswell, J. W., & Creswell, J. D. (2018). Research design: Qualitative, quantitative, and mixed methods approaches (5th ed.). SAGE."
-suggestions:
-  - "Hapus Bab Hasil/Kesimpulan dari proposal, atau pindahkan ke lampiran dengan label jelas 'uji coba/simulasi' beserta sumber angkanya."
-  - "Ganti dengan rencana analisis dan tabel kerangka hasil kosong (dummy table) yang menunjukkan bentuk hasil yang akan dilaporkan."
-  - "Bila angka berasal dari uji coba awal (pilot), sebutkan kapan, bagaimana, dan dengan data apa uji itu dilakukan."
+source_types: [methodology]
+directions:
+  - option: "Bagian itu memang hasil uji coba awal (pilot)"
+    implication: "Label 'uji coba/simulasi', waktu, cara, dan sumber datanya perlu terlihat jelas, misalnya di lampiran."
+  - option: "Bagian itu gambaran hasil yang diharapkan"
+    implication: "Bentuknya bisa berupa rencana analisis dan tabel kerangka hasil kosong (dummy table), tanpa angka."
+  - option: "Bagian itu sisa dari draf skripsi lengkap"
+    implication: "Proposal bisa dibatasi pada Bab 1–3; hasil disimpan untuk Bab 4 setelah data terkumpul."
 check:
   kind: forbidden_sections
   sections:

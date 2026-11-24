@@ -1,6 +1,6 @@
 # Rujukan Metodologi untuk Aturan Cek Konsistensi
 
-Setiap aturan di [apps/api/rules/](../apps/api/rules/README.md) membawa `basis` (prinsip), `references` (rujukan), dan `suggestions` (langkah perbaikan). Halaman ini mendaftar semua rujukan yang dipakai.
+Setiap aturan di [apps/api/rules/](../apps/api/rules/README.md) membawa `basis` (prinsip), `references` (rujukan), `source_types` (asal landasan), dan `directions` (arah yang bisa dieksplorasi beserta konsekuensinya, bukan vonis atau perintah). Halaman ini mendaftar semua rujukan yang dipakai.
 
 > **Status verifikasi:** rujukan di bawah adalah karya metodologi yang dikenal luas. Rujukan dicantumkan di tingkat buku/artikel, **tanpa nomor halaman**, karena halaman belum diverifikasi oleh tim. Sebelum dikutip di proposal STACK atau di aplikasi untuk dosen: (1) cek edisi yang tersedia di perpustakaan, (2) catat bab/halaman yang mendukung tiap aturan, (3) minta dosen metodologi meninjau aturan dan ubah `reviewed_by_supervisor: true`.
 

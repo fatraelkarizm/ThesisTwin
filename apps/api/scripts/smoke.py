@@ -123,9 +123,9 @@ def main() -> int:
     )
     causal = next(f for f in findings if f["rule_id"] == "R-CAUSAL-01")
     check(
-        "Temuan membawa rujukan + saran + halaman",
+        "Temuan membawa rujukan + arah + halaman",
         causal["references"]
-        and causal["suggestions"]
+        and len(causal["directions"]) >= 2
         and all(e["page"] for e in causal["evidence"]),
         f"{len(causal['references'])} rujukan",
     )

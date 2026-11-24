@@ -10,9 +10,14 @@ basis: >-
 references:
   - "Sugiyono. (2019). Metode penelitian kuantitatif, kualitatif, dan R&D. Alfabeta."
   - "Creswell, J. W., & Creswell, J. D. (2018). Research design: Qualitative, quantitative, and mixed methods approaches (5th ed.). SAGE."
-suggestions:
-  - "Tulis definisi operasional tiap variabel: indikator, cara ukur, skala data."
-  - "Sebutkan instrumen untuk tiap variabel beserta rencana uji validitas dan reliabilitasnya."
+source_types: [methodology]
+directions:
+  - option: "Instrumen baku yang sudah ada"
+    implication: "Sumber instrumen dan bukti validitas/reliabilitasnya dari penelitian sebelumnya bisa dikutip; kecocokan dengan konteks tetap perlu dicek."
+  - option: "Instrumen disusun sendiri"
+    implication: "Butuh definisi operasional (indikator, cara ukur, skala data) dan rencana uji validitas serta reliabilitas sebelum dipakai."
+  - option: "Variabel diukur dari data yang sudah ada (mis. nilai, log sistem)"
+    implication: "Asal data dan cara variabel dihitung dari data itu perlu dijelaskan."
 check:
   kind: requires
   source: {types: [variable]}

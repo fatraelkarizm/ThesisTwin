@@ -139,6 +139,17 @@ class Example(BaseModel):
     document_text: str = ""
 
 
+class Direction(BaseModel):
+    """Arah yang bisa dieksplorasi mahasiswa: bukan vonis, perintah, atau teks skripsi."""
+
+    option: str  # mis. "Mempertahankan klaim kausal"
+    implication: str  # yang ikut berubah / perlu dicek bila arah ini dipilih
+
+
+# Asal landasan aturan, agar dosen bisa menilai bobotnya.
+SourceType = Literal["prodi_guideline", "methodology", "math_writing", "publication_style"]
+
+
 class Rule(BaseModel):
     id: str = Field(pattern=r"^R-[A-Z0-9]+(-[A-Z0-9]+)*$")
     enabled: bool = True
@@ -155,8 +166,8 @@ class Rule(BaseModel):
     basis: str | None = None
     # Rujukan akademik (APA). Tanpa nomor halaman: tim memverifikasi halaman sebelum dipakai.
     references: list[str] = Field(default_factory=list)
-    # Langkah perbaikan yang bisa dikerjakan mahasiswa. Tindakan, bukan teks skripsi.
-    suggestions: list[str] = Field(default_factory=list)
+    source_types: list[SourceType] = Field(min_length=1)
+    directions: list[Direction] = Field(default_factory=list)
 
     def applies_to(self, program: str) -> bool:
         return self.enabled and ("*" in self.programs or program in self.programs)

@@ -33,19 +33,32 @@ export function FindingCard({ finding, onConfirm, onReject }: FindingCardProps) 
         <span className="font-medium">{copy.suggestion}: </span>
         {finding.suggestedClarification}
       </p>
-      {finding.suggestions?.length ? (
+      {finding.directions?.length ? (
         <div className="rounded-lg bg-brand-soft/60 p-3">
-          <p className="text-sm font-semibold text-brand-strong">{copy.suggestionsTitle}</p>
-          <ol className="mt-1.5 list-decimal space-y-1 pl-5 text-sm">
-            {finding.suggestions.map((s) => (
-              <li key={s}>{s}</li>
+          <p className="text-sm font-semibold text-brand-strong">{copy.directionsTitle}</p>
+          <p className="text-xs text-muted">{copy.directionsNote}</p>
+          <ul className="mt-2 space-y-2 text-sm">
+            {finding.directions.map((d) => (
+              <li key={d.option} className="border-l-2 border-brand pl-2">
+                <p className="font-medium">{d.option}</p>
+                <p className="text-muted">
+                  <span className="font-medium">{copy.directionImplication}: </span>
+                  {d.implication}
+                </p>
+              </li>
             ))}
-          </ol>
+          </ul>
         </div>
       ) : null}
       {finding.basis ? (
         <p className="border-l-2 border-line pl-2 text-xs text-muted">
-          <span className="font-medium">{copy.basis}: </span>
+          <span className="font-medium">
+            {copy.basis}
+            {finding.sourceTypes?.length
+              ? ` (${finding.sourceTypes.map((t) => copy.sourceType[t]).join(", ")})`
+              : ""}
+            :{" "}
+          </span>
           {finding.basis}
         </p>
       ) : null}
