@@ -19,7 +19,7 @@ ThesisTwin/
 │   │       ├── components/
 │   │       │   ├── ui/          # primitif generik (Button, Badge, Card). Tanpa tahu domain.
 │   │       │   ├── domain/      # komponen sadar-domain reusable (StatusBadge, EvidenceChip, FindingCard)
-│   │       │   └── features/    # rakitan per fitur (graph/, findings/, feedback/, brief/). Tidak diimpor lintas fitur.
+│   │       │   └── features/    # rakitan per fitur (shell/, dashboard/, graph/, findings/, brief/). Tidak diimpor lintas fitur; shell/ hanya dipakai app/layout.tsx.
 │   │       ├── lib/             # api-client, util murni, konstanta
 │   │       ├── types/           # tipe domain bersama (cermin skema API)
 │   │       └── hooks/           # hook reusable (tanpa JSX)

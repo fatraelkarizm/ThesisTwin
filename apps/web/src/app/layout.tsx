@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Sidebar } from "@/components/features/shell/Sidebar";
+import { Topbar } from "@/components/features/shell/Topbar";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "ThesisTwin",
-  description: "Navigasi dan konsistensi perjalanan skripsi",
+  description: "Cek konsistensi dan Supervision Brief untuk proposal skripsi",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -23,7 +25,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="id"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="flex min-h-full">
+        <Sidebar />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <Topbar />
+          <div className="flex-1">{children}</div>
+        </div>
+      </body>
     </html>
   );
 }
