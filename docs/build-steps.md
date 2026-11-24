@@ -70,7 +70,7 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 ### Langkah 5 — Tabel proyek, dokumen, versi (append-only)
 - **Output:** model `projects`, `documents`, `document_versions` (hash SHA-256, nomor versi), service `add_version`.
 - **Selesai jika:** versi tidak pernah ditimpa; file sama (hash sama) tidak membuat versi baru; tes lulus.
-- **Status:** ⬜
+- **Status:** ✅ (2026-11-24) — 5 tes. Isi sama dengan versi terakhir tidak membuat versi baru; kembali ke isi lama tetap versi baru.
 
 ### Langkah 6 — API upload PDF + consent gate
 - **Output:** `POST /projects/{id}/documents` (multipart), penyimpanan file lokal di folder yang di-ignore git, tolak bila consent belum diberikan.
