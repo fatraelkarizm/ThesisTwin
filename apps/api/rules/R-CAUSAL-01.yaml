@@ -1,0 +1,28 @@
+# Katalog: docs/alignment-rules.md. Abstrak [3]: pertanyaan kausal diuji dengan desain one-group pre/post-test.
+id: R-CAUSAL-01
+priority: high
+title: Pertanyaan kausal, desain mungkin belum mendukung inferensi kausal
+why_flagged: >-
+  Pertanyaan atau klaim memakai bahasa sebab-akibat, sedangkan desain yang tercantum
+  (mis. one-group pre-test/post-test, survei satu kali, korelasi) umumnya hanya menunjukkan
+  perubahan atau hubungan, bukan dampak kausal.
+suggested_clarification: >-
+  Apakah pertanyaan ini ingin dirumuskan sebagai hubungan/perubahan, atau desain perlu kelompok
+  pembanding agar klaim kausal dapat didukung?
+check:
+  kind: conflict
+  a:
+    types: [research_question, objective, claim]
+    any_terms: [pengaruh, berpengaruh, mempengaruhi, memengaruhi, dampak, efek, efektivitas, menyebabkan, impact, effect, effectiveness, cause]
+  b:
+    types: [method]
+    any_terms: [one group, satu kelompok, pre test post test, pretest posttest, tanpa kelompok kontrol, cross sectional, survei satu kali, korelasi, correlational, korelasional]
+examples:
+  fires:
+    elements:
+      - {type: research_question, content: "Bagaimana pengaruh model PBL terhadap kemampuan pemecahan masalah?", page: 5}
+      - {type: method, content: "Desain one-group pre-test/post-test.", page: 21}
+  quiet:
+    elements:
+      - {type: research_question, content: "Bagaimana pengaruh model PBL terhadap kemampuan pemecahan masalah?", page: 5}
+      - {type: method, content: "Quasi-eksperimen dengan kelompok kontrol (nonequivalent control group design).", page: 21}

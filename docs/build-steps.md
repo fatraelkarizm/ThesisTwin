@@ -117,7 +117,7 @@ Status: ⬜ belum · 🔄 dikerjakan · ✅ selesai · ⛔ terblokir · 👥 but
 ### Langkah 13 — Rule engine membaca `rules/*.yaml`
 - **Output:** engine deterministik; tiap finding membawa `rule_id` (abstrak: "each flag cites a rule").
 - **Selesai jika:** menambah aturan = menambah file data + tes, tanpa mengubah engine.
-- **Status:** ⬜
+- **Status:** ✅ (2026-11-24) — `domain/rules.py` (cek `conflict`, `requires`, `required_sections`), pemuat `services/rules.py`. Tiap aturan wajib membawa contoh `fires`/`quiet`; satu tes generik menjalankan semuanya. Temuan dengan evidence belum terverifikasi → `needs_user_confirmation`. Keterbatasan: pencocokan kata kunci tidak memahami negasi.
 
 ### Langkah 14 — 5–10 aturan pertama
 - **Output:** termasuk **pertanyaan kausal vs desain one-group pre/post-test** (abstrak [3]), RQ→objective, objective→analisis, variabel→instrumen, **bagian wajib panduan Matematika**.
