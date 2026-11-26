@@ -26,9 +26,10 @@ from app.domain.impact import change_impact
 from app.domain.rules import Element, Rule, run
 from app.domain.status import Status
 from app.domain.verification import verify_quote
+from app.parsing.detect import PDF_MEDIA
 from app.services import audit
 from app.services.documents import ProjectNotFound
-from app.services.rules import load_rules
+from app.services.rules import load_rules, rule_meta
 
 UNREVIEWED = {Status.AI_SUGGESTED.value, Status.NEEDS_USER_CONFIRMATION.value}
 
@@ -282,8 +283,19 @@ def build_brief(
         if diff
         else []
     )
+    meta = rule_meta()
     findings = [
-        brief_mod.BriefFinding(f.id, f.rule_id, f.title, f.priority, f.status)
+        brief_mod.BriefFinding(
+            f.id,
+            f.rule_id,
+            f.title,
+            f.priority,
+            f.status,
+            why_flagged=f.why_flagged,
+            evidence=tuple(brief_mod.BriefEvidence(e.element, e.page) for e in f.evidence),
+            basis=meta[f.rule_id].basis if f.rule_id in meta else None,
+            source_types=tuple(meta[f.rule_id].source_types) if f.rule_id in meta else (),
+        )
         for f in list_findings(session, versions[-1].id)
     ]
     previous_rules = (
@@ -306,6 +318,7 @@ def build_brief(
         findings=findings,
         previous_rules=previous_rules,
         impacts=impacts,
+        unit="page" if versions[-1].media_type == PDF_MEDIA else "section",
     )
 
 

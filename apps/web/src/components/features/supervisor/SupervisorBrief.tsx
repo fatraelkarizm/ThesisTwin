@@ -2,6 +2,8 @@
 
 import { BookOpenCheck, Check, CircleAlert, Printer, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { BasisNote } from "@/components/domain/BasisNote";
+import { EvidenceChip } from "@/components/domain/EvidenceChip";
 import { PriorityTag } from "@/components/domain/PriorityTag";
 import { StatusBadge } from "@/components/domain/StatusBadge";
 import { Badge } from "@/components/ui/Badge";
@@ -93,6 +95,22 @@ export function SupervisorBrief({ token }: { token: string }) {
                       <span className="text-xs text-muted">{f.rule_id}</span>
                     </div>
                     <p className="mt-2 text-sm font-semibold">{f.title}</p>
+                    {f.why_flagged ? <p className="mt-1 text-sm">{f.why_flagged}</p> : null}
+                    {f.evidence.length ? (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {f.evidence.map((e, i) => (
+                          <EvidenceChip
+                            key={`${e.element}-${e.page}-${i}`}
+                            evidence={{ ...e, document: `v${brief.to_version}`, unit: brief.unit }}
+                          />
+                        ))}
+                      </div>
+                    ) : null}
+                    {f.basis ? (
+                      <div className="mt-2">
+                        <BasisNote basis={f.basis} sourceTypes={f.source_types} />
+                      </div>
+                    ) : null}
                     {decided[f.id] ? (
                       <p className="mt-3 flex items-center gap-2 text-sm">
                         <StatusBadge status={decided[f.id] as BriefFindingOut["status"]} /> {s.decided}

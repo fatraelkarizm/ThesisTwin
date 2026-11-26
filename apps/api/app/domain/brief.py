@@ -25,12 +25,23 @@ TYPE_LABEL = {
 
 
 @dataclass(frozen=True)
+class BriefEvidence:
+    element: str  # label elemen, mis. "Rumusan masalah", atau nama bagian dokumen
+    page: int
+
+
+@dataclass(frozen=True)
 class BriefFinding:
     id: str
     rule_id: str
     title: str
     priority: str
     status: str
+    # Agar dosen bisa memutuskan tanpa membuka dokumen (docs/feedback/supervisor-burden.md §2.1).
+    why_flagged: str = ""
+    evidence: tuple[BriefEvidence, ...] = ()
+    basis: str | None = None
+    source_types: tuple[str, ...] = ()
 
 
 @dataclass
@@ -40,6 +51,7 @@ class Brief:
     from_version: int | None
     to_version: int
     generated_at: datetime
+    unit: str = "page"  # "page" (PDF) atau "section" (Word/LaTeX): satuan nomor di evidence
     changes: list[str] = field(default_factory=list)
     comments: list[CommentStatus] = field(default_factory=list)
     open_findings: list[BriefFinding] = field(default_factory=list)
@@ -82,6 +94,7 @@ def build_brief(
     findings: list[BriefFinding],
     previous_rules: set[str],
     impacts: list[Impact] | None = None,
+    unit: str = "page",
 ) -> Brief:
     open_ = [f for f in findings if f.status in {"ai_suggested", "needs_user_confirmation"}]
     awaiting = [f for f in findings if f.status == "student_confirmed"]
@@ -92,6 +105,7 @@ def build_brief(
         from_version=from_version,
         to_version=to_version,
         generated_at=generated_at,
+        unit=unit,
         changes=describe_changes(diff) if diff else [],
         comments=comments,
         open_findings=open_,
@@ -134,7 +148,12 @@ def render_text(b: Brief) -> str:
         out.append("- Tidak ada komentar yang terbaca.")
 
     out += ["", "Menunggu keputusan dosen:"]
-    out += [f"- [{f.rule_id}] {f.title}" for f in b.awaiting_supervisor] or ["- Tidak ada."]
+    where = "bagian" if b.unit == "section" else "hlm."
+    for f in b.awaiting_supervisor:
+        pages = ", ".join(f"{e.element} {where} {e.page}" for e in f.evidence)
+        out.append(f"- [{f.rule_id}] {f.title}" + (f" ({pages})" if pages else ""))
+    if not b.awaiting_supervisor:
+        out.append("- Tidak ada.")
 
     out += ["", "Temuan terbuka (belum dikonfirmasi mahasiswa):"]
     out += [f"- [{f.rule_id}] {f.title}" for f in b.open_findings] or ["- Tidak ada."]

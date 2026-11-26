@@ -17,7 +17,7 @@ Tidak ada notifikasi, email, tenggat, atau kewajiban mengisi apa pun dari sisi a
 
 ## 2. Titik yang berpotensi memberatkan (hipotesis tim, belum diuji)
 
-1. **Keputusan temuan tanpa konteks.** Kartu "menunggu dosen" hanya memuat prioritas, ID aturan, dan judul. Landasan, arah, dan bukti halaman tidak ikut tampil, sehingga dosen mungkin harus membuka dokumen untuk memutuskan. Kandidat perbaikan: tampilkan bukti halaman dan landasan di kartu itu.
+1. ~~**Keputusan temuan tanpa konteks.**~~ **Ditangani 2026-11-26:** kartu "menunggu dosen" kini memuat alasan, bukti (elemen + halaman/bagian), landasan beserta asal sumbernya; teks brief untuk chat ikut mencantumkan halaman. Apakah ini *cukup* untuk memutuskan tanpa membuka dokumen masih perlu dicek ke dosen (pertanyaan no. 9).
 2. **Panjang ringkasan tidak dibatasi.** Proposal dengan banyak temuan menghasilkan daftar panjang. Belum ada batas atau urutan "3 hal terpenting".
 3. **Tautan kedaluwarsa 14 hari.** Bila dosen membuka setelah itu, mahasiswa harus membuat tautan baru. Belum diketahui apakah ini mengganggu.
 4. **Istilah aturan** (mis. `R-CAUSAL-01`) mungkin tidak bermakna bagi dosen.

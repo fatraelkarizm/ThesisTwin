@@ -168,3 +168,25 @@ def test_style_finding_keeps_page_evidence(client):  # noqa: F811
     assert {e["element"] for e in f["evidence"]} == {"koma desimal", "titik desimal"}
     assert all(e["page"] for e in f["evidence"])
     assert f["source_types"] == ["math_writing"] and len(f["directions"]) == 3
+
+
+def test_supervisor_can_decide_from_the_brief_alone(client):  # noqa: F811
+    # Audit beban dosen §2.1: kartu keputusan butuh alasan, bukti halaman, dan landasan.
+    pid = client.post("/projects", json={"title": "S", "program": "matematika"}).json()["id"]
+    client.post(f"/projects/{pid}/consent")
+    vid = _upload(client, pid, V1)
+    _element(client, vid, "research_question", RQ_OLD, 1)
+    _element(client, vid, "method", METHOD, 2)
+    causal = next(
+        f for f in client.post(f"/versions/{vid}/check").json() if f["rule_id"] == "R-CAUSAL-01"
+    )
+    client.post(f"/findings/{causal['id']}/status", json={"target": "student_confirmed"})
+
+    token = client.post(f"/projects/{pid}/share").json()["token"]
+    [f] = client.get(f"/share/{token}").json()["awaiting_supervisor"]
+    assert f["why_flagged"] and f["basis"] and f["source_types"] == ["methodology"]
+    assert {(e["element"], e["page"]) for e in f["evidence"]} == {
+        ("Rumusan masalah", 1),
+        ("Metode/desain", 2),
+    }
+    assert "Rumusan masalah bagian 1" in client.get(f"/share/{token}/brief.txt").text

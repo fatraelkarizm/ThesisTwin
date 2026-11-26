@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/Button";
 import { copy } from "@/lib/copy";
 import type { Finding } from "@/types/domain";
 import { AiLabel } from "./AiLabel";
+import { BasisNote } from "./BasisNote";
 import { ConfidenceMeter } from "./ConfidenceMeter";
 import { EvidenceChip } from "./EvidenceChip";
 import { PriorityTag } from "./PriorityTag";
@@ -50,18 +51,7 @@ export function FindingCard({ finding, onConfirm, onReject }: FindingCardProps) 
           </ul>
         </div>
       ) : null}
-      {finding.basis ? (
-        <p className="border-l-2 border-line pl-2 text-xs text-muted">
-          <span className="font-medium">
-            {copy.basis}
-            {finding.sourceTypes?.length
-              ? ` (${finding.sourceTypes.map((t) => copy.sourceType[t]).join(", ")})`
-              : ""}
-            :{" "}
-          </span>
-          {finding.basis}
-        </p>
-      ) : null}
+      {finding.basis ? <BasisNote basis={finding.basis} sourceTypes={finding.sourceTypes} /> : null}
       {finding.references?.length ? (
         <details className="text-xs">
           <summary className="cursor-pointer font-medium text-brand-strong">

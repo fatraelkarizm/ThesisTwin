@@ -82,6 +82,10 @@ export interface BriefFindingOut {
   title: string;
   priority: Priority;
   status: Status;
+  why_flagged: string;
+  evidence: { element: string; page: number }[];
+  basis: string | null;
+  source_types: SourceType[];
 }
 
 export interface BriefOut {
@@ -90,6 +94,7 @@ export interface BriefOut {
   from_version: number | null;
   to_version: number;
   generated_at: string;
+  unit: "page" | "section";
   changes: string[];
   comments: CommentStatusOut[];
   open_findings: BriefFindingOut[];
