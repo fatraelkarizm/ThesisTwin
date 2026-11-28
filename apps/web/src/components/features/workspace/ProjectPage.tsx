@@ -32,33 +32,31 @@ export function ProjectPage({ step, versionPicker = true, children }: ProjectPag
 
   return (
     <main className="flex flex-1 flex-col bg-surface">
-      <header className="border-b border-line px-4 pt-6 pb-5 md:px-8">
-        <div className="mx-auto max-w-5xl">
+      <header className="border-b border-line px-4 pt-6 md:px-8">
         <p className="text-xs font-semibold uppercase tracking-wide text-brand-strong">
           {copy.stepLabel(step, steps.length)}
         </p>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight">{current.title}</h1>
         <p className="mt-1 max-w-3xl text-sm text-muted">{current.description}</p>
 
-        <ol className="mt-4 flex flex-wrap gap-1.5" aria-label={copy.shell.workflow}>
+        <ol className="-mb-px mt-5 flex gap-6 overflow-x-auto" aria-label={copy.shell.workflow}>
           {steps.map((s, i) => (
             <li key={s.href}>
               <Link
                 href={s.href}
                 aria-current={i + 1 === step ? "step" : undefined}
-                className={`inline-flex min-h-9 items-center gap-1.5 rounded-full border px-3 text-xs ${
+                className={`inline-flex min-h-11 items-center gap-1.5 whitespace-nowrap border-b-2 text-sm ${
                   i + 1 === step
-                    ? "border-brand bg-brand-soft font-semibold text-brand-strong"
-                    : "border-line text-muted hover:text-foreground"
+                    ? "border-brand font-semibold text-foreground"
+                    : "border-transparent text-muted hover:border-line hover:text-foreground"
                 }`}
               >
-                <span className="tabular-nums">{i + 1}</span>
+                <span className="tabular-nums">{i + 1}.</span>
                 {s.short}
               </Link>
             </li>
           ))}
         </ol>
-        </div>
       </header>
 
       <div className="flex-1 px-4 py-6 md:px-8">
@@ -79,7 +77,7 @@ export function ProjectPage({ step, versionPicker = true, children }: ProjectPag
         ) : null}
 
         {state.status === "ready" && version ? (
-          <div className="mx-auto max-w-5xl space-y-6">
+          <div className="space-y-6">
             {versionPicker && state.versions.length > 0 ? (
               <div className="flex flex-wrap items-center gap-2" role="group" aria-label={copy.workspace.version}>
                 <span className="text-xs font-medium text-muted">{copy.workspace.version}</span>
