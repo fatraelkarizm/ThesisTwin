@@ -1,38 +1,53 @@
 # Ontologi elemen penelitian (docs/data-model.md). DATA, bukan kode: diubah tanpa menyentuh engine.
 # Divalidasi oleh app/domain/ontology.py (Ontology); referensi tipe yang tidak dikenal ditolak saat dimuat.
 
+# code: awalan nomor elemen di UI (R1, T2, ...). short: nama ringkas di peta (default = label).
 element_types:
   - id: research_question
     label: Rumusan masalah
+    code: R
     layer: 0
     baseline_question: "Mengapa masalah “{content}” penting dan layak diteliti sekarang?"
   - id: objective
     label: Tujuan
+    code: T
     layer: 1
   - id: variable
     label: Variabel
+    code: V
     layer: 2
   - id: population
     label: Populasi
+    code: P
+    short: Data
     layer: 2
   - id: method
     label: Metode/desain
+    code: D
+    short: Desain
     layer: 3
     baseline_question: "Mengapa memilih desain “{content}” dibanding alternatifnya?"
   - id: instrument
     label: Instrumen
+    code: I
     layer: 3
     baseline_question: "Bagaimana “{content}” disusun, dan sudah diuji coba pada siapa?"
   - id: analysis
     label: Analisis
+    code: A
     layer: 4
     baseline_question: "Asumsi apa yang harus dipenuhi oleh “{content}”, dan bagaimana Anda mengujinya?"
   - id: claim
     label: Klaim
+    code: K
     layer: 5
   - id: limitation
     label: Keterbatasan
+    code: B
     layer: 5
+
+# Urutan kotak di peta penelitian halaman Isi Proposal (alur baca Bab I -> Bab III).
+map: [research_question, objective, method, variable, population, instrument, analysis]
 
 # Rantai dependency utama proposal. Urutan = urutan pemeriksaan celah.
 # gap_question: pertanyaan sidang bila `source` ada tetapi `target` tidak ada sama sekali.

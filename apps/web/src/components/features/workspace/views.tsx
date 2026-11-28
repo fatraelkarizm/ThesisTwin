@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, FileText, RefreshCw } from "lucide-react";
+import { Eye, RefreshCw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { BriefDocument } from "@/components/domain/BriefDocument";
 import { Button } from "@/components/ui/Button";
@@ -11,17 +11,15 @@ import {
   toFinding,
   type BriefOut,
   type CommentStatusOut,
-  type ElementOut,
   type ElementType,
-  type GraphOut,
   type StressQuestionOut,
 } from "@/lib/api";
 import { copy } from "@/lib/copy";
 import type { Finding } from "@/types/domain";
-import { AddElementForm, ElementList } from "./ElementsPanel";
+import { AddElementForm } from "./ElementsPanel";
 import { FindingGroup, groupFindings, isOpen } from "./FindingGroup";
-import { GraphView } from "./GraphView";
 import { ProjectPage, type ProjectContext } from "./ProjectPage";
+import { ElementCard, numberElements, ResearchMap, TypePanel } from "./ResearchMap";
 import { CommentsPanel, SharePanel } from "./SidePanels";
 import { StressPanel } from "./StressPanel";
 
@@ -48,56 +46,91 @@ function useVersionData<T>(versionId: string, load: (id: string) => Promise<T>) 
 
 // ---- 1. Isi proposal ----------------------------------------------------------------------
 
-const loadProposal = (id: string) => Promise.all([api.elements(id), api.graph(id)]);
+const loadProposal = (id: string) => Promise.all([api.elements(id), api.graph(id), api.ontology()]);
 
 export function ProposalView({ version, unit }: ProjectContext) {
   const w = copy.workspace;
-  const [tab, setTab] = useState<"elements" | "graph">("elements");
   const { data, setData, error, setError } = useVersionData(version.id, loadProposal);
-  const elements: ElementOut[] = data?.[0] ?? [];
-  const graph: GraphOut | null = data?.[1] ?? null;
+  const [picked, setPicked] = useState<ElementType | null>(null);
+  if (!data) return <ErrorNote error={error} />;
+
+  const [elements, graph, ontology] = data;
+  const numbered = numberElements(elements, ontology);
+  const types = new Map(ontology.element_types.map((t) => [t.id, t]));
+  const filled = ontology.map.filter((t) => elements.some((e) => e.type === t));
+  const selected = picked ?? filled[0] ?? ontology.map[0];
+  const pages = [...new Set(elements.map((e) => e.page))].sort((a, b) => a - b);
+  const where = unit === "section" ? w.form.section : w.form.page;
 
   async function add(body: { type: ElementType; content: string; quote: string; page: number }) {
     try {
       const el = await api.addElement(version.id, body);
-      setData([[...elements, el], await api.graph(version.id)]);
+      setData([[...elements, el], await api.graph(version.id), ontology]);
       setError(null);
     } catch (e) {
       setError(message(e));
     }
   }
 
+  const stats = [
+    { label: w.stats.elements, value: String(elements.length) },
+    { label: w.stats.verified, value: `${elements.filter((e) => e.verified).length} / ${elements.length}` },
+    {
+      label: w.stats.typesFilled,
+      value: `${filled.length} / ${ontology.map.length}`,
+      warn: filled.length < ontology.map.length,
+    },
+    { label: unit === "section" ? w.stats.sections : w.stats.pages, value: pages.join(", ") || "–" },
+  ];
+
   return (
     <>
-      <p className="flex items-center gap-2 text-sm">
-        <FileText aria-hidden="true" className="size-4 text-brand-strong" />
-        {w.summaryDetected(elements.length, elements.filter((e) => e.verified).length)}
-      </p>
-      <div role="tablist" aria-label={w.tabElements} className="flex gap-1 border-b border-line">
-        {(["elements", "graph"] as const).map((t) => (
-          <button
-            key={t}
-            role="tab"
-            type="button"
-            aria-selected={tab === t}
-            onClick={() => setTab(t)}
-            className={`-mb-px min-h-11 border-b-2 px-4 text-sm ${
-              tab === t ? "border-brand font-semibold text-brand-strong" : "border-transparent text-muted"
-            }`}
-          >
-            {t === "elements" ? `${w.tabElements} (${elements.length})` : w.tabGraph}
-          </button>
-        ))}
-      </div>
       <ErrorNote error={error} />
-      {tab === "elements" ? (
-        <div className="space-y-6">
-          <ElementList elements={elements} unit={unit} />
-          <AddElementForm unit={unit} onAdd={add} />
-        </div>
-      ) : graph ? (
-        <GraphView graph={graph} unit={unit} />
-      ) : null}
+      <dl className="grid grid-cols-2 divide-line rounded-card border border-line bg-surface lg:grid-cols-4 lg:divide-x">
+        {stats.map((s) => (
+          <div key={s.label} className="px-4 py-3">
+            <dt className="text-xs text-muted">{s.label}</dt>
+            <dd className={`mt-1 truncate text-2xl font-semibold tabular-nums ${s.warn ? "text-tone-warning-fg" : ""}`}>
+              {s.value}
+            </dd>
+          </div>
+        ))}
+      </dl>
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <ResearchMap
+          ontology={ontology}
+          numbered={numbered}
+          gaps={graph.gaps}
+          selected={selected}
+          onSelect={setPicked}
+        />
+        <TypePanel
+          info={types.get(selected)}
+          items={numbered.filter((n) => n.el.type === selected)}
+          where={where}
+        />
+      </div>
+
+      <section aria-labelledby="elements-title" className="space-y-3">
+        <h2 id="elements-title" className="text-lg font-semibold">
+          {w.cardsTitle}
+        </h2>
+        {numbered.length ? (
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {numbered.map((n) => (
+              <ElementCard key={n.el.id} item={n} info={types.get(n.el.type)} where={where} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-muted">{w.noElements}</p>
+        )}
+        <AddElementForm
+          unit={unit}
+          types={ontology.element_types.map((t) => ({ id: t.id, label: t.label }))}
+          onAdd={add}
+        />
+      </section>
     </>
   );
 }

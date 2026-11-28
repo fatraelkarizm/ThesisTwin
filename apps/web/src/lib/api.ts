@@ -105,6 +105,13 @@ export interface BriefOut {
   open_summary: string[]; // satu baris per aturan
 }
 
+/** Ontologi dari server (apps/api/config/ontology.yaml): label, kode, dan urutan peta. */
+export interface OntologyOut {
+  element_types: { id: ElementType; label: string; short: string; code: string; layer: number }[];
+  relations: { source: ElementType; target: ElementType; type: string }[];
+  map: ElementType[];
+}
+
 export interface GraphOut {
   nodes: ElementOut[];
   edges: { src: string; dst: string; type: string }[];
@@ -210,6 +217,7 @@ export const api = {
   addElement: (versionId: string, body: { type: ElementType; content: string; quote: string; page: number }) =>
     request<ElementOut>(`/versions/${versionId}/elements`, json(body)),
   graph: (versionId: string) => request<GraphOut>(`/versions/${versionId}/graph`),
+  ontology: () => request<OntologyOut>("/ontology"),
   stressTest: (versionId: string, regenerate = false) =>
     request<StressQuestionOut[]>(`/versions/${versionId}/stress-test${regenerate ? "?regenerate=true" : ""}`, {
       method: "POST",

@@ -10,6 +10,7 @@ from app.services.config import (
     load_ontology,
 )
 from app.services.rules import load_rules
+from tests.test_projects_api import client  # noqa: F401
 
 
 def _copy_config(tmp_path: Path, **override: str) -> Path:
@@ -28,7 +29,7 @@ def test_shipped_config_loads():
 
 def test_relation_to_unknown_type_is_rejected_with_filename(tmp_path):
     bad = """
-element_types: [{id: objective, label: Tujuan, layer: 1}]
+element_types: [{id: objective, label: Tujuan, code: T, layer: 1}]
 relations: [{source: objective, target: hasil, type: requires}]
 """
     with pytest.raises(ConfigFileError, match=r"(?s)ontology\.yaml.*hasil"):
@@ -65,3 +66,14 @@ def test_defense_question_placeholders_are_element_types(rule):
     fields = {f for _, f, _, _ in string.Formatter().parse(rule.defense_question) if f}
     assert fields <= set(load_ontology().type_ids)
     assert rule.defense_question.rstrip().endswith("?")
+
+
+def test_ontology_endpoint_serves_labels_codes_and_map(client):  # noqa: F811
+    body = client.get("/ontology").json()
+    types = {t["id"]: t for t in body["element_types"]}
+    assert types["method"]["short"] == "Desain" and types["research_question"]["code"] == "R"
+    assert types["objective"]["short"] == "Tujuan"  # tanpa short -> label
+    assert body["map"][0] == "research_question"
+    assert {"source": "research_question", "target": "objective", "type": "addresses"} in body[
+        "relations"
+    ]

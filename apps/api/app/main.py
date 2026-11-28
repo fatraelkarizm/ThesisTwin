@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import errors, health, projects, review, share
+from app.api import errors, health, ontology, projects, review, share
 from app.core.config import settings
 from app.db.session import init_db
 
@@ -21,6 +21,7 @@ app.add_middleware(
 )
 errors.register(app)
 app.include_router(health.router)
+app.include_router(ontology.router)
 app.include_router(projects.router)
 app.include_router(review.router)
 app.include_router(share.router)

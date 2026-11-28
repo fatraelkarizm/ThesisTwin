@@ -33,11 +33,23 @@ export function ProjectPage({ step, versionPicker = true, children }: ProjectPag
   return (
     <main className="flex flex-1 flex-col bg-surface">
       <header className="border-b border-line px-4 pt-6 md:px-8">
-        <p className="text-xs font-semibold uppercase tracking-wide text-brand-strong">
-          {copy.stepLabel(step, steps.length)}
-        </p>
-        <h1 className="mt-1 text-2xl font-semibold tracking-tight">{current.title}</h1>
-        <p className="mt-1 max-w-3xl text-sm text-muted">{current.description}</p>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold text-brand-strong">{copy.stepLabel(step, steps.length)}</p>
+            <h1 className="mt-1 text-2xl font-semibold tracking-tight">{current.title}</h1>
+            <p className="mt-1 max-w-3xl text-sm text-muted">{current.description}</p>
+          </div>
+          {next ? (
+            <Link
+              href={next.href}
+              aria-label={`${copy.nextStep}: ${next.short}`}
+              className={buttonClass("primary", "shrink-0")}
+            >
+              {next.short}
+              <ArrowRight aria-hidden="true" className="size-4" />
+            </Link>
+          ) : null}
+        </div>
 
         <ol className="-mb-px mt-5 flex gap-6 overflow-x-auto" aria-label={copy.shell.workflow}>
           {steps.map((s, i) => (
@@ -101,14 +113,6 @@ export function ProjectPage({ step, versionPicker = true, children }: ProjectPag
 
             {children({ project: state.project, versions: state.versions, version, unit, reload })}
 
-            {next ? (
-              <div className="flex justify-end border-t border-line pt-5">
-                <Link href={next.href} className={buttonClass("secondary")}>
-                  {copy.nextStep}: {next.short}
-                  <ArrowRight aria-hidden="true" className="size-4" />
-                </Link>
-              </div>
-            ) : null}
           </div>
         ) : null}
       </div>
