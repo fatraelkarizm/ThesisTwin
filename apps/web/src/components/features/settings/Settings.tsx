@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import { api, ApiError, type ProjectOut, type ShareLinkOut } from "@/lib/api";
 import { copy } from "@/lib/copy";
-import { PROJECT_KEY, savedProjectId } from "@/lib/project";
+import { saveProjectId, savedProjectId } from "@/lib/project";
 
 const fmt = (iso: string) => new Date(iso).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
 
@@ -48,7 +48,7 @@ export function Settings() {
     if (!project) return;
     try {
       await api.deleteProject(project.id);
-      window.localStorage.removeItem(PROJECT_KEY);
+      saveProjectId(null);
       router.push("/");
     } catch (e) {
       setError(e instanceof ApiError ? e.message : String(e));

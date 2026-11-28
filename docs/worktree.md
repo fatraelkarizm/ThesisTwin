@@ -85,6 +85,7 @@ Berlaku untuk semua file di `components/ui` dan `components/domain`.
 | `EvidenceChip` | `domain/` | `document`, `page` | klik → buka sumber |
 | `AiLabel` | `domain/` | — | wajib untuk konten AI |
 | `FindingCard` | `domain/` | `finding: Finding`, `onConfirm`, `onReject` | memakai StatusBadge + EvidenceChip + `why_flagged` |
+| `FindingGuidance` | `domain/` | `finding` (directions, basis, sourceTypes, references) | arah + landasan + rujukan, dilipat; dipakai `FindingCard` dan kartu kelompok temuan |
 | `NodeDetailPanel` | `features/graph` | `node` | sumber, status, feedback terkait |
 
 ## 4. Aturan Ketat Modul Reusable (Backend)

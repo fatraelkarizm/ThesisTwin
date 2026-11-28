@@ -1,55 +1,98 @@
-import { render, screen, within } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { copy } from "@/lib/copy";
-import { FindingQueue } from "./FindingQueue";
-import { ToolsPanel } from "./ToolsPanel";
-import { findings } from "./sample";
+import { Dashboard, Home, type Live } from "./Dashboard";
+import { journey, type JourneyInput } from "./journey";
 
-describe("ToolsPanel", () => {
-  it("hanya tool yang tersedia menjadi tautan; sisanya berlabel Segera", () => {
-    render(<ToolsPanel />);
-    const links = screen.getAllByRole("link");
-    expect(links).toHaveLength(1);
-    expect(links[0]).toHaveTextContent(copy.dashboard.tools.items.consistency.title);
-    expect(screen.getAllByText(copy.soon)).toHaveLength(3);
+const fresh: JourneyInput = {
+  elements: 8,
+  verified: 8,
+  findingsTotal: 5,
+  findingsOpen: 5,
+  questions: 0,
+  answered: 0,
+  versions: 1,
+  commentsPending: 0,
+  linksCreated: 0,
+};
+
+describe("journey", () => {
+  it("draf baru: langkah berikutnya meninjau temuan, dengan jumlahnya", () => {
+    const j = journey(fresh);
+    expect(j.next.href).toBe("/temuan");
+    expect(j.next.title).toBe(copy.home.journey.next.findings(5).title);
+    expect(j.steps.map((s) => s.state)).toEqual(["done", "next", "todo", "later", "todo"]);
+  });
+
+  it("tanpa elemen terbaca: mulai dari isi proposal, cek konsistensi belum dianggap selesai", () => {
+    const j = journey({ ...fresh, elements: 0, verified: 0, findingsTotal: 0, findingsOpen: 0 });
+    expect(j.next.href).toBe("/proyek");
+    expect(j.steps[1].state).not.toBe("done");
+  });
+
+  it("satu versi: perbandingan versi dilewati, langsung ke kirim brief", () => {
+    const j = journey({ ...fresh, findingsOpen: 0, questions: 3, answered: 3 });
+    expect(j.next.href).toBe("/brief");
+    expect(j.steps[3].state).toBe("later");
+  });
+
+  it("revisi dengan komentar dosen belum ditandai: ke perubahan versi", () => {
+    const j = journey({ ...fresh, findingsOpen: 0, questions: 3, answered: 3, versions: 2, commentsPending: 2 });
+    expect(j.next.href).toBe("/versi");
+  });
+
+  it("semua selesai: arahkan ke unggah revisi", () => {
+    const j = journey({ ...fresh, findingsOpen: 0, questions: 3, answered: 3, versions: 2, linksCreated: 1 });
+    expect(j.done).toBe(5);
+    expect(j.next.href).toBe("/upload");
   });
 });
 
-describe("ToolsPanel (proyek nyata)", () => {
-  it("tiap tool menaut ke halamannya sendiri dan berlabel Tersedia, bukan simulasi", () => {
-    render(<ToolsPanel live />);
-    const links = screen.getAllByRole("link");
-    expect(links).toHaveLength(4);
-    expect(links.map((a) => a.getAttribute("href"))).toEqual(["/temuan", "/versi", "/brief", "/stress-test"]);
-    expect(screen.getAllByText(copy.dashboard.tools.available)).toHaveLength(4);
-    expect(screen.queryByText(copy.simulated)).not.toBeInTheDocument();
-  });
+const live: Live = {
+  project: { id: "p1", title: "Skripsi PBL", program: "matematika", consent_at: "x" },
+  latest: {
+    id: "v1",
+    version_no: 1,
+    filename: "proposal.docx",
+    media_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    sha256: "a",
+    uploaded_at: "2026-11-24T00:00:00Z",
+  },
+  journey: journey(fresh),
+  open: [1, 2, 3, 4].map((n) => ({
+    id: `F${n}`,
+    ruleId: "R-X",
+    priority: "high",
+    title: `Temuan ${n}`,
+    whyFlagged: "w",
+    suggestedClarification: "s?",
+    evidence: [{ element: "Rumusan masalah", document: "v1", page: n, unit: "section" }],
+    confidence: 1,
+    status: "ai_suggested",
+    aiGenerated: false,
+  })),
+};
+
+afterEach(() => {
+  window.localStorage.clear();
+  vi.unstubAllGlobals();
 });
 
-describe("FindingQueue (proyek nyata)", () => {
-  it("keputusan dikirim lewat onDecide dan hasil API yang ditampilkan", async () => {
-    const onDecide = vi.fn().mockResolvedValue({ ...findings[0], status: "student_confirmed" });
-    render(<FindingQueue initial={[findings[0]]} onDecide={onDecide} />);
-    await userEvent.click(screen.getByRole("button", { name: copy.confirm }));
-    expect(onDecide).toHaveBeenCalledWith(findings[0].id, "student_confirmed");
-    expect(await screen.findByText(copy.status.student_confirmed)).toBeInTheDocument();
-  });
-});
-
-describe("FindingQueue", () => {
-  it("konfirmasi mahasiswa mengubah status dan menghilangkan tombol aksi", async () => {
-    render(<FindingQueue initial={[findings[0]]} />);
-    await userEvent.click(screen.getByRole("button", { name: copy.confirm }));
-    expect(screen.getByText(copy.status.student_confirmed)).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: copy.confirm })).not.toBeInTheDocument();
+describe("Beranda", () => {
+  it("satu kartu langkah berikutnya, hanya 3 temuan teratas, dan tautan ke semua temuan", () => {
+    render(<Home live={live} />);
+    expect(screen.getByRole("heading", { name: copy.home.journey.next.findings(5).title })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Tinjau temuan/ })).toHaveAttribute("href", "/temuan");
+    expect(screen.getByText("Temuan 3")).toBeInTheDocument();
+    expect(screen.queryByText("Temuan 4")).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: copy.home.seeAll(4) })).toHaveAttribute("href", "/temuan");
   });
 
-  it("tolak mengubah status jadi Ditolak hanya pada temuan itu", async () => {
-    render(<FindingQueue initial={findings} />);
-    const items = screen.getAllByRole("listitem");
-    await userEvent.click(within(items[1]).getByRole("button", { name: copy.reject }));
-    expect(within(items[1]).getByText(copy.status.rejected)).toBeInTheDocument();
-    expect(within(items[0]).getByRole("button", { name: copy.confirm })).toBeInTheDocument();
+  it("tanpa proyek: onboarding, bukan data contoh", async () => {
+    vi.stubGlobal("fetch", vi.fn());
+    render(<Dashboard />);
+    expect(await screen.findByRole("heading", { name: copy.home.onboarding.title })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: new RegExp(copy.home.onboarding.cta) })).toHaveAttribute("href", "/upload");
+    expect(screen.queryByText(/simulasi/i)).not.toBeInTheDocument();
   });
 });

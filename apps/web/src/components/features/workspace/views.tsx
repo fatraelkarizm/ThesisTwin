@@ -1,8 +1,7 @@
 "use client";
 
-import { FileText, Play } from "lucide-react";
+import { FileText, RefreshCw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { FindingCard } from "@/components/domain/FindingCard";
 import { Button } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import {
@@ -13,18 +12,18 @@ import {
   type CommentStatusOut,
   type ElementOut,
   type ElementType,
-  type FindingApi,
   type GraphOut,
   type StressQuestionOut,
 } from "@/lib/api";
 import { copy } from "@/lib/copy";
+import type { Finding } from "@/types/domain";
 import { AddElementForm, ElementList } from "./ElementsPanel";
+import { FindingGroup, groupFindings, isOpen } from "./FindingGroup";
 import { GraphView } from "./GraphView";
 import { ProjectPage, type ProjectContext } from "./ProjectPage";
 import { BriefPanel, CommentsPanel } from "./SidePanels";
 import { StressPanel } from "./StressPanel";
 
-const OPEN = new Set(["ai_suggested", "needs_user_confirmation"]);
 const message = (e: unknown) => (e instanceof ApiError ? e.message : String(e));
 
 function ErrorNote({ error }: { error: string | null }) {
@@ -104,13 +103,21 @@ export function ProposalView({ version, unit }: ProjectContext) {
 
 // ---- 2. Cek konsistensi -------------------------------------------------------------------
 
+type Filter = "open" | "high" | "reviewed" | "all";
+
 export function FindingsView({ version, unit }: ProjectContext) {
   const w = copy.workspace;
   const { data, setData, error, setError } = useVersionData(version.id, api.findings);
   const [checking, setChecking] = useState(false);
-  const findings: FindingApi[] = data ?? [];
-  const open = findings.filter((f) => OPEN.has(f.status));
-  const done = findings.filter((f) => !OPEN.has(f.status));
+  const [filter, setFilter] = useState<Filter>("open");
+  const findings = (data ?? []).map((f) => toFinding(f, unit));
+  const subsets: Record<Filter, Finding[]> = {
+    open: findings.filter(isOpen),
+    high: findings.filter((f) => isOpen(f) && f.priority === "high"),
+    reviewed: findings.filter((f) => !isOpen(f)),
+    all: findings,
+  };
+  const groups = groupFindings(subsets[filter]);
 
   async function runCheck() {
     setChecking(true);
@@ -126,7 +133,7 @@ export function FindingsView({ version, unit }: ProjectContext) {
   async function decide(id: string, target: "student_confirmed" | "rejected") {
     try {
       const updated = await api.setStatus(id, target);
-      setData(findings.map((f) => (f.id === id ? updated : f)));
+      setData((data ?? []).map((f) => (f.id === id ? updated : f)));
     } catch (e) {
       setError(message(e));
     }
@@ -134,51 +141,46 @@ export function FindingsView({ version, unit }: ProjectContext) {
 
   return (
     <>
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-card border border-line bg-background p-4">
-        <p className="text-sm">
-          {w.counts(
-            open.length,
-            findings.filter((f) => f.status === "student_confirmed" || f.status === "supervisor_confirmed").length,
-            findings.filter((f) => f.status === "rejected").length,
-          )}
-        </p>
-        <Button onClick={runCheck} disabled={checking}>
-          <Play aria-hidden="true" className="size-4" />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div role="group" aria-label={w.filterLabel} className="flex flex-wrap gap-1.5">
+          {(Object.keys(w.filters) as Filter[]).map((k) => (
+            <button
+              key={k}
+              type="button"
+              aria-pressed={filter === k}
+              onClick={() => setFilter(k)}
+              className={`inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3.5 text-sm ${
+                filter === k ? "border-brand bg-brand-soft font-medium text-brand-strong" : "border-line hover:bg-surface-muted"
+              }`}
+            >
+              {w.filters[k]}
+              <span className="tabular-nums text-muted">{subsets[k].length}</span>
+            </button>
+          ))}
+        </div>
+        <Button variant="secondary" onClick={runCheck} disabled={checking}>
+          <RefreshCw aria-hidden="true" className="size-4" />
           {checking ? w.running : w.runCheck}
         </Button>
       </div>
       <ErrorNote error={error} />
-      <Section title={w.toReview}>
-        {open.length === 0 ? (
-          <p className="text-sm text-muted">{w.noneToReview}</p>
-        ) : (
-          <ul className="space-y-3">
-            {open.map((f) => (
-              <li key={f.id}>
-                <FindingCard
-                  finding={toFinding(f, unit)}
-                  onConfirm={(id) => decide(id, "student_confirmed")}
-                  onReject={(id) => decide(id, "rejected")}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
-      </Section>
-      {done.length > 0 ? (
-        <details className="rounded-card border border-line">
-          <summary className="flex min-h-11 cursor-pointer items-center px-4 text-sm font-semibold">
-            {w.reviewed} ({done.length})
-          </summary>
-          <ul className="space-y-3 p-4 pt-0">
-            {done.map((f) => (
-              <li key={f.id}>
-                <FindingCard finding={toFinding(f, unit)} />
-              </li>
-            ))}
-          </ul>
-        </details>
-      ) : null}
+      {groups.length === 0 ? (
+        <p className="rounded-card border border-dashed border-line p-6 text-center text-sm text-muted">
+          {filter === "open" ? w.noneToReview : w.noneInFilter}
+        </p>
+      ) : (
+        <ul className="space-y-3">
+          {groups.map((g) => (
+            <li key={g.ruleId}>
+              <FindingGroup
+                group={g}
+                onConfirm={(id) => decide(id, "student_confirmed")}
+                onReject={(id) => decide(id, "rejected")}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 }

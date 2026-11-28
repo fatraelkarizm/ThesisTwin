@@ -2,7 +2,7 @@ import {
   FileOutput,
   FileText,
   GitCompare,
-  LayoutDashboard,
+  House,
   ListChecks,
   Settings,
   ShieldQuestion,
@@ -13,18 +13,24 @@ import { copy } from "@/lib/copy";
 export interface NavItem {
   label: string;
   icon: LucideIcon;
-  // Tanpa href = rute belum dibangun; ditampilkan non-aktif dengan label "Segera".
-  href?: string;
+  href: string;
+  step?: number; // nomor langkah alur kerja; sama dengan penunjuk langkah di tiap halaman
 }
 
-const n = copy.shell.nav;
+const stepIcons: Record<string, LucideIcon> = {
+  "/proyek": FileText,
+  "/temuan": ListChecks,
+  "/stress-test": ShieldQuestion,
+  "/versi": GitCompare,
+  "/brief": FileOutput,
+};
 
-export const navItems: NavItem[] = [
-  { label: n.dashboard, icon: LayoutDashboard, href: "/" },
-  { label: n.proposals, icon: FileText, href: "/proyek" },
-  { label: n.findings, icon: ListChecks, href: "/temuan" },
-  { label: n.versions, icon: GitCompare, href: "/versi" },
-  { label: n.brief, icon: FileOutput, href: "/brief" },
-  { label: n.stressTest, icon: ShieldQuestion, href: "/stress-test" },
-  { label: n.settings, icon: Settings, href: "/pengaturan" },
-];
+// Diturunkan dari copy.steps agar urutan & nama sidebar tidak bisa berbeda dari stepper.
+export const homeItem: NavItem = { label: copy.shell.home, icon: House, href: "/" };
+export const stepItems: NavItem[] = copy.steps.map((s, i) => ({
+  label: s.short,
+  icon: stepIcons[s.href],
+  href: s.href,
+  step: i + 1,
+}));
+export const settingsItem: NavItem = { label: copy.shell.settings, icon: Settings, href: "/pengaturan" };

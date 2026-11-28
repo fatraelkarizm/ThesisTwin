@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/Button";
 import { copy } from "@/lib/copy";
 import type { Finding } from "@/types/domain";
 import { AiLabel } from "./AiLabel";
-import { BasisNote } from "./BasisNote";
 import { ConfidenceMeter } from "./ConfidenceMeter";
 import { EvidenceChip } from "./EvidenceChip";
+import { FindingGuidance } from "./FindingGuidance";
 import { PriorityTag } from "./PriorityTag";
 import { StatusBadge } from "./StatusBadge";
 
@@ -34,39 +34,6 @@ export function FindingCard({ finding, onConfirm, onReject }: FindingCardProps) 
         <span className="font-medium">{copy.suggestion}: </span>
         {finding.suggestedClarification}
       </p>
-      {finding.directions?.length ? (
-        <div className="rounded-lg bg-brand-soft/60 p-3">
-          <p className="text-sm font-semibold text-brand-strong">{copy.directionsTitle}</p>
-          <p className="text-xs text-muted">{copy.directionsNote}</p>
-          <ul className="mt-2 space-y-2 text-sm">
-            {finding.directions.map((d) => (
-              <li key={d.option} className="border-l-2 border-brand pl-2">
-                <p className="font-medium">{d.option}</p>
-                <p className="text-muted">
-                  <span className="font-medium">{copy.directionImplication}: </span>
-                  {d.implication}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-      {finding.basis ? <BasisNote basis={finding.basis} sourceTypes={finding.sourceTypes} /> : null}
-      {finding.references?.length ? (
-        <details className="text-xs">
-          <summary className="cursor-pointer font-medium text-brand-strong">
-            {copy.referencesTitle(finding.references.length)}
-          </summary>
-          <ul className="mt-1.5 space-y-1 pl-4 text-muted">
-            {finding.references.map((r) => (
-              <li key={r} className="-indent-4 pl-4">
-                {r}
-              </li>
-            ))}
-          </ul>
-          <p className="mt-1 italic text-muted">{copy.referencesNote}</p>
-        </details>
-      ) : null}
       <div className="flex flex-wrap gap-2">
         {hasEvidence ? (
           finding.evidence.map((e, i) => <EvidenceChip key={`${e.element}-${e.page}-${i}`} evidence={e} />)
@@ -74,6 +41,7 @@ export function FindingCard({ finding, onConfirm, onReject }: FindingCardProps) 
           <span className="text-xs text-muted">{copy.noEvidence}</span>
         )}
       </div>
+      <FindingGuidance finding={finding} />
       {onConfirm || onReject ? (
         <footer className="flex gap-2">
           {onConfirm ? <Button onClick={() => onConfirm(finding.id)}>{copy.confirm}</Button> : null}

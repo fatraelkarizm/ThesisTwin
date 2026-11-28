@@ -1,13 +1,13 @@
 "use client";
 
-import { CheckCircle2, CircleAlert, FileText, Info } from "lucide-react";
+import { ArrowRight, CheckCircle2, CircleAlert, FileText, FileUp, Info } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useId, useState, type FormEvent } from "react";
-import { Button } from "@/components/ui/Button";
+import { Button, buttonClass } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { api, ApiError, type UploadOut, type VersionOut } from "@/lib/api";
+import { api, ApiError, type ProjectOut, type UploadOut, type VersionOut } from "@/lib/api";
 import { copy } from "@/lib/copy";
-import { PROJECT_KEY } from "@/lib/project";
+import { PROJECT_KEY, saveProjectId } from "@/lib/project";
 
 const DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
@@ -19,8 +19,10 @@ type State =
 
 export function UploadForm() {
   const u = copy.upload;
-  const ids = { title: useId(), program: useId(), file: useId(), consent: useId() };
+  const ids = { title: useId(), program: useId(), file: useId(), fileLabel: useId(), consent: useId() };
   const [projectId, setProjectId] = useState<string | null>(null);
+  const [project, setProject] = useState<ProjectOut | null>(null);
+  const [dragging, setDragging] = useState(false);
   const [versions, setVersions] = useState<VersionOut[]>([]);
   const [title, setTitle] = useState("");
   const [program, setProgram] = useState<keyof typeof u.programs>("matematika");
@@ -31,9 +33,10 @@ export function UploadForm() {
   useEffect(() => {
     const saved = window.localStorage.getItem(PROJECT_KEY);
     if (!saved) return;
-    api.versions(saved).then(
-      (list) => {
+    Promise.all([api.project(saved), api.versions(saved)]).then(
+      ([p, list]) => {
         setProjectId(saved);
+        setProject(p);
         setVersions(list);
       },
       // Proyek lama tidak ada lagi (mis. database direset): mulai dari awal.
@@ -48,9 +51,11 @@ export function UploadForm() {
     try {
       let pid = projectId;
       if (!pid) {
-        pid = (await api.createProject(title.trim() || u.projectTitlePlaceholder, program)).id;
-        window.localStorage.setItem(PROJECT_KEY, pid);
+        const created = await api.createProject(title.trim() || u.projectTitlePlaceholder, program);
+        pid = created.id;
+        saveProjectId(pid);
         setProjectId(pid);
+        setProject(created);
       }
       await api.giveConsent(pid);
       const result = await api.upload(pid, file);
@@ -62,8 +67,9 @@ export function UploadForm() {
   }
 
   function reset() {
-    window.localStorage.removeItem(PROJECT_KEY);
+    saveProjectId(null);
     setProjectId(null);
+    setProject(null);
     setVersions([]);
     setState({ kind: "idle" });
   }
@@ -72,14 +78,14 @@ export function UploadForm() {
 
   return (
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
-      <Card title={u.formTitle} description={u.formDescription}>
+      <Card title={projectId ? u.formTitleRevision : u.formTitle}>
         <form onSubmit={submit} className="space-y-4">
           {projectId ? (
             <p className="flex items-center justify-between gap-3 rounded-lg bg-surface-muted px-3 py-2 text-sm">
-              <span>
-                {u.activeProject}: <span className="font-mono text-xs">{projectId.slice(0, 8)}</span>
+              <span className="min-w-0 truncate">
+                {u.activeProject}: <span className="font-medium">{project?.title}</span>
               </span>
-              <button type="button" onClick={reset} className="text-sm font-medium text-brand underline">
+              <button type="button" onClick={reset} className="min-h-11 shrink-0 text-sm font-medium text-brand-strong underline">
                 {u.newProject}
               </button>
             </p>
@@ -115,17 +121,46 @@ export function UploadForm() {
             </div>
           )}
 
-          <label htmlFor={ids.file} className="block text-sm font-medium">
-            {u.file}
-            <input
-              id={ids.file}
-              name="file"
-              type="file"
-              accept={`.pdf,.docx,application/pdf,${DOCX}`}
-              onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-              className={`${field} file:mr-3 file:rounded-md file:border-0 file:bg-brand-soft file:px-3 file:py-1 file:text-sm file:font-medium file:text-brand`}
-            />
-          </label>
+          <div>
+            <p id={ids.fileLabel} className="text-sm font-medium">
+              {u.file}
+            </p>
+            <label
+              htmlFor={ids.file}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setDragging(true);
+              }}
+              onDragLeave={() => setDragging(false)}
+              onDrop={(e) => {
+                e.preventDefault();
+                setDragging(false);
+                setFile(e.dataTransfer.files[0] ?? null);
+              }}
+              className={`mt-1 flex cursor-pointer flex-col items-center gap-2 rounded-card border-2 border-dashed px-4 py-8 text-center focus-within:outline-2 focus-within:outline-brand ${
+                dragging ? "border-brand bg-brand-soft" : "border-line hover:border-brand"
+              }`}
+            >
+              <FileUp aria-hidden="true" className="size-6 text-brand-strong" />
+              {file ? (
+                <span className="text-sm font-medium">{file.name}</span>
+              ) : (
+                <span className="text-sm">
+                  {u.dropHint} <span className="font-medium text-brand-strong underline">{u.pick}</span>
+                </span>
+              )}
+              <span className="text-xs text-muted">{u.formDescription}</span>
+              <input
+                id={ids.file}
+                name="file"
+                type="file"
+                aria-labelledby={ids.fileLabel}
+                accept={`.pdf,.docx,application/pdf,${DOCX}`}
+                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                className="sr-only"
+              />
+            </label>
+          </div>
 
           <label htmlFor={ids.consent} className="flex items-start gap-3 rounded-lg border border-line p-3 text-sm">
             <input
@@ -170,7 +205,7 @@ export function UploadForm() {
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-sm font-medium">
-                    {copy.dashboard.proposal} v{v.version_no}
+                    {copy.home.proposal} v{v.version_no}
                   </span>
                   <span className="block truncate text-xs text-muted">{v.filename}</span>
                 </span>
@@ -187,7 +222,7 @@ function UploadResult({ result }: { result: UploadOut }) {
   const u = copy.upload;
   const isDocx = result.version.media_type === DOCX;
   return (
-    <div className="space-y-1 rounded-lg bg-tone-success-bg p-3 text-sm text-tone-success-fg">
+    <div className="space-y-1 rounded-lg bg-tone-success-bg p-4 text-sm text-tone-success-fg">
       <p className="flex items-center gap-2 font-semibold">
         <CheckCircle2 aria-hidden="true" className="size-4" />
         {result.created ? u.created : u.duplicate}: v{result.version.version_no}
@@ -196,10 +231,17 @@ function UploadResult({ result }: { result: UploadOut }) {
         {result.pages} {isDocx ? u.sectionsDocx : u.pagesPdf}
       </p>
       <p>{u.autoResult(result.auto_elements, result.findings)}</p>
-      <p className="font-mono text-xs">SHA-256 {result.version.sha256.slice(0, 12)}…</p>
-      <Link href="/proyek" className="inline-block font-medium underline">
-        {u.openWorkspace}
-      </Link>
+      {result.findings > 0 ? (
+        <Link href="/temuan" className={buttonClass("primary", "mt-2")}>
+          {u.reviewFindings(result.findings)}
+          <ArrowRight aria-hidden="true" className="size-4" />
+        </Link>
+      ) : (
+        <Link href="/proyek" className={buttonClass("primary", "mt-2")}>
+          {u.openWorkspace}
+          <ArrowRight aria-hidden="true" className="size-4" />
+        </Link>
+      )}
     </div>
   );
 }

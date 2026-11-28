@@ -47,7 +47,7 @@ describe("UploadForm", () => {
     expect(await screen.findByText(new RegExp(u.created))).toBeInTheDocument();
     expect(screen.getByText(new RegExp(`3 ${u.pagesPdf}`))).toBeInTheDocument();
     expect(screen.getByText(u.autoResult(5, 2))).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: u.openWorkspace })).toHaveAttribute("href", "/proyek");
+    expect(screen.getByRole("link", { name: u.reviewFindings(2) })).toHaveAttribute("href", "/temuan");
     expect(window.localStorage.getItem("thesistwin.projectId")).toBe("p1");
   });
 

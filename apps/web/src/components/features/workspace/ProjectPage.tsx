@@ -40,7 +40,8 @@ export function ProjectPage({ step, versionPicker = true, children }: ProjectPag
         <h1 className="mt-1 text-2xl font-semibold tracking-tight">{current.title}</h1>
         <p className="mt-1 max-w-3xl text-sm text-muted">{current.description}</p>
 
-        <ol className="mt-4 flex flex-wrap gap-1.5" aria-label="Alur kerja">
+        {/* Desktop: sidebar sudah menampilkan langkah yang sama. */}
+        <ol className="mt-4 flex flex-wrap gap-1.5 md:hidden" aria-label={copy.shell.workflow}>
           {steps.map((s, i) => (
             <li key={s.href}>
               <Link
@@ -106,7 +107,7 @@ export function ProjectPage({ step, versionPicker = true, children }: ProjectPag
             {next ? (
               <div className="flex justify-end border-t border-line pt-5">
                 <Link href={next.href} className={buttonClass("secondary")}>
-                  {copy.nextStep}: {next.title}
+                  {copy.nextStep}: {next.short}
                   <ArrowRight aria-hidden="true" className="size-4" />
                 </Link>
               </div>

@@ -9,6 +9,8 @@ Referensi utama: **Notalx** ([01-notalx-dashboard.png](references/01-notalx-dash
 | [01-notalx-dashboard.png](references/01-notalx-dashboard.png) | Notalx (writing assistant) | **Acuan utama**: struktur dashboard, kartu, panel Tools |
 | [02-journal-dashboard.png](references/02-journal-dashboard.png) | Journal app | Header sapaan, kartu insight berwarna, linimasa entri |
 | [03-notelify-editor.png](references/03-notelify-editor.png) | Notelify (editor) | Hanya struktur tiga kolom; **bukan** fitur AI-nya |
+| [Bimbingan – Thesis Progress Tracker](https://dribbble.com/shots/15731015-Bimbingan-Thesis-Final-Project-Progress-Tracker-Mobile-App) (Dribbble) | Pelacak skripsi | Beranda: posisi di alur + satu langkah berikutnya (§2a) |
+| [Thesis AI Assistant](https://dribbble.com/shots/25547028-Thesis-AI-Assistant) (Dribbble) | Asisten skripsi | Hanya halaman awal yang tenang untuk pengguna baru; kolom chat "tulis apa saja" **tidak** diambil (guardrail 1) |
 
 ## 2. Yang diambil dari Notalx
 
@@ -24,6 +26,19 @@ Referensi utama: **Notalx** ([01-notalx-dashboard.png](references/01-notalx-dash
 | "Recent Documents" dengan bar progres bersegmen | Riwayat versi dengan bar **bagian yang sudah dicek** (bersegmen) |
 | Warna utama hijau, latar abu sangat muda, kartu putih, sudut membulat, bayangan halus | Struktur diadopsi; warna utama diganti **biru** (§4) |
 
+## 2a. Revisi alur (2026-11-28)
+
+Audit UI menemukan dua navigasi yang urutan & namanya berbeda (sidebar vs penunjuk langkah), dashboard kosong berisi data simulasi, dan daftar temuan yang terlalu panjang. Perubahan:
+
+| Sebelumnya | Sekarang |
+|---|---|
+| Sidebar: Dashboard, Proposal, Temuan, Riwayat Versi, Supervision Brief, Defense Stress-Test | Beranda, lalu **5 langkah bernomor** yang diturunkan dari `copy.steps` (tidak bisa beda dari penunjuk langkah), lalu Pengaturan. Penunjuk langkah di header halaman hanya tampil di mobile |
+| Dashboard: kartu versi, antrean semua temuan, panel Tools, ubin statistik | **Beranda**: kartu *Langkah berikutnya* (satu aksi), daftar 5 langkah dengan status nyata, 3 temuan prioritas tertinggi. Logika di `features/dashboard/journey.ts` |
+| Pengguna baru melihat data simulasi | Onboarding: apa yang dilakukan ThesisTwin, satu tombol unggah, apa yang terjadi setelahnya. Tidak ada data contoh |
+| Topbar: pencarian non-aktif, dua tombol unggah, nama proyek statis | Judul & prodi proyek aktif + satu tombol "Unggah draf" |
+| Unggah: input file bawaan, ID proyek & SHA-256, tautan kecil | Area tarik-lepas, judul proyek, tombol utama "Tinjau N temuan" setelah unggah |
+| Temuan: semua detail terbuka, aturan yang sama berulang | Saringan (perlu ditinjau / prioritas tinggi / sudah ditinjau / semua), temuan per aturan digabung jadi satu kartu, arah & landasan dilipat |
+
 ## 3. Yang sengaja **tidak** diambil
 
 | Pola referensi | Alasan |
@@ -34,6 +49,7 @@ Referensi utama: **Notalx** ([01-notalx-dashboard.png](references/01-notalx-dash
 | Grafik tren mingguan | Belum ada data longitudinal; ditunda sampai ada riwayat nyata |
 | Streak, emoji suasana hati (journal) | Tidak relevan; berisiko terasa main-main untuk konteks akademik |
 | "AI Insight" tanpa label | Semua konten AI wajib berlabel `Dibuat AI` (guardrail 5) |
+| Persentase progres per bab (Bimbingan) | Kami tidak bisa mengukur "seberapa selesai" sebuah bab. Yang dihitung hanya langkah alur kerja yang benar-benar dilalui |
 
 ## 4. Token
 
@@ -60,7 +76,7 @@ Didefinisikan di [globals.css](../../apps/web/src/app/globals.css), dipakai lewa
 
 ## 5. Aturan tata letak
 
-- Desktop: sidebar 240px + konten; konten dibagi **kolom utama putih + kolom kanan 360px berwarna `background`** (pola Notalx).
+- Desktop: sidebar 240px + konten selebar maksimal `max-w-5xl`.
 - Section **terbuka**: judul + deskripsi langsung di halaman; yang berbingkai hanya item di dalamnya (komponen `Section`). `Card` dipakai untuk formulir.
 - < 1024px: kolom kanan turun ke bawah. < 768px: sidebar disembunyikan.
 - Satu tombol utama (biru) per area. Aksi lain sekunder.

@@ -1,17 +1,14 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useId, useState } from "react";
 import { copy } from "@/lib/copy";
-import { navItems } from "./nav";
+import { NavList } from "./NavList";
 
 // Pengganti sidebar di layar < 768px.
 export function MobileNav() {
   const s = copy.shell;
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
   const panelId = useId();
 
   return (
@@ -32,25 +29,7 @@ export function MobileNav() {
           aria-label={s.navLabel}
           className="absolute inset-x-0 top-16 z-20 border-b border-line bg-surface p-3 shadow-card"
         >
-          <ul className="space-y-1">
-            {navItems
-              .filter((item) => item.href)
-              .map(({ label, icon: Icon, href }) => (
-                <li key={label}>
-                  <Link
-                    href={href!}
-                    onClick={() => setOpen(false)}
-                    aria-current={pathname === href ? "page" : undefined}
-                    className={`flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm ${
-                      pathname === href ? "bg-brand-soft font-medium text-brand-strong" : ""
-                    }`}
-                  >
-                    <Icon aria-hidden="true" className="size-4" />
-                    {label}
-                  </Link>
-                </li>
-              ))}
-          </ul>
+          <NavList onNavigate={() => setOpen(false)} />
         </nav>
       ) : null}
     </div>
