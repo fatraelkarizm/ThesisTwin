@@ -3,8 +3,8 @@ import { copy } from "@/lib/copy";
 import type { Status } from "@/types/domain";
 
 // Satu-satunya pemetaan status -> tampilan. Jangan buat badge status di tempat lain.
-const map: Record<Status, { tone: BadgeTone; icon: string }> = {
-  ai_suggested: { tone: "info", icon: "✦" },
+const map: Record<Status, { tone: BadgeTone; icon?: string }> = {
+  ai_suggested: { tone: "info" },
   needs_user_confirmation: { tone: "warning", icon: "?" },
   student_confirmed: { tone: "success", icon: "✓" },
   supervisor_confirmed: { tone: "success", icon: "✓✓" },

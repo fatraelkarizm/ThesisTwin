@@ -3,7 +3,7 @@ import { copy } from "@/lib/copy";
 
 export function AiLabel() {
   return (
-    <Badge tone="info" icon="✦">
+    <Badge tone="info">
       {copy.aiLabel}
     </Badge>
   );

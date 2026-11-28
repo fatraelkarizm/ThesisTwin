@@ -1,32 +1,34 @@
 @import "tailwindcss";
 
-/* Token visual. Referensi & alasan: docs/design/README.md. Kontras diverifikasi >= 4.5:1 (WCAG AA). */
+/* Token visual "kertas & tinta". Referensi & alasan: docs/design/README.md §4. Kontras dihitung (WCAG AA). */
 /* Selalu tema terang (keputusan tim 2026-11-24), tidak mengikuti mode gelap sistem. */
 :root {
   color-scheme: light;
-  --background: #f4f6fb;
-  --foreground: #161b26;
-  --muted: #5b6475;
+  --background: #f6f4ee;
+  --foreground: #1d1f24;
+  --muted: #5e5b53;
   --surface: #ffffff;
-  --surface-muted: #f1f4f9;
-  --line: #e3e8f0;
-  --brand: #2563eb;
-  --brand-hover: #1d4ed8;
+  --surface-muted: #f1eee6;
+  --line: #e4dfd3;
+  /* Aksen tunggal untuk aksi utama dan penanda posisi, bukan dekorasi. */
+  --brand: #1e5b46;
+  --brand-hover: #174836;
   --brand-fg: #ffffff;
-  --brand-soft: #dbeafe;
-  --brand-strong: #1d4ed8;
-  --tone-neutral-bg: #eef1f6;
-  --tone-neutral-fg: #334155;
-  /* "info" dipakai untuk label AI: ungu, agar tidak tertukar dengan warna brand. */
-  --tone-info-bg: #ede9fe;
-  --tone-info-fg: #5b21b6;
-  --tone-success-bg: #dcfce7;
-  --tone-success-fg: #14532d;
-  --tone-warning-bg: #fef3c7;
-  --tone-warning-fg: #78350f;
-  --tone-danger-bg: #fee2e2;
-  --tone-danger-fg: #7f1d1d;
-  --card-shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 1px 3px rgb(15 23 42 / 0.05);
+  --brand-soft: #e2ede6;
+  --brand-strong: #174836;
+  --tone-neutral-bg: #efebe2;
+  --tone-neutral-fg: #3f3b33;
+  /* Label saran sistem: pasir netral, sengaja tidak mencolok agar tidak terbaca sebagai "fitur AI". */
+  --tone-info-bg: #f1eee6;
+  --tone-info-fg: #4a4538;
+  --tone-success-bg: #e6f0e0;
+  --tone-success-fg: #2f5419;
+  --tone-warning-bg: #f6e7d8;
+  --tone-warning-fg: #8a3a12;
+  --tone-danger-bg: #f6dedb;
+  --tone-danger-fg: #8c1f1a;
+  /* Kartu rata seperti lembar kertas: batasnya garis, bukan bayangan. */
+  --card-shadow: none;
 }
 
 @theme inline {
@@ -51,16 +53,24 @@
   --color-tone-warning-fg: var(--tone-warning-fg);
   --color-tone-danger-bg: var(--tone-danger-bg);
   --color-tone-danger-fg: var(--tone-danger-fg);
-  --radius-card: 0.75rem;
+  --radius-card: 0.5rem;
   --shadow-card: var(--card-shadow);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-plex-sans);
+  --font-serif: var(--font-source-serif);
+  --font-mono: var(--font-plex-mono);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Judul serif agar terasa seperti naskah akademik; isi tetap sans demi keterbacaan UI. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif), Georgia, serif;
 }
 
 /* Cetak brief dosen ke PDF (abstrak: brief "sent as a PDF"): latar putih, tanpa bayangan. */
