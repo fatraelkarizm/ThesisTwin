@@ -37,3 +37,4 @@ examples:
     elements:
       - {type: analysis, content: "Analisis berfokus pada perbandingan nilai rata-rata akurasi kedua model."}
     document_text: "Perbandingan diuji dengan Wilcoxon signed-rank pada 10 kali pengulangan."
+defense_question: "Bagaimana Anda tahu perbedaan antar-model itu bermakna dan bukan kebetulan satu kali percobaan? Berapa pengulangan dan uji statistik apa yang dipakai?"

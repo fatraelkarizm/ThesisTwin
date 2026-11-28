@@ -1,0 +1,41 @@
+# Kosakata ekstraksi elemen dari struktur bab (app/domain/structure.py). DATA, bukan kode.
+# Judul bab di kampus lain berbeda? Tambahkan di sini, tanpa mengubah engine.
+# Divalidasi oleh app/domain/ontology.py (Extraction); `type` harus ada di ontology.yaml.
+
+max_chars: 350
+
+# Halaman yang memuat judul-judul ini dilewati, agar daftar isi tidak dianggap bagian.
+skip_pages: [DAFTAR ISI, DAFTAR TABEL, DAFTAR GAMBAR, DAFTAR LAMPIRAN]
+
+# Urutan judul = prioritas. Pencocokan peka huruf (Title Case atau UPPERCASE), agar penyebutan
+# di tengah kalimat ("rumusan masalah dalam penelitian ini") tidak dianggap judul.
+# standalone_headings: judul yang hanya sah bila berdiri sendiri di barisnya
+# ("1.3 Tujuan" ya, "2.1 Tujuan Pembelajaran" tidak).
+sections:
+  - type: research_question
+    headings: [Rumusan Masalah, Pertanyaan Penelitian, Research Questions]
+  - type: objective
+    headings: [Tujuan Penelitian, Research Objectives]
+    standalone_headings: [Tujuan]
+  - type: method
+    headings: [Desain Penelitian, Rancangan Penelitian, Jenis Penelitian, Metode Penelitian]
+  - type: variable
+    headings: [Variabel Penelitian, Definisi Operasional Variabel, Definisi Operasional]
+  - type: population
+    headings:
+      - Populasi dan Sampel
+      - Subjek Penelitian
+      - Objek Penelitian
+      - Sumber Data
+      - Karakteristik Dataset
+      - Dataset Penelitian
+  - type: instrument
+    headings: [Instrumen Penelitian, Teknik Pengumpulan Data]
+  - type: analysis
+    headings: [Teknik Analisis Data, Analisis Data, Metode Analisis Data]
+  - type: claim
+    headings: [Hipotesis Penelitian, Hipotesis]
+
+# Kalimat definisi variabel: menyebut "variabel <jenis>" dan memakai kata pendefinisi.
+variable_kinds: [bebas, terikat, kontrol, independen, dependen, moderator, intervening]
+defining_words: [adalah, yaitu, meliputi, mencakup, berupa]

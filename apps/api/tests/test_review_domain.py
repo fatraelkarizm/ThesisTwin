@@ -4,6 +4,7 @@ from app.domain.brief import BriefFinding, build_brief, render_text
 from app.domain.comments import CommentState, comment_statuses
 from app.domain.diff import diff_elements
 from app.domain.rules import Element
+from app.services.config import ontology
 
 
 def E(id_, type_, content):
@@ -92,6 +93,7 @@ def test_brief_summarises_state_only():
         comments=comment_statuses(BLOCKS_OLD, COMMENTS, BLOCKS_OLD),
         findings=findings,
         previous_rules={"R-CAUSAL-01", "R-OBJ-ANALYSIS"},
+        type_label=ontology().label,
     )
     assert [f.id for f in b.open_findings] == ["F1"]
     assert [f.id for f in b.awaiting_supervisor] == ["F2"]

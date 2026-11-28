@@ -27,7 +27,7 @@ from app.domain.rules import Element, Rule, run
 from app.domain.status import Status
 from app.domain.verification import verify_quote
 from app.parsing.detect import PDF_MEDIA
-from app.services import audit
+from app.services import audit, config
 from app.services.documents import ProjectNotFound
 from app.services.rules import load_rules, rule_meta
 
@@ -172,7 +172,7 @@ def run_check(
                 evidence=[
                     EvidenceRow(
                         element_id=e.id,
-                        element=brief_mod.TYPE_LABEL.get(e.type, e.type),
+                        element=config.ontology().label(e.type),
                         document=f"v{version.version_no}",
                         page=e.page,
                     )
@@ -279,7 +279,9 @@ def build_brief(
     project, versions = project_versions(session, project_id)
     from_v, to_v, diff = latest_diff(session, project_id)
     impacts = (
-        change_impact(diff, _domain_elements(list_elements(session, versions[-1].id)))
+        change_impact(
+            diff, _domain_elements(list_elements(session, versions[-1].id)), config.ontology()
+        )
         if diff
         else []
     )
@@ -320,9 +322,10 @@ def build_brief(
         impacts=impacts,
         unit="page" if versions[-1].media_type == PDF_MEDIA else "section",
         rule_titles={rid: r.title for rid, r in meta.items()},
+        type_label=config.ontology().label,
     )
 
 
 def version_graph(session: Session, version_id: str) -> tuple[Graph, list[ElementRow]]:
     rows = list_elements(session, version_id)
-    return build_graph(_domain_elements(rows)), rows
+    return build_graph(_domain_elements(rows), config.ontology()), rows

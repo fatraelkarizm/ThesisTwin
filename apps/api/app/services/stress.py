@@ -10,7 +10,8 @@ from sqlalchemy.orm import Session
 
 from app.db.models import AuditLog, StressQuestionRow
 from app.domain.stress import FindingRef, stress_questions
-from app.services import review
+from app.services import config, review
+from app.services.rules import rule_meta
 
 
 class QuestionNotFound(LookupError):
@@ -60,7 +61,8 @@ def generate(
         for f in review.list_findings(session, version_id)
     ]
     position = len(kept)
-    for q in stress_questions(graph, refs):
+    questions = {r.id: r.defense_question for r in rule_meta().values() if r.defense_question}
+    for q in stress_questions(graph, refs, config.ontology(), questions):
         if q.key in kept:
             continue
         session.add(

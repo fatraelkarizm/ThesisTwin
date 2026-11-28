@@ -29,3 +29,4 @@ examples:
     elements:
       - {type: objective, content: "Mengetahui perbedaan hasil belajar sebelum dan sesudah perlakuan.", page: 5}
       - {type: analysis, content: "Uji t berpasangan (paired sample t-test).", page: 30}
+defense_question: "Dengan analisis apa tujuan “{objective}” dicapai, dan mengapa analisis itu cocok dengan jenis datanya?"

@@ -3,14 +3,19 @@ from sqlalchemy import create_engine, inspect, text
 from app.db.session import init_db
 from app.domain.graph import build_graph
 from app.domain.rules import Element
+from app.services.config import ontology
 
 
 def E(id_, type_):
     return Element(id_, type_, id_, 1)
 
 
+def graph(els):
+    return build_graph(els, ontology())
+
+
 def test_edges_follow_ontology():
-    g = build_graph([E("RQ1", "research_question"), E("O1", "objective"), E("M1", "method")])
+    g = graph([E("RQ1", "research_question"), E("O1", "objective"), E("M1", "method")])
     assert {(e.src, e.dst, e.type) for e in g.edges} == {
         ("RQ1", "O1", "addresses"),
         ("O1", "M1", "requires"),
@@ -18,14 +23,14 @@ def test_edges_follow_ontology():
 
 
 def test_gaps_when_expected_type_missing():
-    g = build_graph([E("V1", "variable"), E("O1", "objective")])
+    g = graph([E("V1", "variable"), E("O1", "objective")])
     gaps = {(x.from_type, x.to_type) for x in g.gaps}
     assert ("variable", "instrument") in gaps and ("objective", "analysis") in gaps
     assert ("research_question", "objective") not in gaps  # tidak ada RQ -> bukan celah
 
 
 def test_nodes_ordered_by_dependency_chain():
-    g = build_graph([E("A", "analysis"), E("RQ", "research_question"), E("O", "objective")])
+    g = graph([E("A", "analysis"), E("RQ", "research_question"), E("O", "objective")])
     assert [n.id for n in g.nodes] == ["RQ", "O", "A"]
 
 

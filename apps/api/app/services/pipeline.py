@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from sqlalchemy.orm import Session
 
 from app.domain.structure import extract_by_structure
-from app.services import review
+from app.services import config, review
 from app.services.documents import AddedVersion, ingest_upload
 from app.storage import LocalStorage
 
@@ -31,7 +31,7 @@ def process_upload(
         return UploadResult(added, 0, len(review.list_findings(session, version.id)))
 
     pages = {int(k): v for k, v in json.loads(version.parsed_json).get("pages", {}).items()}
-    extracted = extract_by_structure(pages)
+    extracted = extract_by_structure(pages, config.extraction())
     for e in extracted:
         review.add_element(session, version.id, e.type, e.content, e.quote, e.page, source="auto")
     findings = review.run_check(session, version.id) if extracted else []

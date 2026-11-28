@@ -34,6 +34,7 @@ ThesisTwin/
 │       │   ├── parsing/         # DOCX/PDF -> {halaman: teks}; nomor halaman dari parser, bukan LLM
 │       │   └── db/              # model SQLAlchemy, sesi, migrasi
 │       ├── rules/               # aturan alignment sebagai DATA (YAML/JSON), bukan kode
+│       ├── config/              # ontologi (tipe, relasi, dampak, label) & kosakata judul bab sebagai DATA
 │       └── tests/               # cermin struktur app/
 └── (eval/, datasets/ — nanti, M9)
 ```
@@ -96,7 +97,7 @@ Berlaku untuk semua file di `components/ui` dan `components/domain`.
 3. **Satu state machine** untuk status temuan/node di `domain/status.py`. Transisi tidak valid → `InvalidTransition`. Tidak ada kode lain yang boleh menulis status langsung.
 4. **LLM hanya lewat `llm/`.** Output LLM selalu divalidasi Pydantic; invalid → retry terbatas → `needs_user_confirmation`, bukan menebak.
 5. **Redaction di pintu masuk LLM** (`domain/redaction.py`); service tidak boleh memanggil `llm/` dengan teks mentah.
-6. **Constraint engine membaca `rules/`** (data). Menambah aturan = menambah data + test, bukan mengubah engine.
+6. **Constraint engine membaca `rules/`, ontologi & ekstraksi membaca `config/`** (data, dimuat di `services/config.py`, dioper ke `domain/`). Menambah aturan, tipe elemen, relasi, atau judul bab = menambah data + test, bukan mengubah engine.
 7. **Evidence invariant:** pembuat `Finding`/`Node` menolak input tanpa sumber kecuali `status=needs_user_confirmation`.
 8. **Audit:** setiap perubahan status menulis `audit_log` (actor, action, entity, waktu).
 9. **Schema = kontrak:** perubahan schema = perubahan `web/src/types/` pada PR yang sama.

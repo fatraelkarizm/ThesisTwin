@@ -3,55 +3,22 @@
 Proposal skripsi di Indonesia umumnya mengikuti struktur baku: BAB I (Rumusan Masalah, Tujuan),
 BAB III (Desain, Variabel, Populasi/Data, Instrumen, Analisis). Elemen diambil dari isi bagian
 dengan judul tersebut; kutipannya selalu salinan persis teks halaman, sehingga lolos verifikasi
-secara jujur. Hasilnya tetap **saran** yang harus dikonfirmasi mahasiswa. Bagian yang judulnya
-tidak baku tidak akan terdeteksi; di situlah LLM (nanti) atau input manual mengisi.
+secara jujur. Hasilnya tetap **saran** yang harus dikonfirmasi mahasiswa.
+
+Kosakata judul bab adalah data (config/extraction.yaml, skema `Extraction`). Bagian yang judulnya
+belum terdaftar tidak akan terdeteksi; tambahkan judulnya di config atau isi manual.
 """
 
 import re
 from dataclasses import dataclass
 
-# Urutan kata kunci = prioritas. Pencocokan peka huruf (judul ditulis Title Case/UPPERCASE),
-# agar penyebutan dalam kalimat ("rumusan masalah dalam penelitian ini") tidak dianggap judul.
-SECTIONS: list[tuple[str, list[str]]] = [
-    ("research_question", ["Rumusan Masalah", "Pertanyaan Penelitian", "Research Questions"]),
-    ("objective", ["Tujuan Penelitian", "Research Objectives", "Tujuan$"]),
-    (
-        "method",
-        ["Desain Penelitian", "Rancangan Penelitian", "Jenis Penelitian", "Metode Penelitian"],
-    ),
-    ("variable", ["Variabel Penelitian", "Definisi Operasional Variabel", "Definisi Operasional"]),
-    (
-        "population",
-        [
-            "Populasi dan Sampel",
-            "Subjek Penelitian",
-            "Objek Penelitian",
-            "Sumber Data",
-            "Karakteristik Dataset",
-            "Dataset Penelitian",
-        ],
-    ),
-    ("instrument", ["Instrumen Penelitian", "Teknik Pengumpulan Data"]),
-    ("analysis", ["Teknik Analisis Data", "Analisis Data", "Metode Analisis Data"]),
-    ("claim", ["Hipotesis Penelitian", "Hipotesis"]),
-]
+from app.domain.ontology import Extraction, SectionVocab
 
-MAX_CHARS = 350
-SKIP_PAGE = re.compile(r"\bDAFTAR (ISI|TABEL|GAMBAR|LAMPIRAN)\b")
+# Mekanika pemotongan teks, bukan kosakata domain.
 NUMBERED = re.compile(r"(?:^|(?<=\s))(\d{1,2})[.)]\s+(?=[A-Z])")
 SENTENCE_END = re.compile(r"(?<=[.?!])\s+(?=[A-Z0-9“\"(])")
 NEXT_HEADING = re.compile(r"(?<=\s)(?:\d+(?:\.\d+)+\.?\s+[A-Z]|BAB\s+[IVX]+\b)")
 CAPTION = re.compile(r"(Tabel|Gambar|Table|Figure)\s*$")
-VARIABLE_KINDS = [
-    "bebas",
-    "terikat",
-    "kontrol",
-    "independen",
-    "dependen",
-    "moderator",
-    "intervening",
-]
-DEFINING = re.compile(r"\b(adalah|yaitu|meliputi|mencakup|berupa)\b")
 
 
 @dataclass(frozen=True)
@@ -62,12 +29,18 @@ class Extracted:
     page: int
 
 
-def _document(pages: dict[int, str]) -> tuple[str, list[tuple[int, int, int]]]:
+def _any_word(words: list[str]) -> re.Pattern[str] | None:
+    return re.compile(r"\b(" + "|".join(map(re.escape, words)) + r")\b") if words else None
+
+
+def _document(
+    pages: dict[int, str], skip: re.Pattern[str] | None
+) -> tuple[str, list[tuple[int, int, int]]]:
     """Gabungkan halaman; kembalikan teks dan rentang (awal, akhir, halaman). Halaman daftar isi
     dikosongkan agar judul di daftar isi tidak dianggap bagian."""
     text, spans = "", []
     for n in sorted(pages):
-        body = "" if SKIP_PAGE.search(pages[n]) else pages[n]
+        body = "" if skip and skip.search(pages[n]) else pages[n]
         start = len(text)
         text += body + "\n"
         spans.append((start, start + len(body), n))
@@ -81,14 +54,14 @@ def _page_at(spans: list[tuple[int, int, int]], pos: int) -> tuple[int, int]:
     return spans[-1][2], spans[-1][1]
 
 
-def _section(text: str, keywords: list[str]) -> tuple[int, int] | None:
+def _section(text: str, vocab: SectionVocab) -> tuple[int, int] | None:
     """Judul harus bernomor ("3.2.2 Variabel Penelitian") atau di awal baris/bagian (DOCX),
-    bukan sel tabel di tengah teks. Judul induk yang isinya langsung subjudul dilewati."""
-    for kw in keywords:
-        # Akhiran "$": judul harus berdiri sendiri di barisnya ("1.3 Tujuan", bukan
-        # "2.1 Tujuan Pembelajaran").
-        word = kw.removesuffix("$")
-        tail = r"[ \t]*(?=\n|$)" if word != kw else r"\b"
+    bukan sel tabel di tengah teks. Judul induk yang isinya langsung subjudul dilewati.
+    Judul `standalone` hanya sah bila berdiri sendiri di barisnya ("1.3 Tujuan", bukan
+    "2.1 Tujuan Pembelajaran")."""
+    headings = [(h, r"\b") for h in vocab.headings]
+    headings += [(h, r"[ \t]*(?=\n|$)") for h in vocab.standalone_headings]
+    for word, tail in headings:
         name = rf"(?:{re.escape(word)}|{re.escape(word.upper())}){tail}"
         pattern = rf"(?:(?<=\s)\d+(?:\.\d+)*\.?\s+{name}|(?:^|(?<=\n))\s*{name})"
         for m in re.finditer(pattern, text):
@@ -128,12 +101,12 @@ def _sentences(body: str) -> list[tuple[int, int]]:
     return [(a, b) for a, b in out if body[a:b].strip()]
 
 
-def _clip(text: str) -> str:
+def _clip(text: str, max_chars: int) -> str:
     text = " ".join(text.split()).strip(" ;,")
-    return text if len(text) <= MAX_CHARS else text[: MAX_CHARS - 1].rstrip() + "…"
+    return text if len(text) <= max_chars else text[: max_chars - 1].rstrip() + "…"
 
 
-def _pick(type_: str, body: str) -> list[tuple[int, int]]:
+def _pick(type_: str, body: str, vocab: Extraction) -> list[tuple[int, int]]:
     if type_ == "research_question":
         items = _items(body)
         if items:  # potong tiap item sampai tanda tanya pertama
@@ -147,32 +120,34 @@ def _pick(type_: str, body: str) -> list[tuple[int, int]]:
             return [(a, a + (_sentences(body[a:b]) or [(0, b - a)])[0][1]) for a, b in items][:6]
         return _sentences(body)[:1]
     if type_ == "variable":
+        defining = _any_word(vocab.defining_words)
         picked, seen = [], set()
         for a, b in _sentences(body):
             s = body[a:b].lower()
-            kind = next((k for k in VARIABLE_KINDS if f"variabel {k}" in s), None)
-            if kind and kind not in seen and DEFINING.search(s):
+            kind = next((k for k in vocab.variable_kinds if f"variabel {k}" in s), None)
+            if kind and kind not in seen and defining and defining.search(s):
                 seen.add(kind)
                 picked.append((a, b))
         return picked or _sentences(body)[:1]
     return _sentences(body)[:1]  # metode, populasi, instrumen, analisis: kalimat pembuka
 
 
-def extract_by_structure(pages: dict[int, str]) -> list[Extracted]:
-    text, spans = _document(pages)
+def extract_by_structure(pages: dict[int, str], vocab: Extraction) -> list[Extracted]:
+    text, spans = _document(pages, _any_word(vocab.skip_pages))
     out: list[Extracted] = []
-    for type_, keywords in SECTIONS:
-        found = _section(text, keywords)
+    for section in vocab.sections:
+        found = _section(text, section)
         if not found:
             continue
         start, end = found
         body = text[start:end]
-        for a, b in _pick(type_, body):
+        for a, b in _pick(section.type, body, vocab):
             raw = body[a:b].strip()
             if len(raw) < 12:
                 continue
             abs_a = start + a + (len(body[a:b]) - len(body[a:b].lstrip()))
             page, page_end = _page_at(spans, abs_a)
             quote = text[abs_a : min(abs_a + len(raw), page_end)]
-            out.append(Extracted(type_, _clip(raw), _clip(quote), page))
+            clip = vocab.max_chars
+            out.append(Extracted(section.type, _clip(raw, clip), _clip(quote, clip), page))
     return out

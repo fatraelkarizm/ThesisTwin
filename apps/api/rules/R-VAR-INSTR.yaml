@@ -30,3 +30,4 @@ examples:
     elements:
       - {type: variable, content: "Kemampuan pemecahan masalah matematis.", page: 12}
       - {type: instrument, content: "Tes uraian pemecahan masalah 5 soal.", page: 24}
+defense_question: "Bagaimana “{variable}” diukur, dan apa bukti validitas serta reliabilitas instrumennya?"

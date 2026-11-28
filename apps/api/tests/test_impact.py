@@ -4,6 +4,7 @@ from app.domain.brief import build_brief, render_text
 from app.domain.diff import diff_elements
 from app.domain.impact import change_impact
 from app.domain.rules import Element
+from app.services.config import ontology
 
 
 def E(id_, type_, content):
@@ -23,7 +24,7 @@ NEW = [
 
 
 def test_population_change_flags_sampling_and_generalisation():
-    impacts = change_impact(diff_elements(OLD, NEW), NEW)
+    impacts = change_impact(diff_elements(OLD, NEW), NEW, ontology())
     by_type = {i.affected_type: i for i in impacts}
     assert {"method", "claim"} <= set(by_type)
     assert "sampling" in by_type["method"].check
@@ -33,12 +34,12 @@ def test_population_change_flags_sampling_and_generalisation():
 
 def test_updated_dependent_is_not_stale():
     new = NEW[:1] + [E("m3", "method", "Cluster random sampling per kecamatan, 300 siswa."), NEW[2]]
-    by_type = {i.affected_type: i for i in change_impact(diff_elements(OLD, new), new)}
+    by_type = {i.affected_type: i for i in change_impact(diff_elements(OLD, new), new, ontology())}
     assert not by_type["method"].stale and by_type["claim"].stale
 
 
 def test_no_changes_no_impacts():
-    assert change_impact(diff_elements(OLD, OLD), OLD) == []
+    assert change_impact(diff_elements(OLD, OLD), OLD, ontology()) == []
 
 
 def test_brief_text_lists_rechecks():
@@ -53,7 +54,8 @@ def test_brief_text_lists_rechecks():
         comments=[],
         findings=[],
         previous_rules=set(),
-        impacts=change_impact(d, NEW),
+        impacts=change_impact(d, NEW, ontology()),
+        type_label=ontology().label,
     )
     text = render_text(b)
     assert "Perlu dicek ulang karena perubahan:" in text

@@ -1,8 +1,20 @@
 from app.domain.graph import build_graph
 from app.domain.rules import Element
 from app.domain.stress import MAX_Q, MIN_Q, FindingRef, stress_questions
+from app.services.config import ontology
+from app.services.rules import rule_meta
 from tests.test_e2e_review import METHOD, RQ_OLD, V1, _element, _upload
 from tests.test_projects_api import client  # noqa: F401
+
+QUESTIONS = {r.id: r.defense_question for r in rule_meta().values() if r.defense_question}
+
+
+def graph(els):
+    return build_graph(els, ontology())
+
+
+def sq(g, findings):
+    return stress_questions(g, findings, ontology(), QUESTIONS)
 
 
 def E(id_, type_, content, verified=True):
@@ -18,8 +30,8 @@ ELS = [
 
 
 def test_open_finding_ranks_first_and_names_the_design():
-    qs = stress_questions(
-        build_graph(ELS), [FindingRef("R-CAUSAL-01", "high", "student_confirmed", ["rq", "m"])]
+    qs = sq(
+        graph(ELS), [FindingRef("R-CAUSAL-01", "high", "student_confirmed", ["rq", "m"])]
     )
     assert MIN_Q <= len(qs) <= MAX_Q
     assert qs[0].key == "finding:R-CAUSAL-01" and "one-group" in qs[0].text
@@ -27,18 +39,18 @@ def test_open_finding_ranks_first_and_names_the_design():
 
 
 def test_gaps_and_unverified_elements_become_questions():
-    keys = {q.key for q in stress_questions(build_graph(ELS), [])}
+    keys = {q.key for q in sq(graph(ELS), [])}
     assert "gap:variable:instrument" in keys and "unverified:v" in keys
 
 
 def test_rejected_findings_are_ignored():
-    qs = stress_questions(build_graph(ELS), [FindingRef("R-CAUSAL-01", "high", "rejected", ["rq"])])
+    qs = sq(graph(ELS), [FindingRef("R-CAUSAL-01", "high", "rejected", ["rq"])])
     assert "finding:R-CAUSAL-01" not in {q.key for q in qs}
 
 
 def test_baseline_fills_up_to_minimum():
-    qs = stress_questions(
-        build_graph([E("m", "method", "Studi kasus."), E("a", "analysis", "Analisis tematik.")]), []
+    qs = sq(
+        graph([E("m", "method", "Studi kasus."), E("a", "analysis", "Analisis tematik.")]), []
     )
     assert len(qs) >= 2 and all(q.kind in {"gap", "baseline"} for q in qs)
 
@@ -83,14 +95,14 @@ def test_link_cannot_rate_other_project(client):  # noqa: F811
 
 
 def test_reasons_use_indonesian_labels_not_internal_ids():
-    qs = stress_questions(build_graph([E("v", "variable", "Motivasi")]), [])
+    qs = sq(graph([E("v", "variable", "Motivasi")]), [])
     gap = next(q for q in qs if q.kind == "gap")
     assert "variabel tanpa instrumen" in gap.reason and "variable" not in gap.reason
 
 
 def test_new_rules_have_examiner_questions():
-    qs = stress_questions(
-        build_graph(ELS),
+    qs = sq(
+        graph(ELS),
         [
             FindingRef("R-PROPOSAL-RESULTS", "high", "ai_suggested", []),
             FindingRef("R-RQ-OBJ-COUNT", "medium", "ai_suggested", ["rq", "o"]),

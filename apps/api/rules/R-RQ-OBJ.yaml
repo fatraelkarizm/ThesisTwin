@@ -28,3 +28,4 @@ examples:
     elements:
       - {type: research_question, content: "Bagaimana kemampuan representasi matematis siswa kelas VIII?", page: 4}
       - {type: objective, content: "Mendeskripsikan kemampuan representasi matematis siswa kelas VIII.", page: 5}
+defense_question: "Tujuan penelitian mana yang menjawab “{research_question}”, dan bagaimana Anda tahu tujuan itu tercapai?"

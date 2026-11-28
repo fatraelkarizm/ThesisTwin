@@ -35,3 +35,4 @@ examples:
     elements:
       - {type: claim, content: "Hasil penelitian berlaku untuk siswa kelas VIII-A SMP N 1.", page: 8}
       - {type: method, content: "Sampel satu kelas dipilih dengan purposive sampling.", page: 22}
+defense_question: "Sampel Anda terbatas. Sampai sejauh mana hasil boleh digeneralisasi, dan bagaimana Anda membatasi klaimnya?"

@@ -4,24 +4,13 @@ Hanya merangkum **state** (perubahan, komentar, temuan, keputusan). Tidak menuli
 Murni: data masuk -> struktur brief -> teks pesan chat.
 """
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime
 
 from app.domain.comments import CommentState, CommentStatus
 from app.domain.diff import ElementDiff
 from app.domain.impact import Impact
-
-TYPE_LABEL = {
-    "research_question": "Rumusan masalah",
-    "objective": "Tujuan",
-    "variable": "Variabel",
-    "population": "Populasi",
-    "method": "Metode/desain",
-    "instrument": "Instrumen",
-    "analysis": "Analisis",
-    "claim": "Klaim",
-    "limitation": "Keterbatasan",
-}
 
 
 @dataclass(frozen=True)
@@ -63,21 +52,17 @@ class Brief:
     open_summary: list[str] = field(default_factory=list)
 
 
-def _label(t: str) -> str:
-    return TYPE_LABEL.get(t, t)
-
-
-def describe_changes(d: ElementDiff) -> list[str]:
-    lines = [f"Diubah — {_label(c.new.type)}: “{c.new.content}”" for c in d.changed]
-    lines += [f"Baru — {_label(e.type)}: “{e.content}”" for e in d.added]
-    lines += [f"Dihapus — {_label(e.type)}: “{e.content}”" for e in d.removed]
+def describe_changes(d: ElementDiff, label: Callable[[str], str]) -> list[str]:
+    lines = [f"Diubah — {label(c.new.type)}: “{c.new.content}”" for c in d.changed]
+    lines += [f"Baru — {label(e.type)}: “{e.content}”" for e in d.added]
+    lines += [f"Dihapus — {label(e.type)}: “{e.content}”" for e in d.removed]
     return lines
 
 
-def describe_impacts(impacts: list[Impact]) -> list[str]:
+def describe_impacts(impacts: list[Impact], label: Callable[[str], str]) -> list[str]:
     lines = []
     for i in impacts:
-        src, dst = _label(i.changed_type), _label(i.affected_type).lower()
+        src, dst = label(i.changed_type), label(i.affected_type).lower()
         if not i.affected_elements:
             continue  # tidak ada elemen terdampak yang tercatat; celahnya sudah dilaporkan graph
         stale = " — belum berubah sejak versi lalu" if i.stale else ""
@@ -114,6 +99,7 @@ def build_brief(
     impacts: list[Impact] | None = None,
     unit: str = "page",
     rule_titles: dict[str, str] | None = None,
+    type_label: Callable[[str], str] = str,
 ) -> Brief:
     open_ = [f for f in findings if f.status in {"ai_suggested", "needs_user_confirmation"}]
     awaiting = [f for f in findings if f.status == "student_confirmed"]
@@ -127,12 +113,12 @@ def build_brief(
         to_version=to_version,
         generated_at=generated_at,
         unit=unit,
-        changes=describe_changes(diff) if diff else [],
+        changes=describe_changes(diff, type_label) if diff else [],
         comments=comments,
         open_findings=open_,
         awaiting_supervisor=awaiting,
         resolved_rules=resolved,
-        impacts=describe_impacts(impacts or []),
+        impacts=describe_impacts(impacts or [], type_label),
         resolved_titles=[titles.get(r, r) for r in resolved],
         open_summary=summarize(open_),
     )

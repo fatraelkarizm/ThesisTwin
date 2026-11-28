@@ -9,6 +9,6 @@ Isi wajib tiap file:
 - `source_types`: asal landasan aturan, minimal satu dari `prodi_guideline`, `methodology`, `math_writing`, `publication_style`
 - `directions`: **minimal dua** arah `{option, implication}` yang bisa dieksplorasi mahasiswa. Arah adalah pilihan beserta konsekuensinya, bukan perintah ("Hapus…", "Tambahkan…") dan bukan penilaian ("bagus/jelek/salah/benar"). `pytest` menolak keduanya.
 - `examples.fires` dan `examples.quiet`: contoh yang **harus** memicu dan yang **tidak boleh** memicu. `pytest` menjalankan semuanya otomatis.
-- opsional: `basis` (prinsip landasan), `references` (rujukan APA tanpa halaman sampai diverifikasi), `programs` (default semua), `enabled`, `reviewed_by_supervisor` (default `false` sampai dosen metodologi meninjau)
+- opsional: `defense_question` (pertanyaan penguji untuk Defense Stress-Test; `{<tipe elemen>}` diisi isi elemen terkait, harus diakhiri tanda tanya), `basis` (prinsip landasan), `references` (rujukan APA tanpa halaman sampai diverifikasi), `programs` (default semua), `enabled`, `reviewed_by_supervisor` (default `false` sampai dosen metodologi meninjau)
 
 Keterbatasan: pencocokan per kata kunci; negasi ("tidak memakai one-group") tidak dipahami. Karena itu temuan selalu berupa pertanyaan dan wajib dikonfirmasi manusia.

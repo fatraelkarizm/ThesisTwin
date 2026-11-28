@@ -35,3 +35,4 @@ examples:
     elements:
       - {type: method, content: "Penelitian ini memakai metode eksperimental dengan pendekatan komparatif."}
     document_text: "3.13 Ancaman Validitas: internal, eksternal, konstruk, kesimpulan statistik."
+defense_question: "Ancaman validitas apa yang paling mungkin membuat hasil eksperimen Anda keliru, dan bagaimana Anda mengendalikannya?"

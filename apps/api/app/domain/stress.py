@@ -4,16 +4,16 @@ Tautan terlemah graph -> 3–5 pertanyaan penguji. Deterministik: pemilihan deng
 dijelaskan, pertanyaan dari templat. Pertanyaan tidak pernah berisi jawabannya.
 """
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
 
-from app.domain.brief import TYPE_LABEL
 from app.domain.graph import Graph
+from app.domain.ontology import Ontology
 from app.domain.rules import Element
 
 MIN_Q, MAX_Q = 3, 5
 PRIORITY = {"high": 2, "medium": 1, "low": 0}
 PRIORITY_LABEL = {"high": "tinggi", "medium": "sedang", "low": "rendah"}
-FINDING_TYPES = ("research_question", "objective", "variable", "method", "analysis", "instrument")
 CLOSED = {"rejected", "resolved"}
 
 
@@ -44,89 +44,35 @@ def _first(els: list[Element], type_: str) -> Element | None:
     return next((e for e in els if e.type == type_), None)
 
 
-FINDING_Q = {
-    "R-CAUSAL-01": (
-        "Pertanyaan Anda bersifat sebab-akibat, sedangkan desainnya “{method}”. Mengapa desain ini "
-        "cukup untuk menyimpulkan pengaruh, dan ancaman validitas apa yang Anda kendalikan?"
-    ),
-    "R-RQ-OBJ": (
-        "Tujuan penelitian mana yang menjawab “{research_question}”, dan bagaimana Anda tahu "
-        "tujuan itu tercapai?"
-    ),
-    "R-OBJ-ANALYSIS": (
-        "Dengan analisis apa tujuan “{objective}” dicapai, dan mengapa analisis itu cocok dengan "
-        "jenis datanya?"
-    ),
-    "R-VAR-INSTR": (
-        "Bagaimana “{variable}” diukur, dan apa bukti validitas serta reliabilitas instrumennya?"
-    ),
-    "R-PROPOSAL-RESULTS": (
-        "Proposal Anda sudah memuat hasil dan kesimpulan. Dari mana angka hasil itu diperoleh, "
-        "dan bagaimana Anda menjamin rencana penelitian tidak disesuaikan dengan hasil yang sudah "
-        "ditulis?"
-    ),
-    "R-RQ-OBJ-COUNT": (
-        "Jumlah rumusan masalah dan tujuan Anda berbeda. Tujuan mana menjawab rumusan masalah yang "
-        "mana, dan apakah ada tujuan yang sebenarnya manfaat atau keluaran penelitian?"
-    ),
-    "R-VALIDITY-THREATS": (
-        "Ancaman validitas apa yang paling mungkin membuat hasil eksperimen Anda keliru, dan "
-        "bagaimana Anda mengendalikannya?"
-    ),
-    "R-STAT-TEST": (
-        "Bagaimana Anda tahu perbedaan antar-model itu bermakna dan bukan kebetulan satu kali "
-        "percobaan? Berapa pengulangan dan uji statistik apa yang dipakai?"
-    ),
-    "R-CONCL-SCOPE": (
-        "Sampel Anda terbatas. Sampai sejauh mana hasil boleh digeneralisasi, dan bagaimana Anda "
-        "membatasi klaimnya?"
-    ),
-}
-
-GAP_Q = {
-    ("research_question", "objective"): "Tujuan apa yang menjawab rumusan masalah Anda?",
-    ("objective", "variable"): (
-        "Variabel apa yang Anda teliti untuk mencapai tujuan ini, dan bagaimana definisi "
-        "operasionalnya?"
-    ),
-    ("objective", "method"): "Desain penelitian apa yang dipakai untuk mencapai tujuan ini?",
-    ("population", "method"): "Bagaimana sampel diambil dari populasi yang Anda tetapkan?",
-    ("variable", "instrument"): "Instrumen apa yang mengukur variabel Anda, dan bagaimana diuji?",
-    ("method", "analysis"): "Teknik analisis apa yang sesuai dengan desain Anda, dan mengapa?",
-    ("objective", "analysis"): "Bagaimana data diolah sampai tujuan penelitian terjawab?",
-    ("analysis", "claim"): "Kesimpulan apa yang Anda harapkan dari analisis ini, dan apa batasnya?",
-}
-
-BASELINE_Q = {
-    "method": "Mengapa memilih desain “{content}” dibanding alternatifnya?",
-    "analysis": "Asumsi apa yang harus dipenuhi oleh “{content}”, dan bagaimana Anda mengujinya?",
-    "research_question": "Mengapa masalah “{content}” penting dan layak diteliti sekarang?",
-    "instrument": "Bagaimana “{content}” disusun, dan sudah diuji coba pada siapa?",
-}
-
-
-def _fill(template: str, els: list[Element], extra: dict[str, str] | None = None) -> str:
-    values = {t: _short(e.content) for t in FINDING_TYPES if (e := _first(els, t))}
-    values.update(extra or {})
-    for t in FINDING_TYPES:
+def _fill(template: str, els: list[Element], types: list[str]) -> str:
+    """Isi {<tipe elemen>} dengan elemen pertama bertipe itu; yang tidak ada -> "bagian ini"."""
+    values = {t: _short(e.content) for t in types if (e := _first(els, t))}
+    for t in types:
         values.setdefault(t, "bagian ini")
     return template.format(**values)
 
 
-def stress_questions(graph: Graph, findings: list[FindingRef]) -> list[Question]:
+def stress_questions(
+    graph: Graph,
+    findings: list[FindingRef],
+    ontology: Ontology,
+    rule_questions: Mapping[str, str],
+) -> list[Question]:
+    """`rule_questions`: id aturan -> templat pertanyaan sidang (field `defense_question` di
+    rules/*.yaml). Templat celah & dasar datang dari ontologi."""
     els = graph.nodes
     by_id = {e.id: e for e in els}
     out: list[Question] = []
 
     for f in findings:
-        if f.status in CLOSED or f.rule_id not in FINDING_Q:
+        if f.status in CLOSED or f.rule_id not in rule_questions:
             continue
         involved = [by_id[i] for i in f.element_ids if i in by_id] or els
         out.append(
             Question(
                 key=f"finding:{f.rule_id}",
                 kind="finding",
-                text=_fill(FINDING_Q[f.rule_id], involved),
+                text=_fill(rule_questions[f.rule_id], involved, ontology.type_ids),
                 reason=(
                     f"Temuan {f.rule_id} masih terbuka "
                     f"(prioritas {PRIORITY_LABEL.get(f.priority, f.priority)})."
@@ -136,7 +82,7 @@ def stress_questions(graph: Graph, findings: list[FindingRef]) -> list[Question]
             )
         )
     for g in graph.gaps:
-        template = GAP_Q.get((g.from_type, g.to_type))
+        template = ontology.gap_question(g.from_type, g.to_type)
         if template:
             src = [e.id for e in els if e.type == g.from_type]
             out.append(
@@ -145,8 +91,8 @@ def stress_questions(graph: Graph, findings: list[FindingRef]) -> list[Question]
                     kind="gap",
                     text=template,
                     reason=(
-                        f"Rantai terputus: ada {TYPE_LABEL.get(g.from_type, g.from_type).lower()} "
-                        f"tanpa {TYPE_LABEL.get(g.to_type, g.to_type).lower()}."
+                        f"Rantai terputus: ada {ontology.label(g.from_type).lower()} "
+                        f"tanpa {ontology.label(g.to_type).lower()}."
                     ),
                     element_ids=tuple(src),
                     score=2,
@@ -178,7 +124,7 @@ def stress_questions(graph: Graph, findings: list[FindingRef]) -> list[Question]
         for e in els:
             if len(ranked) >= MIN_Q:
                 break
-            template = BASELINE_Q.get(e.type)
+            template = ontology.baseline_question(e.type)
             key = f"baseline:{e.type}"
             if template and key not in seen:
                 seen.add(key)

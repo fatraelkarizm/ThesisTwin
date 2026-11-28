@@ -31,3 +31,4 @@ examples:
     document_text: "BAB III METODOLOGI PENELITIAN ... BAB IV HASIL DAN PEMBAHASAN Akurasi 93,5%"
   quiet:
     document_text: "BAB I PENDAHULUAN ... BAB II KAJIAN PUSTAKA ... BAB III METODE PENELITIAN"
+defense_question: "Proposal Anda sudah memuat hasil dan kesimpulan. Dari mana angka hasil itu diperoleh, dan bagaimana Anda menjamin rencana penelitian tidak disesuaikan dengan hasil yang sudah ditulis?"

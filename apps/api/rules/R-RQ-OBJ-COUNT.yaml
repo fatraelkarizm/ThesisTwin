@@ -36,3 +36,4 @@ examples:
     elements:
       - {type: research_question, content: "Bagaimana besaran emisi karbon model BERT?"}
       - {type: objective, content: "Mengukur emisi karbon model BERT."}
+defense_question: "Jumlah rumusan masalah dan tujuan Anda berbeda. Tujuan mana menjawab rumusan masalah yang mana, dan apakah ada tujuan yang sebenarnya manfaat atau keluaran penelitian?"

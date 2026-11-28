@@ -192,6 +192,9 @@ class Rule(BaseModel):
     references: list[str] = Field(default_factory=list)
     source_types: list[SourceType] = Field(min_length=1)
     directions: list[Direction] = Field(default_factory=list)
+    # Pertanyaan penguji untuk Defense Stress-Test bila temuan aturan ini terbuka.
+    # {<tipe elemen>} diisi isi elemen terkait, mis. {method}.
+    defense_question: str | None = None
 
     def applies_to(self, program: str) -> bool:
         return self.enabled and ("*" in self.programs or program in self.programs)

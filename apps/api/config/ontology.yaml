@@ -1,0 +1,100 @@
+# Ontologi elemen penelitian (docs/data-model.md). DATA, bukan kode: diubah tanpa menyentuh engine.
+# Divalidasi oleh app/domain/ontology.py (Ontology); referensi tipe yang tidak dikenal ditolak saat dimuat.
+
+element_types:
+  - id: research_question
+    label: Rumusan masalah
+    layer: 0
+    baseline_question: "Mengapa masalah “{content}” penting dan layak diteliti sekarang?"
+  - id: objective
+    label: Tujuan
+    layer: 1
+  - id: variable
+    label: Variabel
+    layer: 2
+  - id: population
+    label: Populasi
+    layer: 2
+  - id: method
+    label: Metode/desain
+    layer: 3
+    baseline_question: "Mengapa memilih desain “{content}” dibanding alternatifnya?"
+  - id: instrument
+    label: Instrumen
+    layer: 3
+    baseline_question: "Bagaimana “{content}” disusun, dan sudah diuji coba pada siapa?"
+  - id: analysis
+    label: Analisis
+    layer: 4
+    baseline_question: "Asumsi apa yang harus dipenuhi oleh “{content}”, dan bagaimana Anda mengujinya?"
+  - id: claim
+    label: Klaim
+    layer: 5
+  - id: limitation
+    label: Keterbatasan
+    layer: 5
+
+# Rantai dependency utama proposal. Urutan = urutan pemeriksaan celah.
+# gap_question: pertanyaan sidang bila `source` ada tetapi `target` tidak ada sama sekali.
+relations:
+  - source: research_question
+    target: objective
+    type: addresses
+    gap_question: Tujuan apa yang menjawab rumusan masalah Anda?
+  - source: objective
+    target: variable
+    type: requires
+    gap_question: Variabel apa yang Anda teliti untuk mencapai tujuan ini, dan bagaimana definisi operasionalnya?
+  - source: objective
+    target: method
+    type: requires
+    gap_question: Desain penelitian apa yang dipakai untuk mencapai tujuan ini?
+  - source: population
+    target: method
+    type: requires
+    gap_question: Bagaimana sampel diambil dari populasi yang Anda tetapkan?
+  - source: variable
+    target: instrument
+    type: measured_by
+    gap_question: Instrumen apa yang mengukur variabel Anda, dan bagaimana diuji?
+  - source: method
+    target: analysis
+    type: analyzed_with
+    gap_question: Teknik analisis apa yang sesuai dengan desain Anda, dan mengapa?
+  - source: objective
+    target: analysis
+    type: analyzed_with
+    gap_question: Bagaimana data diolah sampai tujuan penelitian terjawab?
+  - source: analysis
+    target: claim
+    type: supports
+    gap_question: Kesimpulan apa yang Anda harapkan dari analisis ini, dan apa batasnya?
+
+# Analisis dampak perubahan antarversi (FR-071, FR-072).
+# Bila elemen bertipe <kunci> berubah, elemen bertipe `affected` perlu dicek ulang.
+impact:
+  research_question:
+    - {affected: objective, check: apakah tujuan masih menjawab rumusan masalah yang baru}
+    - {affected: method, check: apakah desain masih sesuai bentuk pertanyaan}
+    - {affected: analysis, check: apakah analisis masih menjawab pertanyaan}
+    - {affected: claim, check: apakah klaim/kesimpulan masih sesuai}
+  objective:
+    - {affected: method, check: apakah desain masih mendukung tujuan}
+    - {affected: instrument, check: apakah instrumen masih mengukur yang dibutuhkan tujuan}
+    - {affected: analysis, check: apakah analisis masih menjawab tujuan}
+  population:
+    - {affected: method, check: "sampling frame, ukuran sampel, dan stratifikasi"}
+    - {affected: instrument, check: kelayakan instrumen untuk populasi baru}
+    - {affected: analysis, check: apakah analisis masih sesuai ukuran/karakter sampel}
+    - {affected: claim, check: batas generalisasi hasil}
+  variable:
+    - {affected: instrument, check: apakah instrumen masih mengukur variabel}
+    - {affected: analysis, check: apakah analisis sesuai skala data variabel}
+  method:
+    - {affected: analysis, check: apakah analisis sesuai desain baru}
+    - {affected: claim, check: apakah klaim masih didukung desain}
+    - {affected: limitation, check: keterbatasan desain yang perlu ditulis}
+  instrument:
+    - {affected: analysis, check: apakah analisis sesuai data dari instrumen}
+  analysis:
+    - {affected: claim, check: apakah kesimpulan sesuai hasil analisis}

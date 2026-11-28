@@ -37,3 +37,4 @@ examples:
     elements:
       - {type: research_question, content: "Bagaimana pengaruh model PBL terhadap kemampuan pemecahan masalah?", page: 5}
       - {type: method, content: "Quasi-eksperimen dengan kelompok kontrol (nonequivalent control group design).", page: 21}
+defense_question: "Pertanyaan Anda bersifat sebab-akibat, sedangkan desainnya “{method}”. Mengapa desain ini cukup untuk menyimpulkan pengaruh, dan ancaman validitas apa yang Anda kendalikan?"

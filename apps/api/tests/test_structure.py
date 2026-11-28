@@ -1,6 +1,7 @@
 from app.domain.structure import extract_by_structure
 from app.domain.verification import verify_quote
 from app.parsing.pdf import normalize
+from app.services.config import extraction
 
 PAGES = {
     1: "DAFTAR ISI 1.2 Rumusan Masalah 5 1.3 Tujuan Penelitian 6 3.2.2 Variabel Penelitian 20",
@@ -25,8 +26,12 @@ PAGES = {
 }
 
 
+def extract(pages):
+    return extract_by_structure(pages, extraction())
+
+
 def test_extracts_numbered_items_and_definitions_from_real_headings():
-    got = [(e.type, e.page) for e in extract_by_structure(PAGES)]
+    got = [(e.type, e.page) for e in extract(PAGES)]
     assert got.count(("research_question", 5)) == 2
     assert got.count(("objective", 5)) == 3
     assert ("method", 20) in got and ("analysis", 20) in got
@@ -34,13 +39,13 @@ def test_extracts_numbered_items_and_definitions_from_real_headings():
 
 
 def test_table_of_contents_and_table_cells_are_not_sections():
-    els = extract_by_structure(PAGES)
+    els = extract(PAGES)
     assert all(e.page != 1 for e in els)  # daftar isi dilewati
     assert not any(e.type == "population" for e in els)  # "Sumber Data" di sel tabel bukan judul
 
 
 def test_research_questions_end_at_question_mark_and_quotes_verify():
-    els = extract_by_structure(PAGES)
+    els = extract(PAGES)
     rqs = [e for e in els if e.type == "research_question"]
     assert rqs[0].content.endswith("pelatihan?")
     assert all(verify_quote(e.quote, e.page, PAGES).ok for e in els)
@@ -54,7 +59,7 @@ def test_word_per_line_pdf_text_is_joined():
 
 def test_lowercase_mention_in_prose_is_not_a_heading():
     pages = {1: "Dalam bab ini rumusan masalah dibahas singkat tanpa daftar sama sekali."}
-    assert extract_by_structure(pages) == []
+    assert extract(pages) == []
 
 
 def test_forbidden_section_finding_points_to_its_page_not_the_toc():
@@ -92,7 +97,7 @@ def test_single_numbered_objective_is_extracted():
             "sesudah PBL.\nDesain Penelitian\nPenelitian ini memakai desain one-group pre-test."
         )
     }
-    got = [e for e in extract_by_structure(pages) if e.type in {"objective", "research_question"}]
+    got = [e for e in extract(pages) if e.type in {"objective", "research_question"}]
     assert [e.type for e in got] == ["research_question", "objective"]
     assert got[1].content.startswith("Mengukur kemampuan")
 
@@ -103,7 +108,7 @@ def test_objective_heading_without_penelitian_is_detected():
         "1. Membangun model matematis untuk teka-teki. \n"
         "2. Menganalisis struktur grup gerak keping. \n1.4 Manfaat \nManfaat teoretis."
     }
-    objectives = [e for e in extract_by_structure(pages) if e.type == "objective"]
+    objectives = [e for e in extract(pages) if e.type == "objective"]
     assert [e.page for e in objectives] == [6, 6]
     assert objectives[0].content == "Membangun model matematis untuk teka-teki."
 
@@ -113,4 +118,4 @@ def test_longer_heading_starting_with_tujuan_is_not_the_objective():
         8: "2.1 Tujuan Pembelajaran Matematika \n"
         "Pembelajaran matematika bertujuan melatih penalaran siswa secara bertahap."
     }
-    assert extract_by_structure(pages) == []
+    assert extract(pages) == []
