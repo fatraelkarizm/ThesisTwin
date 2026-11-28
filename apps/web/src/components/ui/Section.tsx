@@ -1,4 +1,3 @@
-import { Info } from "lucide-react";
 import type { ReactNode } from "react";
 
 interface SectionProps {
@@ -19,10 +18,7 @@ export function Section({ title, description, action, id, children }: SectionPro
             {title}
           </h2>
           {description ? (
-            <p className="mt-0.5 flex items-center gap-1.5 text-sm text-muted">
-              {description}
-              <Info aria-hidden="true" className="size-3.5 shrink-0" />
-            </p>
+            <p className="mt-0.5 text-sm text-muted">{description}</p>
           ) : null}
         </div>
         {action}

@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { copy } from "@/lib/copy";
+import { BriefDocument } from "@/components/domain/BriefDocument";
+import type { BriefOut } from "@/lib/api";
 import { SupervisorBrief } from "./SupervisorBrief";
 
 function respond(body: unknown) {
@@ -51,5 +53,23 @@ describe("SupervisorBrief", () => {
     expect(screen.getByText(/v1, hal\. 21/)).toBeInTheDocument();
     expect(screen.getByText(/mengendalikan penjelasan alternatif/)).toBeInTheDocument();
     expect(screen.getByText(new RegExp(copy.sourceType.methodology))).toBeInTheDocument();
+  });
+});
+
+describe("BriefDocument (pratinjau mahasiswa)", () => {
+  it("isi sama dengan halaman dosen, tetapi mahasiswa tidak bisa memutuskan atas nama dosen", () => {
+    render(<BriefDocument brief={brief as BriefOut} stress={[]} />);
+    expect(screen.getByText(awaiting.why_flagged)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: new RegExp(copy.supervisor.agree) })).not.toBeInTheDocument();
+    expect(screen.getByText(copy.supervisor.previewDecision)).toBeInTheDocument();
+  });
+
+  it("halaman dosen tetap punya tombol keputusan", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((url: string) => respond(url.endsWith("/stress-test") ? [] : brief)),
+    );
+    render(<SupervisorBrief token="t" />);
+    expect(await screen.findByRole("button", { name: new RegExp(copy.supervisor.agree) })).toBeInTheDocument();
   });
 });

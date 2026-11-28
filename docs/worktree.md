@@ -85,6 +85,7 @@ Berlaku untuk semua file di `components/ui` dan `components/domain`.
 | `EvidenceChip` | `domain/` | `document`, `page` | klik → buka sumber |
 | `AiLabel` | `domain/` | — | wajib untuk konten AI |
 | `FindingCard` | `domain/` | `finding: Finding`, `onConfirm`, `onReject` | memakai StatusBadge + EvidenceChip + `why_flagged` |
+| `BriefDocument` | `domain/` | `brief`, `stress`, `onDecide?`, `onRate?` | isi Supervision Brief; tanpa handler = pratinjau mahasiswa |
 | `FindingGuidance` | `domain/` | `finding` (directions, basis, sourceTypes, references) | arah + landasan + rujukan, dilipat; dipakai `FindingCard` dan kartu kelompok temuan |
 | `NodeDetailPanel` | `features/graph` | `node` | sumber, status, feedback terkait |
 

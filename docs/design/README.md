@@ -37,6 +37,9 @@ Audit UI menemukan dua navigasi yang urutan & namanya berbeda (sidebar vs penunj
 | Pengguna baru melihat data simulasi | Onboarding: apa yang dilakukan ThesisTwin, satu tombol unggah, apa yang terjadi setelahnya. Tidak ada data contoh |
 | Topbar: pencarian non-aktif, dua tombol unggah, nama proyek statis | Judul & prodi proyek aktif + satu tombol "Unggah draf" |
 | Unggah: input file bawaan, ID proyek & SHA-256, tautan kecil | Area tarik-lepas, judul proyek, tombol utama "Tinjau N temuan" setelah unggah |
+| Brief: kotak teks mentah + tombol | **Pratinjau persis halaman dosen** (komponen bersama `BriefDocument`; tombol keputusan dosen diganti keterangan) + panel "Kirim ke dosen": buat/salin tautan, salin teks untuk chat |
+| Judul halaman berbahasa campur (Defense Stress-Test, Riwayat Versi, Supervision Brief) | Judul = nama di sidebar (Latihan Seminar, Perubahan Versi, Kirim ke Dosen) |
+| Ikon ⓘ di setiap deskripsi section | Dihapus: tampak bisa diklik padahal tidak |
 | Temuan: semua detail terbuka, aturan yang sama berulang | Saringan (perlu ditinjau / prioritas tinggi / sudah ditinjau / semua), temuan per aturan digabung jadi satu kartu, arah & landasan dilipat |
 
 ## 3. Yang sengaja **tidak** diambil

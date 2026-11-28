@@ -103,21 +103,21 @@ export const copy = {
     },
     {
       href: "/stress-test",
-      title: "Defense Stress-Test",
+      title: "Latihan Seminar",
       short: "Latihan seminar",
       description:
         "Pertanyaan yang kemungkinan diajukan penguji, dipilih dari bagian proposal yang paling lemah. Jawab dengan kata-katamu sendiri.",
     },
     {
       href: "/versi",
-      title: "Riwayat Versi",
+      title: "Perubahan Versi",
       short: "Perubahan versi",
       description:
         "Apa yang berubah sejak versi sebelumnya, bagian yang perlu dicek ulang, dan apakah komentar dosen sudah ditindaklanjuti.",
     },
     {
       href: "/brief",
-      title: "Supervision Brief",
+      title: "Kirim ke Dosen",
       short: "Kirim ke dosen",
       description:
         "Ringkasan satu halaman untuk dosen dari semua langkah sebelumnya. Kirim sebagai teks chat atau tautan tanpa akun.",
@@ -198,9 +198,12 @@ export const copy = {
     },
     addressedYes: "Sudah ditangani",
     addressedNo: "Belum",
-    briefTitle: "Isi brief",
-    briefDescription: "Ringkasan untuk dosen. Hanya merangkum catatan, tidak menulis isi skripsi.",
-    copy: "Salin teks",
+    copy: "Salin teks untuk chat",
+    copyLink: "Salin tautan",
+    sendTitle: "Kirim ke dosen",
+    sendBody: "Dosen membuka tautan tanpa akun dan bisa memberi keputusan langsung di sana. Atau tempel teksnya di chat.",
+    previewLabel: "Pratinjau: ini yang dilihat dosen",
+    linksMade: (n: number) => (n > 0 ? `${n} tautan pernah dibuat. Kelola atau cabut di Pengaturan.` : "Belum ada tautan yang dibuat."),
     copied: "Tersalin",
     shareLink: "Buat tautan dosen",
     shareNote: "Dosen membuka tautan ini tanpa akun. Berlaku 14 hari. Tautan hanya ditampilkan sekali.",
@@ -210,7 +213,8 @@ export const copy = {
     description: "Diurutkan dari bagian yang paling lemah. Simpan jawabanmu untuk dibaca dosen.",
     generate: "Buat pertanyaan",
     regenerate: "Perbarui pertanyaan",
-    empty: "Belum ada pertanyaan untuk versi ini. Pertanyaan disusun dari temuan dan elemen yang sudah terbaca.",
+    empty: "Belum ada pertanyaan untuk versi ini",
+    emptyBody: "Pertanyaan disusun dari temuan dan elemen yang sudah terbaca, dimulai dari bagian yang paling lemah.",
     source: "Dari templat aturan",
     why: "Dipilih karena",
     answerLabel: "Justifikasi kamu",
@@ -248,6 +252,7 @@ export const copy = {
     noChanges: "Tidak ada perubahan elemen yang terdeteksi.",
     comments: "Komentar Anda sebelumnya",
     awaiting: "Menunggu keputusan Anda",
+    previewDecision: "Dosen memilih: setuju perlu ditindaklanjuti, atau tidak relevan.",
     noAwaiting: "Tidak ada temuan yang menunggu keputusan.",
     print: "Cetak / simpan PDF",
     open: "Temuan terbuka (belum dikonfirmasi mahasiswa)",
@@ -325,3 +330,6 @@ export const copy = {
     },
   },
 } as const;
+
+export const programLabel = (program: string) =>
+  (copy.upload.programs as Record<string, string>)[program] ?? program;

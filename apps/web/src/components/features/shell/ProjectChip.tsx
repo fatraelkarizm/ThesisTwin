@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { api, type ProjectOut } from "@/lib/api";
-import { copy } from "@/lib/copy";
+import { copy, programLabel } from "@/lib/copy";
 import { PROJECT_EVENT, savedProjectId } from "@/lib/project";
-
-const programLabel = (p: string) => (copy.upload.programs as Record<string, string>)[p] ?? p;
 
 /** Judul proyek aktif di topbar, agar mahasiswa tahu proyek mana yang sedang dibuka. */
 export function ProjectChip() {

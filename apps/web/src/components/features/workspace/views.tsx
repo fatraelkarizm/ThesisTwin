@@ -1,7 +1,8 @@
 "use client";
 
-import { FileText, RefreshCw } from "lucide-react";
+import { Eye, FileText, RefreshCw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { BriefDocument } from "@/components/domain/BriefDocument";
 import { Button } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
 import {
@@ -21,7 +22,7 @@ import { AddElementForm, ElementList } from "./ElementsPanel";
 import { FindingGroup, groupFindings, isOpen } from "./FindingGroup";
 import { GraphView } from "./GraphView";
 import { ProjectPage, type ProjectContext } from "./ProjectPage";
-import { BriefPanel, CommentsPanel } from "./SidePanels";
+import { CommentsPanel, SharePanel } from "./SidePanels";
 import { StressPanel } from "./StressPanel";
 
 const message = (e: unknown) => (e instanceof ApiError ? e.message : String(e));
@@ -302,19 +303,52 @@ export function VersionsView({ project, versions }: ProjectContext) {
 
 // ---- 5. Supervision Brief -----------------------------------------------------------------
 
-export function BriefView({ project }: ProjectContext) {
-  const [text, setText] = useState("");
+export function BriefView({ project, versions }: ProjectContext) {
+  const w = copy.workspace;
+  const latest = versions.at(-1)!;
+  const [data, setData] = useState<{ brief: BriefOut; stress: StressQuestionOut[]; text: string; links: number } | null>(
+    null,
+  );
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
-    api.briefText(project.id).then(setText, (e: unknown) => setError(message(e)));
-  }, [project.id]);
+    Promise.all([
+      api.brief(project.id),
+      api.getStressTest(latest.id),
+      api.briefText(project.id),
+      api.shareLinks(project.id),
+    ]).then(
+      ([brief, stress, text, links]) => setData({ brief, stress, text, links: links.length }),
+      (e: unknown) => setError(message(e)),
+    );
+  }, [project.id, latest.id]);
+
   return (
     <>
       <ErrorNote error={error} />
-      <BriefPanel
-        text={text}
-        onShare={async () => `${window.location.origin}${(await api.share(project.id)).path}`}
-      />
+      {data ? (
+        <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
+          <section aria-label={w.previewLabel} className="rounded-card border border-line bg-background p-2">
+            <p className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-muted">
+              <Eye aria-hidden="true" className="size-4" />
+              {w.previewLabel}
+            </p>
+            <div className="rounded-lg border border-line bg-surface p-4 md:p-6">
+              <BriefDocument brief={data.brief} stress={data.stress} />
+            </div>
+          </section>
+          <div className="lg:sticky lg:top-20">
+            <SharePanel
+              text={data.text}
+              links={data.links}
+              onShare={async () => {
+                const path = (await api.share(project.id)).path;
+                setData((d) => (d ? { ...d, links: d.links + 1 } : d));
+                return `${window.location.origin}${path}`;
+              }}
+            />
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }

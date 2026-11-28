@@ -33,14 +33,23 @@ export function StressPanel({ questions, onGenerate, onAnswer }: StressPanelProp
       title={s.title}
       description={s.description}
       action={
-        <Button variant={questions.length ? "secondary" : "primary"} onClick={generate} disabled={busy}>
-          {questions.length ? <RefreshCw aria-hidden="true" className="size-4" /> : <ShieldQuestion aria-hidden="true" className="size-4" />}
-          {questions.length ? s.regenerate : s.generate}
-        </Button>
+        questions.length > 0 ? (
+          <Button variant="secondary" onClick={generate} disabled={busy}>
+            <RefreshCw aria-hidden="true" className="size-4" />
+            {s.regenerate}
+          </Button>
+        ) : undefined
       }
     >
       {questions.length === 0 ? (
-        <p className="text-sm text-muted">{s.empty}</p>
+        <div className="flex flex-col items-center gap-3 rounded-card border border-dashed border-line px-6 py-10 text-center">
+          <ShieldQuestion aria-hidden="true" className="size-8 text-brand-strong" />
+          <p className="text-base font-semibold">{s.empty}</p>
+          <p className="max-w-md text-sm text-muted">{s.emptyBody}</p>
+          <Button onClick={generate} disabled={busy}>
+            {s.generate}
+          </Button>
+        </div>
       ) : (
         <ol className="space-y-3">
           {questions.map((q, i) => (

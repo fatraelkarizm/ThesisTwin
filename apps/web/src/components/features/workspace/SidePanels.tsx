@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Copy, Link2 } from "lucide-react";
+import { Check, Copy, Link2, MessageSquareText } from "lucide-react";
 import { useState } from "react";
 import { Badge, type BadgeTone } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -58,38 +58,60 @@ export function CommentsPanel({
   );
 }
 
-export function BriefPanel({ text, onShare }: { text: string; onShare: () => Promise<string> }) {
-  const w = copy.workspace;
-  const [copied, setCopied] = useState(false);
-  const [link, setLink] = useState<string | null>(null);
+interface SharePanelProps {
+  text: string;
+  links: number; // tautan yang pernah dibuat untuk proyek ini
+  onShare: () => Promise<string>;
+}
 
-  async function copyText(value: string) {
+/** Dua cara mengirim brief: tautan tanpa akun (utama) atau teks untuk chat. */
+export function SharePanel({ text, links, onShare }: SharePanelProps) {
+  const w = copy.workspace;
+  const [copied, setCopied] = useState<"text" | "link" | null>(null);
+  const [link, setLink] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  async function copyValue(value: string, what: "text" | "link") {
     await navigator.clipboard.writeText(value);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    setCopied(what);
+    setTimeout(() => setCopied(null), 1500);
+  }
+
+  async function share() {
+    setBusy(true);
+    try {
+      setLink(await onShare());
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
-    <Section id="brief" title={w.briefTitle} description={w.briefDescription}>
-      <pre className="max-h-80 overflow-auto whitespace-pre-wrap rounded-card border border-line bg-surface p-3 font-sans text-xs leading-relaxed shadow-card">
-        {text}
-      </pre>
-      <div className="mt-3 flex flex-wrap gap-2">
-        <Button variant="secondary" onClick={() => copyText(text)}>
-          {copied ? <Check aria-hidden="true" className="size-4" /> : <Copy aria-hidden="true" className="size-4" />}
-          {copied ? w.copied : w.copy}
-        </Button>
-        <Button onClick={async () => setLink(await onShare())}>
+    <aside className="space-y-4 rounded-card border border-line bg-surface p-5 shadow-card">
+      <div>
+        <h2 className="text-base font-semibold">{w.sendTitle}</h2>
+        <p className="mt-1 text-sm text-muted">{w.sendBody}</p>
+      </div>
+      {link ? (
+        <div className="space-y-2 rounded-lg border border-brand bg-brand-soft p-3">
+          <p className="break-all font-mono text-xs text-brand-strong">{link}</p>
+          <Button className="w-full" onClick={() => copyValue(link, "link")}>
+            {copied === "link" ? <Check aria-hidden="true" className="size-4" /> : <Copy aria-hidden="true" className="size-4" />}
+            {copied === "link" ? w.copied : w.copyLink}
+          </Button>
+          <p className="text-xs text-muted">{w.shareNote}</p>
+        </div>
+      ) : (
+        <Button className="w-full" onClick={share} disabled={busy}>
           <Link2 aria-hidden="true" className="size-4" />
           {w.shareLink}
         </Button>
-      </div>
-      {link ? (
-        <div className="mt-3 rounded-card border border-brand bg-brand-soft p-3 text-xs">
-          <p className="break-all font-mono text-brand-strong">{link}</p>
-          <p className="mt-1.5 text-muted">{w.shareNote}</p>
-        </div>
-      ) : null}
-    </Section>
+      )}
+      <Button variant="secondary" className="w-full" onClick={() => copyValue(text, "text")} disabled={!text}>
+        {copied === "text" ? <Check aria-hidden="true" className="size-4" /> : <MessageSquareText aria-hidden="true" className="size-4" />}
+        {copied === "text" ? w.copied : w.copy}
+      </Button>
+      <p className="border-t border-line pt-3 text-xs text-muted">{w.linksMade(links)}</p>
+    </aside>
   );
 }
