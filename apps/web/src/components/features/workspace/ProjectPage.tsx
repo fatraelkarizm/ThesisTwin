@@ -51,7 +51,7 @@ export function ProjectPage({ step, versionPicker = true, children }: ProjectPag
           ) : null}
         </div>
 
-        <ol className="-mb-px mt-5 flex gap-6 overflow-x-auto" aria-label={copy.shell.workflow}>
+        <ol className="-mb-px mt-5 flex gap-6 overflow-x-auto [scrollbar-width:none]" aria-label={copy.shell.workflow}>
           {steps.map((s, i) => (
             <li key={s.href}>
               <Link

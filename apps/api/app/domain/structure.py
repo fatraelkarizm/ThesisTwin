@@ -19,6 +19,7 @@ NUMBERED = re.compile(r"(?:^|(?<=\s))(\d{1,2})[.)]\s+(?=[A-Z])")
 SENTENCE_END = re.compile(r"(?<=[.?!])\s+(?=[A-Z0-9“\"(])")
 NEXT_HEADING = re.compile(r"(?<=\s)(?:\d+(?:\.\d+)+\.?\s+[A-Z]|BAB\s+[IVX]+\b)")
 CAPTION = re.compile(r"(Tabel|Gambar|Table|Figure)\s*$")
+LIST_MARK_END = re.compile(r"\d{1,2}[.)]\s*$")
 
 
 @dataclass(frozen=True)
@@ -70,9 +71,21 @@ def _section(text: str, vocab: SectionVocab) -> tuple[int, int] | None:
                 if not CAPTION.search(text[max(0, nxt.start() - 8) : nxt.start()]):
                     end = nxt.start()
                     break
-            if len(text[m.end() : end].strip()) >= 40:
-                return m.end(), min(end, m.end() + 4000)
+            start = _skip_heading_rest(text, m.end())
+            if len(text[start:end].strip()) >= 40:
+                return start, min(end, start + 4000)
     return None
+
+
+def _skip_heading_rest(text: str, pos: int) -> int:
+    """"3.2 Objek Kajian dan Perangkat Komputasi⏎": judul terdaftar hanya awal baris judul.
+    Sisa baris pendek tanpa tanda kalimat dilewati agar tidak ikut jadi isi. Judul dan isi yang
+    menyatu dalam satu baris (tanpa ganti baris) tidak diubah."""
+    nl = text.find("\n", pos)
+    rest = text[pos:nl] if nl != -1 else ""
+    if nl != -1 and len(rest) <= 80 and not re.search(r"[.:?!]", rest):
+        return nl + 1
+    return pos
 
 
 def _items(body: str) -> list[tuple[int, int]]:
@@ -129,7 +142,16 @@ def _pick(type_: str, body: str, vocab: Extraction) -> list[tuple[int, int]]:
                 seen.add(kind)
                 picked.append((a, b))
         return picked or _sentences(body)[:1]
-    return _sentences(body)[:1]  # metode, populasi, instrumen, analisis: kalimat pembuka
+    # Metode, populasi, instrumen, analisis: satu elemen per item bila bagian berupa daftar
+    # bernomor (mis. tahapan prosedur), selain itu kalimat pembukanya. Kalimat pembuka sebelum
+    # daftar ikut diambil bila berupa pernyataan, bukan pengantar daftar ("... berikut:").
+    items = _items(body)
+    if not items:
+        return _sentences(body)[:1]
+    head = LIST_MARK_END.sub("", body[: items[0][0]])  # teks sebelum "1." item pertama
+    intro = [s for s in _sentences(head)[:1] if not head[s[0] : s[1]].rstrip().endswith(":")]
+    firsts = [(a, a + (_sentences(body[a:b]) or [(0, b - a)])[0][1]) for a, b in items]
+    return (intro + firsts)[:6]
 
 
 def extract_by_structure(pages: dict[int, str], vocab: Extraction) -> list[Extracted]:

@@ -21,8 +21,8 @@ from app.schemas.review import (
     StatusIn,
     StressQuestionOut,
 )
+from app.services import pipeline, share
 from app.services import review as svc
-from app.services import share
 from app.services import stress as stress_svc
 from app.services.findings import change_status
 from app.services.rules import rule_meta
@@ -64,6 +64,13 @@ def graph(version_id: str, session: SessionDep) -> GraphOut:
             GraphGap(from_type=x.from_type, to_type=x.to_type, relation=x.relation) for x in g.gaps
         ],
     )
+
+
+@router.post("/versions/{version_id}/reextract")
+def reextract(version_id: str, session: SessionDep) -> dict[str, int]:
+    """Baca ulang dokumen dengan kosakata judul bab terbaru; hanya menambah elemen baru."""
+    r = pipeline.reextract(session, version_id)
+    return {"added": r.added, "findings": r.findings}
 
 
 @router.post("/versions/{version_id}/check")

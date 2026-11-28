@@ -52,6 +52,8 @@ export function ProposalView({ version, unit }: ProjectContext) {
   const w = copy.workspace;
   const { data, setData, error, setError } = useVersionData(version.id, loadProposal);
   const [picked, setPicked] = useState<ElementType | null>(null);
+  const [reading, setReading] = useState(false);
+  const [readNote, setReadNote] = useState<string | null>(null);
   if (!data) return <ErrorNote error={error} />;
 
   const [elements, graph, ontology] = data;
@@ -69,6 +71,20 @@ export function ProposalView({ version, unit }: ProjectContext) {
       setError(null);
     } catch (e) {
       setError(message(e));
+    }
+  }
+
+  async function reread() {
+    setReading(true);
+    try {
+      const r = await api.reextract(version.id);
+      setData([await api.elements(version.id), await api.graph(version.id), ontology]);
+      setReadNote(w.reextractDone(r.added));
+      setError(null);
+    } catch (e) {
+      setError(message(e));
+    } finally {
+      setReading(false);
     }
   }
 
@@ -113,9 +129,20 @@ export function ProposalView({ version, unit }: ProjectContext) {
       </div>
 
       <section aria-labelledby="elements-title" className="space-y-3">
-        <h2 id="elements-title" className="text-lg font-semibold">
-          {w.cardsTitle}
-        </h2>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 id="elements-title" className="text-lg font-semibold">
+              {w.cardsTitle}
+            </h2>
+            <p className="text-xs text-muted" role="status">
+              {readNote ?? w.reextractHint}
+            </p>
+          </div>
+          <Button variant="secondary" onClick={reread} disabled={reading}>
+            <RefreshCw aria-hidden="true" className={`size-4 ${reading ? "animate-spin" : ""}`} />
+            {reading ? w.reextracting : w.reextract}
+          </Button>
+        </div>
         {numbered.length ? (
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {numbered.map((n) => (

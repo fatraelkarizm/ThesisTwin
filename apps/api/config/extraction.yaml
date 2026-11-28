@@ -18,7 +18,15 @@ sections:
     headings: [Tujuan Penelitian, Research Objectives]
     standalone_headings: [Tujuan]
   - type: method
-    headings: [Desain Penelitian, Rancangan Penelitian, Jenis Penelitian, Metode Penelitian]
+    headings:
+      - Desain Penelitian
+      - Rancangan Penelitian
+      - Jenis Penelitian
+      - Metode Penelitian
+      - Prosedur Kerja
+      - Prosedur Penelitian
+      - Tahapan Penelitian
+      - Langkah Penelitian
   - type: variable
     headings: [Variabel Penelitian, Definisi Operasional Variabel, Definisi Operasional]
   - type: population
@@ -29,6 +37,7 @@ sections:
       - Sumber Data
       - Karakteristik Dataset
       - Dataset Penelitian
+      - Objek Kajian
   - type: instrument
     headings: [Instrumen Penelitian, Teknik Pengumpulan Data]
   - type: analysis

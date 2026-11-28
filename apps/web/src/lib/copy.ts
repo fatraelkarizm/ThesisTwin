@@ -151,6 +151,11 @@ export const copy = {
     panelCount: (n: number) => `${n} elemen terbaca`,
     panelEmpty: "Belum terbaca dari dokumen. Kalau bagian ini ada, tambahkan manual di bawah dengan kutipan aslinya.",
     cardsTitle: "Elemen terbaca",
+    reextract: "Baca ulang dokumen",
+    reextracting: "Membaca…",
+    reextractHint: "Pakai daftar judul bab terbaru. Elemen yang sudah ada tidak diubah.",
+    reextractDone: (n: number) =>
+      n > 0 ? `${n} elemen baru terbaca dan temuan diperbarui.` : "Tidak ada elemen baru yang terbaca.",
     toReview: "Perlu ditinjau",
     reviewed: "Sudah ditinjau",
     filterLabel: "Saring temuan",

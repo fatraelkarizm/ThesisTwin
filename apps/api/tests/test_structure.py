@@ -119,3 +119,33 @@ def test_longer_heading_starting_with_tujuan_is_not_the_objective():
         "Pembelajaran matematika bertujuan melatih penalaran siswa secara bertahap."
     }
     assert extract(pages) == []
+
+
+def test_numbered_procedure_and_analysis_become_one_element_per_item():
+    pages = {
+        13: "III METODE \n3.3 Prosedur Kerja \n"
+        "Prosedur penelitian disusun ke dalam dua tahapan utama berikut: \n"
+        "1. Pemodelan Geometri: Mendefinisikan dodekahedron reguler di ruang tiga dimensi. \n"
+        "2. Klasifikasi Stiker: Mengelompokkan seluruh keping berdasarkan jumlah stiker. \n"
+        "3.4 Analisis Data \nData yang dianalisis berupa struktur aljabar dan permutasi. "
+        "Kebenaran hasil divalidasi melalui dua tahap: \n"
+        "1. Pembuktian Analitik: Setiap klaim diturunkan dari definisi dan aksioma grup. \n"
+        "2. Verifikasi Numerik: Skrip Python menguji koordinat titik sampel tiap stiker."
+    }
+    got = [(e.type, e.content.split(":")[0]) for e in extract(pages)]
+    assert got == [
+        ("method", "Pemodelan Geometri"),
+        ("method", "Klasifikasi Stiker"),
+        ("analysis", "Data yang dianalisis berupa struktur aljabar dan permutasi."),
+        ("analysis", "Pembuktian Analitik"),
+        ("analysis", "Verifikasi Numerik"),
+    ]
+
+
+def test_rest_of_a_longer_heading_line_is_not_content():
+    pages = {
+        13: "Bab tiga. \n3.2 Objek Kajian dan Perangkat Komputasi \n"
+        "Penelitian ini memadukan pembuktian analitik dengan verifikasi komputasional."
+    }
+    (got,) = [e for e in extract(pages) if e.type == "population"]
+    assert got.content.startswith("Penelitian ini memadukan")

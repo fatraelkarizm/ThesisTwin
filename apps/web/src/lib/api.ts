@@ -218,6 +218,8 @@ export const api = {
     request<ElementOut>(`/versions/${versionId}/elements`, json(body)),
   graph: (versionId: string) => request<GraphOut>(`/versions/${versionId}/graph`),
   ontology: () => request<OntologyOut>("/ontology"),
+  reextract: (versionId: string) =>
+    request<{ added: number; findings: number }>(`/versions/${versionId}/reextract`, { method: "POST" }),
   stressTest: (versionId: string, regenerate = false) =>
     request<StressQuestionOut[]>(`/versions/${versionId}/stress-test${regenerate ? "?regenerate=true" : ""}`, {
       method: "POST",

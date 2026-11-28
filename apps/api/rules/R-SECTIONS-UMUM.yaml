@@ -25,7 +25,7 @@ check:
     - {name: Tujuan Penelitian, any_terms: [tujuan penelitian, research objective]}
     - {name: Manfaat Penelitian, any_terms: [manfaat penelitian, kegunaan penelitian]}
     - {name: Kajian Pustaka, any_terms: [kajian pustaka, tinjauan pustaka, kajian teori, landasan teori, literature review]}
-    - {name: Metode Penelitian, any_terms: [metode penelitian, metodologi penelitian, research method]}
+    - {name: Metode Penelitian, any_terms: [metode penelitian, metodologi penelitian, research method, iii metode, iii metodologi]}
 examples:
   fires:
     document_text: "BAB I PENDAHULUAN Latar Belakang ... Rumusan Masalah ... BAB III Metode Penelitian ..."
