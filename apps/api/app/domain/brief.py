@@ -58,6 +58,9 @@ class Brief:
     awaiting_supervisor: list[BriefFinding] = field(default_factory=list)
     resolved_rules: list[str] = field(default_factory=list)
     impacts: list[str] = field(default_factory=list)
+    # Untuk dibaca dosen: judul aturan, bukan ID; temuan satu aturan diringkas jadi satu baris.
+    resolved_titles: list[str] = field(default_factory=list)
+    open_summary: list[str] = field(default_factory=list)
 
 
 def _label(t: str) -> str:
@@ -82,6 +85,21 @@ def describe_impacts(impacts: list[Impact]) -> list[str]:
     return lines
 
 
+def summarize(findings: list[BriefFinding]) -> list[str]:
+    """Satu baris per aturan. "Judul: A" dan "Judul: B" dari aturan yang sama -> "Judul: A, B"."""
+    by_rule: dict[str, list[str]] = {}
+    for f in findings:
+        by_rule.setdefault(f.rule_id, []).append(f.title)
+    lines = []
+    for titles in by_rule.values():
+        base = titles[0].split(": ", 1)[0]
+        if len(titles) > 1 and all(t.startswith(f"{base}: ") for t in titles):
+            lines.append(f"{base}: " + ", ".join(t[len(base) + 2 :] for t in titles))
+        else:
+            lines += titles
+    return lines
+
+
 def build_brief(
     *,
     project_title: str,
@@ -95,10 +113,13 @@ def build_brief(
     previous_rules: set[str],
     impacts: list[Impact] | None = None,
     unit: str = "page",
+    rule_titles: dict[str, str] | None = None,
 ) -> Brief:
     open_ = [f for f in findings if f.status in {"ai_suggested", "needs_user_confirmation"}]
     awaiting = [f for f in findings if f.status == "student_confirmed"]
     current_rules = {f.rule_id for f in findings if f.status != "rejected"}
+    resolved = sorted(previous_rules - current_rules)
+    titles = rule_titles or {}
     return Brief(
         project_title=project_title,
         program=program,
@@ -110,8 +131,10 @@ def build_brief(
         comments=comments,
         open_findings=open_,
         awaiting_supervisor=awaiting,
-        resolved_rules=sorted(previous_rules - current_rules),
+        resolved_rules=resolved,
         impacts=describe_impacts(impacts or []),
+        resolved_titles=[titles.get(r, r) for r in resolved],
+        open_summary=summarize(open_),
     )
 
 
@@ -151,15 +174,16 @@ def render_text(b: Brief) -> str:
     where = "bagian" if b.unit == "section" else "hlm."
     for f in b.awaiting_supervisor:
         pages = ", ".join(f"{e.element} {where} {e.page}" for e in f.evidence)
-        out.append(f"- [{f.rule_id}] {f.title}" + (f" ({pages})" if pages else ""))
+        out.append(f"- {f.title}" + (f" ({pages})" if pages else ""))
     if not b.awaiting_supervisor:
         out.append("- Tidak ada.")
 
     out += ["", "Temuan terbuka (belum dikonfirmasi mahasiswa):"]
-    out += [f"- [{f.rule_id}] {f.title}" for f in b.open_findings] or ["- Tidak ada."]
+    out += [f"- {line}" for line in b.open_summary] or ["- Tidak ada."]
 
-    if b.resolved_rules:
-        out += ["", "Tidak muncul lagi di versi ini: " + ", ".join(b.resolved_rules)]
+    if b.resolved_titles:
+        out += ["", "Tidak muncul lagi di versi ini:"]
+        out += [f"- {t}" for t in b.resolved_titles]
 
     out += [
         "",

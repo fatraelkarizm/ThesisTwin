@@ -99,3 +99,36 @@ def test_brief_summarises_state_only():
     text = render_text(b)
     assert "v1 → v2" in text and "Diubah — Rumusan masalah" in text
     assert "Bukan penilaian" in text
+
+
+def test_brief_speaks_in_rule_titles_not_ids():
+    # Dosen tidak mengenal ID aturan (supervisor-burden §2 no. 4).
+    sections = [
+        BriefFinding(
+            f"S{i}", "R-SECTIONS-UMUM", f"Bagian wajib tidak ditemukan: {s}", "low", "ai_suggested"
+        )
+        for i, s in enumerate(["Latar Belakang", "Hipotesis"])
+    ]
+    b = build_brief(
+        project_title="Skripsi",
+        program="matematika",
+        from_version=1,
+        to_version=2,
+        generated_at=datetime(2026, 11, 24, tzinfo=UTC),
+        diff=None,
+        comments=[],
+        findings=[
+            *sections,
+            BriefFinding(
+                "F2", "R-VAR-INSTR", "Variabel tanpa instrumen", "medium", "student_confirmed"
+            ),
+        ],
+        previous_rules={"R-CAUSAL-01"},
+        rule_titles={"R-CAUSAL-01": "Pertanyaan kausal, desain mungkin belum mendukung"},
+    )
+    assert b.open_summary == ["Bagian wajib tidak ditemukan: Latar Belakang, Hipotesis"]
+    assert b.resolved_titles == ["Pertanyaan kausal, desain mungkin belum mendukung"]
+    text = render_text(b)
+    assert "R-" not in text
+    assert "- Variabel tanpa instrumen" in text
+    assert "Bagian wajib tidak ditemukan: Latar Belakang, Hipotesis" in text

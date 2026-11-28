@@ -101,6 +101,8 @@ export interface BriefOut {
   awaiting_supervisor: BriefFindingOut[];
   resolved_rules: string[];
   impacts: string[];
+  resolved_titles: string[]; // judul aturan, untuk dibaca dosen
+  open_summary: string[]; // satu baris per aturan
 }
 
 export interface GraphOut {

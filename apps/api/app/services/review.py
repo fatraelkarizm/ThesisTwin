@@ -319,6 +319,7 @@ def build_brief(
         previous_rules=previous_rules,
         impacts=impacts,
         unit="page" if versions[-1].media_type == PDF_MEDIA else "section",
+        rule_titles={rid: r.title for rid, r in meta.items()},
     )
 
 

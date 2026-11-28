@@ -35,8 +35,10 @@ const brief = {
   comments: [],
   open_findings: [],
   awaiting_supervisor: [awaiting],
-  resolved_rules: [],
+  resolved_rules: ["R-STAT-TEST"],
   impacts: [],
+  resolved_titles: ["Perbandingan tanpa uji statistik"],
+  open_summary: ["Bagian wajib tidak ditemukan: Latar Belakang, Hipotesis"],
 };
 
 afterEach(() => vi.unstubAllGlobals());
@@ -62,6 +64,10 @@ describe("BriefDocument (pratinjau mahasiswa)", () => {
     expect(screen.getByText(awaiting.why_flagged)).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: new RegExp(copy.supervisor.agree) })).not.toBeInTheDocument();
     expect(screen.getByText(copy.supervisor.previewDecision)).toBeInTheDocument();
+    // Dosen membaca judul aturan, bukan ID-nya.
+    expect(screen.getByText("Perbandingan tanpa uji statistik")).toBeInTheDocument();
+    expect(screen.getByText(/Latar Belakang, Hipotesis/)).toBeInTheDocument();
+    expect(screen.queryByText(/R-[A-Z]/)).not.toBeInTheDocument();
   });
 
   it("halaman dosen tetap punya tombol keputusan", async () => {

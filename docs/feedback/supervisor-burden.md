@@ -18,9 +18,9 @@ Tidak ada notifikasi, email, tenggat, atau kewajiban mengisi apa pun dari sisi a
 ## 2. Titik yang berpotensi memberatkan (hipotesis tim, belum diuji)
 
 1. ~~**Keputusan temuan tanpa konteks.**~~ **Ditangani 2026-11-26:** kartu "menunggu dosen" kini memuat alasan, bukti (elemen + halaman/bagian), landasan beserta asal sumbernya; teks brief untuk chat ikut mencantumkan halaman. Apakah ini *cukup* untuk memutuskan tanpa membuka dokumen masih perlu dicek ke dosen (pertanyaan no. 9).
-2. **Panjang ringkasan tidak dibatasi.** Proposal dengan banyak temuan menghasilkan daftar panjang. Belum ada batas atau urutan "3 hal terpenting".
+2. **Panjang ringkasan tidak dibatasi.** Proposal dengan banyak temuan menghasilkan daftar panjang. Sebagian dikurangi 2026-11-28: temuan terbuka dari satu aturan diringkas jadi satu baris (mis. empat bagian wajib → satu baris). Batas atau urutan "3 hal terpenting" belum dibuat; menunggu jawaban dosen untuk pertanyaan no. 6.
 3. **Tautan kedaluwarsa 14 hari.** Bila dosen membuka setelah itu, mahasiswa harus membuat tautan baru. Belum diketahui apakah ini mengganggu.
-4. **Istilah aturan** (mis. `R-CAUSAL-01`) mungkin tidak bermakna bagi dosen.
+4. ~~**Istilah aturan** (mis. `R-CAUSAL-01`) mungkin tidak bermakna bagi dosen.~~ **Ditangani 2026-11-28:** halaman dosen dan teks chat memakai judul aturan; ID hanya tersisa di data API (`resolved_rules`) untuk keperluan teknis.
 
 ## 3. Pertanyaan untuk dosen
 

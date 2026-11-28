@@ -50,10 +50,7 @@ export function BriefDocument({ brief, stress, onDecide, onRate, decided = {}, a
           <ul className="space-y-2.5">
             {brief.awaiting_supervisor.map((f) => (
               <li key={f.id} className="rounded-card border border-line bg-surface p-4 shadow-card">
-                <div className="flex flex-wrap items-center gap-2">
-                  <PriorityTag priority={f.priority} />
-                  <span className="text-xs text-muted">{f.rule_id}</span>
-                </div>
+                <PriorityTag priority={f.priority} />
                 <p className="mt-2 text-sm font-semibold">{f.title}</p>
                 {f.why_flagged ? <p className="mt-1 text-sm">{f.why_flagged}</p> : null}
                 {f.evidence.length ? (
@@ -185,22 +182,24 @@ export function BriefDocument({ brief, stress, onDecide, onRate, decided = {}, a
         </Section>
       ) : null}
 
-      {brief.open_findings.length > 0 ? (
+      {brief.open_summary.length > 0 ? (
         <Section title={s.open}>
-          <ul className="space-y-1 text-sm">
-            {brief.open_findings.map((f) => (
-              <li key={f.id}>
-                [{f.rule_id}] {f.title}
-              </li>
+          <ul className="list-disc space-y-1 pl-5 text-sm">
+            {brief.open_summary.map((line) => (
+              <li key={line}>{line}</li>
             ))}
           </ul>
         </Section>
       ) : null}
 
-      {brief.resolved_rules.length > 0 ? (
-        <p className="text-sm text-muted">
-          {s.resolved}: {brief.resolved_rules.join(", ")}
-        </p>
+      {brief.resolved_titles.length > 0 ? (
+        <Section title={s.resolved}>
+          <ul className="list-disc space-y-1 pl-5 text-sm text-muted">
+            {brief.resolved_titles.map((t) => (
+              <li key={t}>{t}</li>
+            ))}
+          </ul>
+        </Section>
       ) : null}
     </div>
   );
