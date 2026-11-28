@@ -95,3 +95,22 @@ def test_single_numbered_objective_is_extracted():
     got = [e for e in extract_by_structure(pages) if e.type in {"objective", "research_question"}]
     assert [e.type for e in got] == ["research_question", "objective"]
     assert got[1].content.startswith("Mengukur kemampuan")
+
+
+def test_objective_heading_without_penelitian_is_detected():
+    pages = {
+        6: "Bagaimana batas bawahnya? \n1.3 Tujuan \nSesuai rumusan masalah ini: \n"
+        "1. Membangun model matematis untuk teka-teki. \n"
+        "2. Menganalisis struktur grup gerak keping. \n1.4 Manfaat \nManfaat teoretis."
+    }
+    objectives = [e for e in extract_by_structure(pages) if e.type == "objective"]
+    assert [e.page for e in objectives] == [6, 6]
+    assert objectives[0].content == "Membangun model matematis untuk teka-teki."
+
+
+def test_longer_heading_starting_with_tujuan_is_not_the_objective():
+    pages = {
+        8: "2.1 Tujuan Pembelajaran Matematika \n"
+        "Pembelajaran matematika bertujuan melatih penalaran siswa secara bertahap."
+    }
+    assert extract_by_structure(pages) == []

@@ -14,7 +14,7 @@ from dataclasses import dataclass
 # agar penyebutan dalam kalimat ("rumusan masalah dalam penelitian ini") tidak dianggap judul.
 SECTIONS: list[tuple[str, list[str]]] = [
     ("research_question", ["Rumusan Masalah", "Pertanyaan Penelitian", "Research Questions"]),
-    ("objective", ["Tujuan Penelitian", "Research Objectives"]),
+    ("objective", ["Tujuan Penelitian", "Research Objectives", "Tujuan$"]),
     (
         "method",
         ["Desain Penelitian", "Rancangan Penelitian", "Jenis Penelitian", "Metode Penelitian"],
@@ -85,7 +85,11 @@ def _section(text: str, keywords: list[str]) -> tuple[int, int] | None:
     """Judul harus bernomor ("3.2.2 Variabel Penelitian") atau di awal baris/bagian (DOCX),
     bukan sel tabel di tengah teks. Judul induk yang isinya langsung subjudul dilewati."""
     for kw in keywords:
-        name = rf"(?:{re.escape(kw)}|{re.escape(kw.upper())})\b"
+        # Akhiran "$": judul harus berdiri sendiri di barisnya ("1.3 Tujuan", bukan
+        # "2.1 Tujuan Pembelajaran").
+        word = kw.removesuffix("$")
+        tail = r"[ \t]*(?=\n|$)" if word != kw else r"\b"
+        name = rf"(?:{re.escape(word)}|{re.escape(word.upper())}){tail}"
         pattern = rf"(?:(?<=\s)\d+(?:\.\d+)*\.?\s+{name}|(?:^|(?<=\n))\s*{name})"
         for m in re.finditer(pattern, text):
             end = len(text)
