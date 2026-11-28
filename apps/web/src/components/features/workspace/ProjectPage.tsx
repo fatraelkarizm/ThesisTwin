@@ -40,8 +40,7 @@ export function ProjectPage({ step, versionPicker = true, children }: ProjectPag
         <h1 className="mt-1 text-2xl font-semibold tracking-tight">{current.title}</h1>
         <p className="mt-1 max-w-3xl text-sm text-muted">{current.description}</p>
 
-        {/* Desktop: sidebar sudah menampilkan langkah yang sama. */}
-        <ol className="mt-4 flex flex-wrap gap-1.5 md:hidden" aria-label={copy.shell.workflow}>
+        <ol className="mt-4 flex flex-wrap gap-1.5" aria-label={copy.shell.workflow}>
           {steps.map((s, i) => (
             <li key={s.href}>
               <Link

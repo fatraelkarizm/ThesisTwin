@@ -205,7 +205,7 @@ export function UploadForm() {
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block text-sm font-medium">
-                    {copy.home.proposal} v{v.version_no}
+                    {copy.dashboard.proposal} v{v.version_no}
                   </span>
                   <span className="block truncate text-xs text-muted">{v.filename}</span>
                 </span>
