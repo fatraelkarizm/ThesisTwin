@@ -81,3 +81,17 @@ def test_count_finding_names_what_is_counted():
     ]
     [f] = evaluate(rule, els)
     assert f.title.endswith("3 rumusan masalah, 4 tujuan")
+
+
+def test_single_numbered_objective_is_extracted():
+    # Satu tujuan bernomor dulu jatuh ke pemecah kalimat dan tersisa "1" -> temuan palsu R-RQ-OBJ.
+    pages = {
+        1: (
+            "Rumusan Masalah\n1. Bagaimana pengaruh model PBL terhadap pemecahan masalah siswa?\n"
+            "Tujuan Penelitian\n1. Mengukur kemampuan pemecahan masalah siswa sebelum dan "
+            "sesudah PBL.\nDesain Penelitian\nPenelitian ini memakai desain one-group pre-test."
+        )
+    }
+    got = [e for e in extract_by_structure(pages) if e.type in {"objective", "research_question"}]
+    assert [e.type for e in got] == ["research_question", "objective"]
+    assert got[1].content.startswith("Mengukur kemampuan")

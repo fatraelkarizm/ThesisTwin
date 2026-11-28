@@ -106,7 +106,9 @@ def _items(body: str) -> list[tuple[int, int]]:
         if int(m.group(1)) == expected:
             seq.append(m)
             expected += 1
-    if len(seq) < 2:
+    # Satu item pun dihitung bila bagian dibuka dengan "1." (mis. satu tujuan penelitian);
+    # "1." di tengah prosa tidak.
+    if not seq or (len(seq) == 1 and body[: seq[0].start()].strip()):
         return []
     return [
         (m.end(), seq[i + 1].start() if i + 1 < len(seq) else len(body)) for i, m in enumerate(seq)
